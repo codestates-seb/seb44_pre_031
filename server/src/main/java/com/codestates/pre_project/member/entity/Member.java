@@ -8,6 +8,8 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TODO : 이미지는 나중에
@@ -37,6 +39,8 @@ public class Member extends BaseEntity {
     @Column(name = "password", nullable = false)
     private String password; // 비밀번호
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
     // 프로필
     @Column(name = "full_name")
