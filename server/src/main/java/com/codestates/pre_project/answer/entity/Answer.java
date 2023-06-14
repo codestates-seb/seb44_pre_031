@@ -35,4 +35,8 @@ public class Answer extends BaseEntity {
         this.content = content;
         this.select = select;
     }
+
+    public void selected() {
+        this.select = true;
+    }
 }
