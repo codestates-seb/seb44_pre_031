@@ -1,5 +1,7 @@
 package com.codestates.pre_project.question.entity;
 
+import com.codestates.pre_project.base.BaseEntity;
+import com.codestates.pre_project.member.entity.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +12,8 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Question {
+public class Question extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
@@ -21,8 +24,8 @@ public class Question {
     private String content;
     @Column(name = "view_count")
     private Long viewCount;
-    @ManyToOne
-    @JoinColumn(name = "memberId", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @Builder
