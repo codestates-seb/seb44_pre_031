@@ -15,14 +15,15 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "questions")
 public class Question extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "question_id")
-    private Long questionId;
-    @Column
+    @Column(name = "question_id", nullable = false)
+    private Long id;
+    @Column(name = "title", nullable = false)
     private String title;
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "content", columnDefinition = "TEXT", nullable = false)
     private String content;
     @Column(name = "view_count")
     private Long viewCount;
