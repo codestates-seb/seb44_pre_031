@@ -1,5 +1,6 @@
 package com.codestates.pre_project.member.controller;
 
+import com.codestates.pre_project.member.service.MemberService;
 import com.codestates.pre_project.response.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,20 +21,19 @@ import static com.codestates.pre_project.member.dto.SignUpDto.toEntity;
 @RequestMapping("/api")
 public class MemberController {
 
-    MemberServce memberServce;
+    MemberService memberService;
 
     @PostMapping("/users/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
     public Response signUp(@Valid @RequestBody SignUpRequest request) {
-        memberServce.signUP(toEntity(request));
+        memberService.signUp(toEntity(request));
         return Response.success();
     }
 
     @PostMapping("/users/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
     public Response signIn(@Valid @RequestBody SignInRequest request) {
-        memberServce.signIn(toEntity(request));
-        return Response.success(toResponse(memberServce.signIn(toEntity(request))));
+        return Response.success(toResponse(memberService.signIn(toEntity(request))));
     }
 
 }
