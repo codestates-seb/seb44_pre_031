@@ -8,12 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.codestates.pre_project.member.dto.SignInDto.SignInRequest;
-import static com.codestates.pre_project.member.dto.SignInDto.toEntity;
-import static com.codestates.pre_project.member.dto.SignInDto.toResponse;
 import static com.codestates.pre_project.member.dto.SignUpDto.SignUpRequest;
 import static com.codestates.pre_project.member.dto.SignUpDto.toEntity;
-
 
 
 @RestController
@@ -30,10 +26,10 @@ public class MemberController {
         return Response.success();
     }
 
-    @PostMapping("/users/sign-up")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Response signIn(@Valid @RequestBody SignInRequest request) {
-        return Response.success(toResponse(memberService.signIn(toEntity(request))));
-    }
+//    @PostMapping("/users/sign-up")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public Response signIn(@Valid @RequestBody SignInRequest request) {
+//        return Response.success(toResponse(memberService.signIn(toEntity(request))));
+//    }
 
 }
