@@ -42,10 +42,7 @@ jwt:
   key: kevin12312421512312431@!kfjiejwf
   access-token-expiration-minutes: 40
   refresh-token-expiration-minutes: 420
-<<<<<<< HEAD
-=======
 # 관리자 이메일
 mail:
   address:
     admin: admin@gmail.com
->>>>>>> 69cc600d73b5729ca466341d8252e9945f5a536c
