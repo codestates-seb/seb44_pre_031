@@ -3,9 +3,7 @@ package com.codestates.pre_project.module.question.entity;
 import com.codestates.pre_project.module.answer.entity.Answer;
 import com.codestates.pre_project.module.base.BaseEntity;
 import com.codestates.pre_project.member.entity.Member;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,6 +11,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 @Entity
 @Table(name = "questions")
 public class Question extends BaseEntity {
@@ -36,6 +35,7 @@ public class Question extends BaseEntity {
     @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
     private List<Answer> answers = new ArrayList<>();
 
+    @Builder
     private Question(Member member, String title, String content) {
         this.member = member;
         this.title = title;
@@ -43,7 +43,11 @@ public class Question extends BaseEntity {
     }
 
     public static Question of(Member member, Question request) {
-        return new Question(member, request.getTitle(), request.getContent());
+        return Question.builder()
+                .member(member)
+                .title(request.getTitle())
+                .content(request.getContent())
+                .build();
     }
 
     public void update(Question question) {

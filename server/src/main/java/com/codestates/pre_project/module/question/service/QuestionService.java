@@ -43,6 +43,7 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
+    @Transactional
     public void deleteQuestion(Long questionId) {
         Question question = findById(questionId);
         questionRepository.delete(question);
