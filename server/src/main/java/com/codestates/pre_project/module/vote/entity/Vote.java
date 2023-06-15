@@ -37,12 +37,12 @@ public class Vote {
         this.voteType = voteType;
     }
 
-    private static Vote like(Question question, Member member) {
+    public static Vote like(Question question, Member member) {
         return new Vote(question, member, true);
     }
 
-    private static Vote dislike(Question question, Member member) {
-
+    public Vote dislike(Question question, Member member) {
+        question.setVoteCount(question.getVoteCount() - 1);
         return new Vote(question, member, false);
     }
 }
