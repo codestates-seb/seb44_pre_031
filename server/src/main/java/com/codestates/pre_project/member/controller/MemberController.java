@@ -17,28 +17,28 @@ import static com.codestates.pre_project.member.dto.UpdateMemberDto.toDto;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("/users/sign-up")
+    @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
     public Response signUp(@Valid @RequestBody SignUpDto.SignUpRequest request) {
         memberService.signUp(SignUpDto.toEntity(request));
         return Response.success();
     }
 
-    @GetMapping("/users/{user-id}")
+    @GetMapping("/{user-id}")
     @ResponseStatus(HttpStatus.OK)
-    public Response findMember(@PathVariable Long memberId) {
+    public Response findMember(@PathVariable("user-id") Long memberId) {
         Member member = memberService.findMember(memberId);
         return Response.success(MemberDto.of(member));
     }
 
-    @PatchMapping("/users/{user-id}")
+    @PatchMapping("/{user-id}")
     @ResponseStatus(HttpStatus.OK)
-    public Response updateMemberInfo(@PathVariable Long memberId,
+    public Response updateMemberInfo(@PathVariable("user-id") Long memberId,
                                      @Valid @RequestBody UpdateMemberDto request) {
         Member member = memberService.updateMemberInfo(memberId, UpdateMemberDto.toEntity(request));
         return Response.success(toDto(member));
