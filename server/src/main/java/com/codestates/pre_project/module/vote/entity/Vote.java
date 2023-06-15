@@ -28,7 +28,7 @@ public class Vote {
     @JoinColumn(name = "member_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
-    @Column(nullable = false)
+    @Column(name = "vote_type")
     private boolean voteType;
 
     private Vote(Question question, Member member, boolean voteType) {
@@ -37,12 +37,12 @@ public class Vote {
         this.voteType = voteType;
     }
 
-    private static Vote like(Question question, Member member) {
+    public static Vote like(Question question, Member member) {
         return new Vote(question, member, true);
     }
 
-    private static Vote dislike(Question question, Member member) {
-
+    public Vote dislike(Question question, Member member) {
+        question.setVoteCount(question.getVoteCount() - 1);
         return new Vote(question, member, false);
     }
 }
