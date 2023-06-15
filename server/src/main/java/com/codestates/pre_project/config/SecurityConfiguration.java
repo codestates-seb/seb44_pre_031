@@ -1,8 +1,12 @@
 package com.codestates.pre_project.config;
 
+import com.codestates.pre_project.auth.filter.JwtAuthenticationFilter;
+import com.codestates.pre_project.auth.jwt.JwtTokenizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -15,6 +19,11 @@ import java.util.Arrays;
 import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 public class SecurityConfiguration {
+    private final JwtTokenizer jwtTokenizer;
+
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer) {
+        this.jwtTokenizer = jwtTokenizer;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -25,10 +34,27 @@ public class SecurityConfiguration {
                   .cors(withDefaults()) // CORS 설정 추가, 프론트엔드와 통신
                   .formLogin().disable() // SSR 방식이 아닌 CSR 방식
                   .httpBasic().disable()
+                  .apply(new CustomFilterConfigurer()) // 구현한 filter 등록 역할
+                  .and()
                   .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll()); // 모든 요청에 대해서 접근 허용
 
         return http.build();
     }
+
+    // 구현한 filter 등록 역할
+    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
+        @Override
+        public void configure(HttpSecurity builder) throws Exception {
+            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
+            jwtAuthenticationFilter.setFilterProcessesUrl("/api/users/sign-in"); // request URL 등록
+
+            builder.addFilter(jwtAuthenticationFilter);
+        }
+    }
+
+
     // PasswordEncoder Bean 객체 생성
     @Bean
     public PasswordEncoder passwordEncoder() {
