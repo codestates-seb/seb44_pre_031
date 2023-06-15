@@ -20,7 +20,8 @@ public class QuestionController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Response createQuestion(@Valid @RequestBody QuestionRequestDto request) {
-        questionService.createQuestion(request.toEntity());
+        // TODO: memberId 가져오는 로직 추가
+        questionService.createQuestion(memberId, request.toEntity());
 
         return Response.success();
     }
@@ -29,9 +30,9 @@ public class QuestionController {
     @ResponseStatus(HttpStatus.OK)
     public Response updateQuestion(@PathVariable("question-id") Long questionId,
                                   @Valid @RequestBody QuestionRequestDto request) {
-        Question question = questionService.updateQuestion(questionId, request.toEntity());
+        questionService.updateQuestion(questionId, request.toEntity());
 
-        return Response.success(question);
+        return Response.success();
     }
 
     @GetMapping("/{question-id}")
@@ -39,6 +40,7 @@ public class QuestionController {
     public Response getQuestion(@PathVariable("question-id") Long questionId) {
         Question question = questionService.getQuestion(questionId);
 
+        // TODO : 응답 DTO 새로 작성
         return Response.success(question);
     }
 

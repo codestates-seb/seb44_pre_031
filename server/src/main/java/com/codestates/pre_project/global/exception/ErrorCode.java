@@ -13,6 +13,7 @@ public enum ErrorCode {
     // 401
 
     // 404
+    QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 질문입니다."),
 
     // 409
 
