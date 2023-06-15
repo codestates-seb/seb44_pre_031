@@ -34,6 +34,7 @@ public class QuestionService {
 
     public Question getQuestion(Long questionId) {
         Question question = findById(questionId);
+        question.view();
 
         return question;
     }
