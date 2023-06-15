@@ -5,15 +5,13 @@ import com.codestates.pre_project.member.dto.SignUpDto;
 import com.codestates.pre_project.member.dto.UpdateMemberDto;
 import com.codestates.pre_project.member.entity.Member;
 import com.codestates.pre_project.member.service.MemberService;
-import com.codestates.pre_project.response.Response;
+import com.codestates.pre_project.module.response.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.codestates.pre_project.member.dto.SignUpDto.SignUpRequest;
-import static com.codestates.pre_project.member.dto.SignUpDto.toEntity;
 import static com.codestates.pre_project.member.dto.UpdateMemberDto.toDto;
 
 

@@ -1,7 +1,7 @@
 package com.codestates.pre_project.config;
 
-import com.codestates.pre_project.auth.filter.JwtAuthenticationFilter;
-import com.codestates.pre_project.auth.jwt.JwtTokenizer;
+import com.codestates.pre_project.global.auth.filter.JwtAuthenticationFilter;
+import com.codestates.pre_project.global.auth.jwt.JwtTokenizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

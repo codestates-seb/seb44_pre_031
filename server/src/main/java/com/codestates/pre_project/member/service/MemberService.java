@@ -1,9 +1,7 @@
 package com.codestates.pre_project.member.service;
 
-import com.codestates.pre_project.auth.utils.CustomAuthorityUtils;
-import com.codestates.pre_project.member.dto.SignInDto;
+import com.codestates.pre_project.global.auth.utils.CustomAuthorityUtils;
 import com.codestates.pre_project.member.entity.Member;
-import com.codestates.pre_project.member.exception.LoginFailureException;
 import com.codestates.pre_project.member.exception.MemberDisplayNameAlreadyExistsException;
 import com.codestates.pre_project.member.exception.MemberEmailAlreadyExistsException;
 import com.codestates.pre_project.member.exception.MemberNotFoundException;
