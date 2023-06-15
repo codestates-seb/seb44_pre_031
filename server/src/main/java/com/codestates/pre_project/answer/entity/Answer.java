@@ -19,9 +19,9 @@ public class Answer extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "answer_id", nullable = false)
     private Long id;
-    @Column(name = "body", nullable = false)
+    @Column(name = "content", nullable = false)
     private String content;
-    @Column(name = "select")
+    @Column(name = "selected")
     private boolean selected;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
