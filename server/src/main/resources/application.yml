@@ -32,7 +32,7 @@ logging.level:
   org.hibernate.SQL: debug
 # jwt 관련
 jwt:
-  key: ${JWT_SECRET_KEY}
+  key: kevin12312421512312431@!kfjiejwf
   access-token-expiration-minutes: 40
   refresh-token-expiration-minutes: 420
 # 관리자 이메일
