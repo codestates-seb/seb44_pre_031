@@ -12,6 +12,8 @@ public class AnswerRequestDto {
     private String content;
 
     public Answer toEntity() {
-        return Answer.from(content);
+        return Answer.builder()
+                .content(content)
+                .build();
     }
 }

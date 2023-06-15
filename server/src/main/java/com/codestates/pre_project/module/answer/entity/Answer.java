@@ -4,6 +4,7 @@ import com.codestates.pre_project.module.base.BaseEntity;
 import com.codestates.pre_project.member.entity.Member;
 import com.codestates.pre_project.module.question.entity.Question;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,12 +30,19 @@ public class Answer extends BaseEntity {
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
-    private Answer(String content) {
+    @Builder
+    private Answer(String content, Member member, Question question) {
         this.content = content;
+        this.member = member;
+        this.question = question;
     }
 
-    public static Answer from(String content) {
-        return new Answer(content);
+    public static Answer of(String content, Member member, Question question) {
+        return Answer.builder()
+                .content(content)
+                .member(member)
+                .question(question)
+                .build();
     }
 
     public void update(Answer answer) {
