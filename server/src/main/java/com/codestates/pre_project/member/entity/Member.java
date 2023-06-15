@@ -1,11 +1,9 @@
 package com.codestates.pre_project.member.entity;
 
-import com.codestates.pre_project.base.BaseEntity;
+import com.codestates.pre_project.global.base.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.ArrayList;

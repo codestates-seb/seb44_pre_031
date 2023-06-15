@@ -4,7 +4,6 @@ import com.codestates.pre_project.answer.entity.Answer;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -13,6 +12,6 @@ public class AnswerRequestDto {
     private String content;
 
     public Answer toEntity() {
-        return Answer.answerFrom(content);
+        return Answer.from(content);
     }
 }

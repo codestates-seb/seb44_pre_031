@@ -1,10 +1,9 @@
 package com.codestates.pre_project.answer.entity;
 
-import com.codestates.pre_project.base.BaseEntity;
+import com.codestates.pre_project.global.base.BaseEntity;
 import com.codestates.pre_project.member.entity.Member;
 import com.codestates.pre_project.question.entity.Question;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,7 +33,7 @@ public class Answer extends BaseEntity {
         this.content = content;
     }
 
-    public static Answer answerFrom(String content) {
+    public static Answer from(String content) {
         return new Answer(content);
     }
 

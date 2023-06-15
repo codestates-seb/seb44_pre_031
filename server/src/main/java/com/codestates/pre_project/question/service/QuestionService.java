@@ -1,4 +1,4 @@
 package com.codestates.pre_project.question.service;
 
-public class ddd {
+public class QuestionService {
 }

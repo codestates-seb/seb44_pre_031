@@ -1,10 +1,9 @@
 package com.codestates.pre_project.question.entity;
 
 import com.codestates.pre_project.answer.entity.Answer;
-import com.codestates.pre_project.base.BaseEntity;
+import com.codestates.pre_project.global.base.BaseEntity;
 import com.codestates.pre_project.member.entity.Member;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -40,7 +39,7 @@ public class Question extends BaseEntity {
         this.content = content;
     }
 
-    public static Question questionOf(String title, String content) {
+    public static Question of(String title, String content) {
         return new Question(title, content);
     }
 

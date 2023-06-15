@@ -3,6 +3,9 @@ package com.codestates.pre_project.question.dto;
 import com.codestates.pre_project.question.entity.Question;
 import lombok.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,5 +21,11 @@ public class QuestionResponseDto {
                 .title(question.getTitle())
                 .content(question.getContent())
                 .build();
+    }
+
+    public List<QuestionResponseDto> toResponses(List<Question> questions) {
+        return questions.stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 }

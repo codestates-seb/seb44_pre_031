@@ -15,6 +15,6 @@ public class QuestionRequestDto {
     private String content;
 
     public Question toEntity() {
-        return Question.questionOf(title, content);
+        return Question.of(title, content);
     }
 }

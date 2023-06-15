@@ -1,4 +1,4 @@
-package com.codestates.pre_project.base;
+package com.codestates.pre_project.global.base;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedBy;
