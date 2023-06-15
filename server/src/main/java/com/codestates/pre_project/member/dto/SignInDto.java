@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -17,10 +18,10 @@ public class SignInDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SignInRequest {
-        @NotNull
+        @NotBlank
         @Email
         private String email;
-        @NotNull
+        @NotBlank
         @Pattern(regexp = "^(?=.*[a-z])(?=.*[0-9!@#$%^&*])[a-z0-9!@#$%^&*]{9,12}$"
                 , message = "영문 소문자 9 ~ 12자 특수문자 숫자 포함")
         private String password;
