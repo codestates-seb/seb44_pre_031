@@ -30,3 +30,8 @@ spring:
 
 logging.level:
   org.hibernate.SQL: debug
+# jwt 관련
+jwt:
+  key: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 40
+  refresh-token-expiration-minutes: 420
