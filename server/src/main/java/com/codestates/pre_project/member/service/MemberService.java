@@ -4,49 +4,58 @@ import com.codestates.pre_project.auth.utils.CustomAuthorityUtils;
 import com.codestates.pre_project.member.dto.SignInDto;
 import com.codestates.pre_project.member.entity.Member;
 import com.codestates.pre_project.member.exception.LoginFailureException;
+import com.codestates.pre_project.member.exception.MemberDisplayNameAlreadyExistsException;
 import com.codestates.pre_project.member.exception.MemberEmailAlreadyExistsException;
+import com.codestates.pre_project.member.exception.MemberNotFoundException;
 import com.codestates.pre_project.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
-    private PasswordEncoder passwordEncoder;
-    private MemberRepository memberRepository;
-    private CustomAuthorityUtils authorityUtils;
+    private final PasswordEncoder passwordEncoder;
+    private final MemberRepository memberRepository;
+    private final CustomAuthorityUtils authorityUtils;
 
     @Transactional
     public void signUp(Member request) {
         validateSignUp(request);
+        List<String> roles = authorityUtils.createRoles(request.getEmail());
         memberRepository.save(Member.builder()
                 .email(request.getEmail())
                 .displayName(request.getDisplayName())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .roles(authorityUtils.createRoles(request.getEmail()))
+                .roles(roles)
                 .build());
     }
 
-//    @Transactional
-//    public Member signIn(Member request) {
-//        validateSignUp(request);
-//        return Member.builder()
-//                .email(request.getEmail())
-//                .displayName(request.getDisplayName())
-//                .password(passwordEncoder.encode(request.getPassword()))
-//                .build();
-//    }
+    @Transactional(readOnly = true)
+    public Member findMember(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+    }
+
+    @Transactional
+    public Member updateMemberInfo(Long memberId, Member member) {
+        Member findMember = validateUpdate(memberId, member);
+        return Member.updateMemberInfo(findMember, member);
+    }
 
     private void validateSignUp(Member member) {
         if (memberRepository.existsByEmail(member.getEmail()))
             throw new MemberEmailAlreadyExistsException(member.getEmail());
     }
 
-    private void validatePassword(SignInDto.SignInRequest request, Member member) {
-        if(!passwordEncoder.matches(request.getPassword(), member.getPassword()))
-            throw new LoginFailureException();
+    private Member validateUpdate(Long memberId, Member member) {
+        Member findMember = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        memberRepository.findByDisplayName(member.getDisplayName()).ifPresent(alreadyExists -> {
+            throw new MemberDisplayNameAlreadyExistsException(member.getDisplayName() + "은 이미 사용중!!!!!!!!!!!!!!");
+        });
+        return findMember;
     }
 }
