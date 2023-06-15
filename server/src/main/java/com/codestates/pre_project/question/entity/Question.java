@@ -27,16 +27,20 @@ public class Question extends BaseEntity {
     private String content;
     @Column(name = "view_count")
     private Long viewCount;
+    @Column(name = "selected_answer")
+    private boolean selectedAnswer;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
     @OneToMany(mappedBy = "questions", cascade = CascadeType.PERSIST)
     private List<Answer> answers = new ArrayList<>();
 
-    @Builder
-    public Question(String title, String content, Long viewCount) {
+    private Question(String title, String content) {
         this.title = title;
         this.content = content;
-        this.viewCount = viewCount;
+    }
+
+    public static Question questionOf(String title, String content) {
+        return new Question(title, content);
     }
 }

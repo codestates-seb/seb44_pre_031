@@ -22,7 +22,7 @@ public class Answer extends BaseEntity {
     @Column(name = "body", nullable = false)
     private String content;
     @Column(name = "select")
-    private boolean select;
+    private boolean selected;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
@@ -30,13 +30,11 @@ public class Answer extends BaseEntity {
     @JoinColumn(name = "question_id", nullable = false)
     private Question question;
 
-    @Builder
-    public Answer(String content, boolean select) {
+    private Answer(String content) {
         this.content = content;
-        this.select = select;
     }
 
-    public void selected() {
-        this.select = true;
+    public static Answer answerFrom(String content) {
+        return new Answer(content);
     }
 }

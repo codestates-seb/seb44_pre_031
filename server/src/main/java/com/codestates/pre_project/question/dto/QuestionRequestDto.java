@@ -7,9 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class QuestionRequestDto {
     @NotBlank(message = "제목을 입력해주세요.")
     private String title;
@@ -17,9 +15,6 @@ public class QuestionRequestDto {
     private String content;
 
     public Question toEntity() {
-        return Question.builder()
-                .title(title)
-                .content(content)
-                .build();
+        return Question.questionOf(title, content);
     }
 }

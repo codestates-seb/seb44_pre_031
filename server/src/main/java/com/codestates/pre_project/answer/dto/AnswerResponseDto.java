@@ -16,7 +16,7 @@ public class AnswerResponseDto {
         return AnswerResponseDto.builder()
                 .id(answer.getId())
                 .content(answer.getContent())
-                .select(answer.isSelect())
+                .select(answer.isSelected())
                 .build();
     }
 }
