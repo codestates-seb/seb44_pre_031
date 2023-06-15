@@ -37,4 +37,12 @@ public class Answer extends BaseEntity {
     public static Answer answerFrom(String content) {
         return new Answer(content);
     }
+
+    public void update(Answer answer) {
+        this.content = answer.content;
+    }
+
+    public void select() {
+        this.selected = true;
+    }
 }

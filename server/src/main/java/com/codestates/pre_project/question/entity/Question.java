@@ -32,7 +32,7 @@ public class Question extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
-    @OneToMany(mappedBy = "questions", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
     private List<Answer> answers = new ArrayList<>();
 
     private Question(String title, String content) {
@@ -42,5 +42,18 @@ public class Question extends BaseEntity {
 
     public static Question questionOf(String title, String content) {
         return new Question(title, content);
+    }
+
+    public void update(Question question) {
+        this.title = question.title;
+        this.content = question.content;
+    }
+
+    public void selectAnswer() {
+        this.selectedAnswer = true;
+    }
+
+    public void view() {
+        this.viewCount++;
     }
 }
