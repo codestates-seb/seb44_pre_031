@@ -9,7 +9,6 @@ import com.codestates.pre_project.module.question.repository.QuestionRepositoryC
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
