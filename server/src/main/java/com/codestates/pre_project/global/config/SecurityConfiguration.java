@@ -9,6 +9,7 @@ import com.codestates.pre_project.global.auth.utils.CustomAuthorityUtils;
 import com.codestates.pre_project.member.repository.MemberRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -47,7 +48,13 @@ public class SecurityConfiguration {
                   .httpBasic().disable()
                   .apply(new CustomFilterConfigurer()) // 구현한 filter 등록 역할
                   .and()
-                  .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll()); // 모든 요청에 대해서 접근 허용
+                  .authorizeHttpRequests(authorize -> authorize
+                          .antMatchers(HttpMethod.POST, "/*/sign-up").permitAll()
+                          .antMatchers(HttpMethod.POST,"/*/sign-in").permitAll()
+                          .antMatchers(HttpMethod.PATCH, "/*/users/**").hasRole("USER")
+                          .antMatchers(HttpMethod.GET, "/*/users/**").hasRole("ADMIN")
+                          .antMatchers(HttpMethod.DELETE, "/*/users/**").hasRole("USER")
+                          .anyRequest().permitAll()); // 멤버 관련 접근 권한 부여
 
         return http.build();
     }
