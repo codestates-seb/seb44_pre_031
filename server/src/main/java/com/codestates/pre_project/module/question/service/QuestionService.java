@@ -4,9 +4,13 @@ import com.codestates.pre_project.global.exception.CustomException;
 import com.codestates.pre_project.member.entity.Member;
 import com.codestates.pre_project.member.service.MemberService;
 import com.codestates.pre_project.module.question.dto.response.GetQuestionResponse;
+import com.codestates.pre_project.module.question.dto.response.QuestionResponse;
 import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,9 +44,9 @@ public class QuestionService {
         return questionRepository.getQuestionWithAnswer(questionId);
     }
 
-    public List<Question> getQuestions() {
+    public Page<QuestionResponse> getQuestions(Pageable pageable) {
 
-        return questionRepository.findAll();
+        return questionRepository.getQuestions(pageable);
     }
 
     @Transactional

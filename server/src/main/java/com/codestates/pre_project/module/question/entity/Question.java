@@ -23,13 +23,13 @@ public class Question extends BaseEntity {
     @Column(name = "content", columnDefinition = "TEXT", nullable = false)
     private String content;
     @Column(name = "view_count")
-    private Long viewCount = 100L;
+    private Long viewCount;
     @Column(name = "selected_answer")
     private boolean selectedAnswer;
     @Column(name = "vote_count")
-    private Long voteCount = 100L;
+    private Long voteCount;
     @Column(name = "bookmark_count")
-    private Long bookmarkCount = 1L;
+    private Long bookmarkCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
@@ -42,6 +42,9 @@ public class Question extends BaseEntity {
         this.member = member;
         this.title = title;
         this.content = content;
+        this.viewCount = 0L;
+        this.voteCount = 0L;
+        this.bookmarkCount = 0L;
     }
 
     public static Question of(Member member, Question request) {

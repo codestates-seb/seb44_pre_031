@@ -1,7 +1,11 @@
 package com.codestates.pre_project.module.question.repository;
 
 import com.codestates.pre_project.module.question.dto.response.GetQuestionResponse;
+import com.codestates.pre_project.module.question.dto.response.QuestionResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface QuestionRepositoryCustom {
-    public GetQuestionResponse getQuestionWithAnswer(Long questionId);
+    GetQuestionResponse getQuestionWithAnswer(Long questionId);
+    Page<QuestionResponse> getQuestions(Pageable pageable);
 }

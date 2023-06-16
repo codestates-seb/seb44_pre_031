@@ -2,12 +2,16 @@ package com.codestates.pre_project.module.question.repository.implementation;
 
 import com.codestates.pre_project.module.answer.dto.AnswerResponse;
 import com.codestates.pre_project.module.answer.dto.QAnswerResponse;
-import com.codestates.pre_project.module.question.dto.response.GetQuestionResponse;
-import com.codestates.pre_project.module.question.dto.response.QQuestionDetailResponse;
-import com.codestates.pre_project.module.question.dto.response.QuestionDetailResponse;
+import com.codestates.pre_project.module.question.dto.response.*;
+import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.repository.QuestionRepositoryCustom;
+import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +31,32 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
         List<AnswerResponse> answerResponses = fetchAnswerResponses(questionId);
 
         return new GetQuestionResponse(questionDetailResponse, answerResponses);
+    }
+
+    @Override
+    public Page<QuestionResponse> getQuestions(Pageable pageable) {
+        List<QuestionResponse> result = queryFactory
+                .select(new QQuestionResponse(
+                        asNumber(question.id),
+                        question.title,
+                        question.content,
+                        question.voteCount,
+                        // TODO : 답변 갯수 필드 추가 or 다른 방법으로 가져오기
+                        question.answers.size(),
+                        question.selectedAnswer,
+                        question.viewCount,
+                        question.createdAt,
+                        question.member.displayName))
+                .from(question)
+                .innerJoin(question.member, member)
+                .orderBy(question.createdAt.desc())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Question> countQuery = queryFactory
+                .selectFrom(question);
+
+        return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchCount);
     }
 
     private QuestionDetailResponse fetchQuestionResponse(Long questionId) {
