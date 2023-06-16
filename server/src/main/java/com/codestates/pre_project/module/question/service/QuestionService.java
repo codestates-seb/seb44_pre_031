@@ -28,12 +28,12 @@ public class QuestionService {
 
     @Transactional
     public void updateQuestion(Long questionId, Question request) {
-        Question question = findById(questionId);
+        Question question = findQuestionById(questionId);
         question.update(request);
     }
 
     public Question getQuestion(Long questionId) {
-        Question question = findById(questionId);
+        Question question = findQuestionById(questionId);
         question.view();
 
         return question;
@@ -46,11 +46,17 @@ public class QuestionService {
 
     @Transactional
     public void deleteQuestion(Long questionId) {
-        Question question = findById(questionId);
+        Question question = findQuestionById(questionId);
         questionRepository.delete(question);
     }
 
-    private Question findById(Long questionId) {
+    public void checkExistSelectedAnswer(Question question) {
+        if (question.isSelectedAnswer()) {
+            throw new CustomException(ALREADY_SELECTED_ANSWER);
+        }
+    }
+
+    private Question findQuestionById(Long questionId) {
         return questionRepository.findById(questionId)
                 .orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));
     }
