@@ -11,7 +11,6 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@RequiredArgsConstructor
 @Entity
 @Table(name = "questions")
 public class Question extends BaseEntity {
@@ -24,11 +23,14 @@ public class Question extends BaseEntity {
     @Column(name = "content", columnDefinition = "TEXT", nullable = false)
     private String content;
     @Column(name = "view_count")
-    private Long viewCount;
+    private Long viewCount = 100L;
     @Column(name = "selected_answer")
     private boolean selectedAnswer;
     @Column(name = "vote_count")
-    private Long voteCount;
+    private Long voteCount = 100L;
+    @Column(name = "bookmark_count")
+    private Long bookmarkCount = 1L;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
@@ -61,5 +63,17 @@ public class Question extends BaseEntity {
 
     public void view() {
         this.viewCount++;
+    }
+
+    public void vote() {
+        this.voteCount++;
+    }
+
+    public void cancelVote() {
+        this.voteCount--;
+    }
+
+    public void bookmark() {
+        this.bookmarkCount++;
     }
 }

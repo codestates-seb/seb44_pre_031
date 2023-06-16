@@ -1,4 +1,4 @@
-package com.codestates.pre_project.module.question.dto;
+package com.codestates.pre_project.module.question.dto.response;
 
 import com.codestates.pre_project.module.question.entity.Question;
 import lombok.*;

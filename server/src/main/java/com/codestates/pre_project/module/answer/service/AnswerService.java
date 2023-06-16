@@ -1,7 +1,6 @@
 package com.codestates.pre_project.module.answer.service;
 
 import com.codestates.pre_project.global.exception.CustomException;
-import com.codestates.pre_project.global.exception.ErrorCode;
 import com.codestates.pre_project.member.entity.Member;
 import com.codestates.pre_project.member.service.MemberService;
 import com.codestates.pre_project.module.answer.entity.Answer;
@@ -25,30 +24,33 @@ public class AnswerService {
     @Transactional
     public void createAnswer(Long memberId, Long questionId, Answer request) {
         Member member = memberService.findMember(memberId);
-        Question question = questionService.getQuestion(questionId);
+        Question question = questionService.findQuestionById(questionId);
         answerRepository.save(Answer.of(request.getContent(), member, question));
     }
 
     @Transactional
     public void updateAnswer(Long answerId, Answer request) {
-        Answer answer = findById(answerId);
+        Answer answer = findAnswerById(answerId);
         answer.update(request);
     }
 
+    @Transactional
     public void selectAnswer(Long questionId, Long answerId) {
-        Answer answer = findById(answerId);
-        answer.select();
-
-        Question question = questionService.getQuestion(questionId);
+        Question question = questionService.findQuestionById(questionId);
+        questionService.checkExistSelectedAnswer(question);
         question.selectAnswer();
+
+        Answer answer = findAnswerById(answerId);
+        answer.select();
     }
 
+    @Transactional
     public void deleteAnswer(Long answerId) {
-        Answer answer = findById(answerId);
+        Answer answer = findAnswerById(answerId);
         answerRepository.delete(answer);
     }
 
-    private Answer findById(Long answerId) {
+    private Answer findAnswerById(Long answerId) {
         return answerRepository.findById(answerId)
                 .orElseThrow(() -> new CustomException(ANSWER_NOT_FOUND));
     }

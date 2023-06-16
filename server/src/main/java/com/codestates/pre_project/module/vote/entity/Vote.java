@@ -42,7 +42,7 @@ public class Vote {
     }
 
     public Vote dislike(Question question, Member member) {
-        question.setVoteCount(question.getVoteCount() - 1);
+        question.vote(question.getVoteCount() - 1);
         return new Vote(question, member, false);
     }
 }

@@ -18,7 +18,7 @@ public class AnswerController {
     public Response createAnswer(@PathVariable("question-id") Long questionId,
                                  @RequestBody AnswerRequestDto request) {
         // TODO : memberId 가져오는 로직 추가
-        answerService.createAnswer(memberId, questionId, request.toEntity());
+        answerService.createAnswer(1L, questionId, request.toEntity());
 
         return Response.success();
     }

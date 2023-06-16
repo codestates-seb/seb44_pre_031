@@ -5,8 +5,8 @@ import com.codestates.pre_project.member.entity.Member;
 import com.codestates.pre_project.member.repository.MemberRepository;
 import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.repository.QuestionRepository;
-import com.codestates.pre_project.module.vote.repository.VoteRepository;
 import com.codestates.pre_project.module.vote.entity.Vote;
+import com.codestates.pre_project.module.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +24,7 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final MemberRepository memberRepository;
 
+    ///////
     @Transactional
     public void voteQuestion(Long questionId) {
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));
@@ -32,7 +33,7 @@ public class VoteService {
         Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
         if (voteRepository.findByQuestionAndMember(question, member) == null) {
-            question.setVoteCount(question.getVoteCount() + 1);
+            question.vote();
             Vote vote = Vote.like(question, member);
             voteRepository.save(vote);
         } else {
