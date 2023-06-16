@@ -1,6 +1,8 @@
 package com.codestates.pre_project.config;
 
 import com.codestates.pre_project.global.auth.filter.JwtAuthenticationFilter;
+import com.codestates.pre_project.global.auth.handler.MemberAuthenticationFailureHandler;
+import com.codestates.pre_project.global.auth.handler.MemberAuthenticationSuccessHandler;
 import com.codestates.pre_project.global.auth.jwt.JwtTokenizer;
 import com.codestates.pre_project.member.repository.MemberRepository;
 import org.springframework.context.annotation.Bean;
@@ -51,7 +53,8 @@ public class SecurityConfiguration {
 
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
             jwtAuthenticationFilter.setFilterProcessesUrl("/api/users/sign-in"); // request URL 등록
-
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler()); // 인증 성공시
+            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler()); // 인증 실패시
             builder.addFilter(jwtAuthenticationFilter);
         }
     }

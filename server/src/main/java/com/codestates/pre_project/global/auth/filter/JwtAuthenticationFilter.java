@@ -14,8 +14,11 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.rmi.ServerException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +51,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication authResult) {
+                                            Authentication authResult) throws ServletException, IOException {
         Member member = (Member) authResult.getPrincipal();
 
         String accessToken = delegateAccessToken(member);      //Access Token 생성
@@ -56,6 +59,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         response.setHeader("Authorization","Bearer " + accessToken);
         response.setHeader("Refresh",refreshToken);
+
+        this.getSuccessHandler().onAuthenticationSuccess(request,response,authResult);
     }
 
     // Access Token 생성
