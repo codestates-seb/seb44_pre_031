@@ -32,7 +32,7 @@ public class VoteService {
         Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
         if (voteRepository.findByQuestionAndMember(question, member) == null) {
-            question.setVoteCount(question.getVoteCount() + 1);
+            question.vote(question.getVoteCount() + 1);
             Vote vote = Vote.like(question, member);
             voteRepository.save(vote);
         } else {

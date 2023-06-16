@@ -34,6 +34,7 @@ public class AnswerService {
         answer.update(request);
     }
 
+    @Transactional
     public void selectAnswer(Long questionId, Long answerId) {
         Question question = questionService.getQuestion(questionId);
         questionService.checkExistSelectedAnswer(question);
@@ -43,13 +44,11 @@ public class AnswerService {
         answer.select();
     }
 
-
+    @Transactional
     public void deleteAnswer(Long answerId) {
         Answer answer = findAnswerById(answerId);
         answerRepository.delete(answer);
     }
-
-
 
     private Answer findAnswerById(Long answerId) {
         return answerRepository.findById(answerId)

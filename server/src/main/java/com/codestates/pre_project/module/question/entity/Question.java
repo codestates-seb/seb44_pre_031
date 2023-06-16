@@ -28,8 +28,9 @@ public class Question extends BaseEntity {
     private boolean selectedAnswer;
     @Column(name = "vote_count")
     private Long voteCount;
-    @Column(name = "saved_count")
-    private Long savedCount;
+    @Column(name = "bookmark_count")
+    private Long bookmarkCount;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
@@ -64,11 +65,15 @@ public class Question extends BaseEntity {
         this.viewCount++;
     }
 
-    public void setVoteCount(Long voteCount) {
-        this.voteCount = voteCount;
+    public void vote() {
+        this.voteCount++;
     }
 
-    public void setSavedCount(Long savedCount) {
-        this.savedCount = savedCount;
+    public void cancelVote() {
+        this.voteCount--;
+    }
+
+    public void bookmark() {
+        this.bookmarkCount++;
     }
 }
