@@ -3,6 +3,7 @@ package com.codestates.pre_project.module.question.service;
 import com.codestates.pre_project.global.exception.CustomException;
 import com.codestates.pre_project.member.entity.Member;
 import com.codestates.pre_project.member.service.MemberService;
+import com.codestates.pre_project.module.question.dto.response.GetQuestionResponse;
 import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,11 +33,11 @@ public class QuestionService {
         question.update(request);
     }
 
-    public Question getQuestion(Long questionId) {
+    public GetQuestionResponse getQuestion(Long questionId, Long memberId) {
         Question question = findQuestionById(questionId);
         question.view();
 
-        return question;
+        return questionRepository.getQuestionWithAnswer(questionId, memberId);
     }
 
     public List<Question> getQuestions() {
