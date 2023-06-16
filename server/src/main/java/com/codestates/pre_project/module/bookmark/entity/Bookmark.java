@@ -1,4 +1,4 @@
-package com.codestates.pre_project.module.save.entity;
+package com.codestates.pre_project.module.bookmark.entity;
 
 import com.codestates.pre_project.member.entity.Member;
 import com.codestates.pre_project.module.question.entity.Question;
@@ -13,8 +13,8 @@ import javax.persistence.*;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Entity
-@Table(name = "saves")
-public class Save {
+@Table(name = "bookmarks")
+public class Bookmark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -29,7 +29,7 @@ public class Save {
     @Column(nullable = false)
     private boolean status;
 
-    public Save(Question question, Member member) {
+    public Bookmark(Question question, Member member) {
         this.question = question;
         this.member = member;
         this.status = true;
