@@ -22,14 +22,14 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public GetQuestionResponse getQuestionWithAnswer(Long questionId, Long memberId) {
-        QuestionDetailResponse questionDetailResponse = fetchQuestionResponse(questionId, memberId);
-        List<AnswerResponse> answerResponses = fetchAnswerResponses(questionId, memberId);
+    public GetQuestionResponse getQuestionWithAnswer(Long questionId) {
+        QuestionDetailResponse questionDetailResponse = fetchQuestionResponse(questionId);
+        List<AnswerResponse> answerResponses = fetchAnswerResponses(questionId);
 
         return new GetQuestionResponse(questionDetailResponse, answerResponses);
     }
 
-    private QuestionDetailResponse fetchQuestionResponse(Long questionId, Long memberId) {
+    private QuestionDetailResponse fetchQuestionResponse(Long questionId) {
         return queryFactory
                 .select(new QQuestionDetailResponse(
                         asNumber(questionId),
@@ -46,14 +46,14 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                 .fetchOne();
     }
 
-    private List<AnswerResponse> fetchAnswerResponses(Long questionId, Long memberId) {
+    private List<AnswerResponse> fetchAnswerResponses(Long questionId) {
         List<Long> answerIds = fetchAnswerIds(questionId);
         return answerIds.stream()
-                .map(answerId -> fetchAnswerResponse(memberId, answerId))
+                .map(this::fetchAnswerResponse)
                 .collect(Collectors.toList());
     }
 
-    private AnswerResponse fetchAnswerResponse(Long memberId, Long answerId) {
+    private AnswerResponse fetchAnswerResponse(Long answerId) {
         return queryFactory
                 .select(new QAnswerResponse(
                         answer.id,

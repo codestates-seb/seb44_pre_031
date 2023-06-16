@@ -33,11 +33,11 @@ public class QuestionService {
         question.update(request);
     }
 
-    public GetQuestionResponse getQuestion(Long questionId, Long memberId) {
+    public GetQuestionResponse getQuestion(Long questionId) {
         Question question = findQuestionById(questionId);
         question.view();
 
-        return questionRepository.getQuestionWithAnswer(questionId, memberId);
+        return questionRepository.getQuestionWithAnswer(questionId);
     }
 
     public List<Question> getQuestions() {
