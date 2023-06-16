@@ -26,19 +26,19 @@ public class VoteService {
 
     @Transactional
     public void voteQuestion(Long questionId) {
-//        Question question = questionRepository.findById(questionId).orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));
-//
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-//
-//        if (voteRepository.findByQuestionAndMember(question, member) == null) {
-//            question.setVoteCount(question.getVoteCount() + 1);
-//            Vote vote = Vote.like(question, member);
-//            voteRepository.save(vote);
-//        } else {
-//            Vote findVote = voteRepository.findByQuestionAndMember(question, member);
-//            Vote dislike = findVote.dislike(question, member);
-//            voteRepository.delete(dislike);
-//        }
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+
+        if (voteRepository.findByQuestionAndMember(question, member) == null) {
+            question.setVoteCount(question.getVoteCount() + 1);
+            Vote vote = Vote.like(question, member);
+            voteRepository.save(vote);
+        } else {
+            Vote findVote = voteRepository.findByQuestionAndMember(question, member);
+            Vote dislike = findVote.dislike(question, member);
+            voteRepository.delete(dislike);
+        }
     }
 }

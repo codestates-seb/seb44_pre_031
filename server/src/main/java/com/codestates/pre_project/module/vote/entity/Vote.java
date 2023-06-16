@@ -41,8 +41,8 @@ public class Vote {
         return new Vote(question, member, true);
     }
 
-//    public Vote dislike(Question question, Member member) {
-//        question.setVoteCount(question.getVoteCount() - 1);
-//        return new Vote(question, member, false);
-//    }
+    public Vote dislike(Question question, Member member) {
+        question.setVoteCount(question.getVoteCount() - 1);
+        return new Vote(question, member, false);
+    }
 }
