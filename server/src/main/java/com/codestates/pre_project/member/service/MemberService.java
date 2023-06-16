@@ -35,7 +35,7 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public Member findMember(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        return findMemberById(memberId);
     }
 
     @Transactional
@@ -50,10 +50,14 @@ public class MemberService {
     }
 
     private Member validateUpdate(Long memberId, Member member) {
-        Member findMember = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        Member findMember = findMemberById(memberId);
         memberRepository.findByDisplayName(member.getDisplayName()).ifPresent(alreadyExists -> {
             throw new MemberDisplayNameAlreadyExistsException(member.getDisplayName() + "은 이미 사용중!!!!!!!!!!!!!!");
         });
         return findMember;
+    }
+
+    private Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
     }
 }
