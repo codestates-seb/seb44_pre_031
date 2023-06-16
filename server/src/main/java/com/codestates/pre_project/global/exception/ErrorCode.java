@@ -15,6 +15,7 @@ public enum ErrorCode {
     // 404
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "질문이 존재하지 않습니다."),
     ANSWER_NOT_FOUND(HttpStatus.NOT_FOUND, "답변이 존재하지 않습니다."),
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "멤버가 존재하지 않습니다."),
 
     // 409
     ALREADY_SELECTED_ANSWER(HttpStatus.CONFLICT, "이미 채택된 답변이 존재합니다."),
