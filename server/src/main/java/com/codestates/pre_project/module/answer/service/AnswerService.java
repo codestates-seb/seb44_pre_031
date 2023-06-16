@@ -24,7 +24,7 @@ public class AnswerService {
     @Transactional
     public void createAnswer(Long memberId, Long questionId, Answer request) {
         Member member = memberService.findMember(memberId);
-        Question question = questionService.getQuestion(questionId);
+        Question question = questionService.findQuestionById(questionId);
         answerRepository.save(Answer.of(request.getContent(), member, question));
     }
 
@@ -36,7 +36,7 @@ public class AnswerService {
 
     @Transactional
     public void selectAnswer(Long questionId, Long answerId) {
-        Question question = questionService.getQuestion(questionId);
+        Question question = questionService.findQuestionById(questionId);
         questionService.checkExistSelectedAnswer(question);
         question.selectAnswer();
 

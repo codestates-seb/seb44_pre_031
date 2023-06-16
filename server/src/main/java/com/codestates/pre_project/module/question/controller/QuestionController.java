@@ -1,6 +1,7 @@
 package com.codestates.pre_project.module.question.controller;
 
 import com.codestates.pre_project.module.question.dto.QuestionRequestDto;
+import com.codestates.pre_project.module.question.dto.response.GetQuestionResponse;
 import com.codestates.pre_project.module.question.dto.response.QuestionDetailResponse;
 import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.service.QuestionService;
@@ -39,7 +40,7 @@ public class QuestionController {
     @ResponseStatus(HttpStatus.OK)
     public Response getQuestion(@PathVariable("question-id") Long questionId) {
         // TODO: memberId 가져오는 로직 추가
-        QuestionDetailResponse response = questionService.getQuestion(questionId, memberId);
+        GetQuestionResponse response = questionService.getQuestion(questionId, memberId);
 
         // TODO : 응답 DTO 새로 작성
         return Response.success(response);

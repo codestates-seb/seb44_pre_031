@@ -57,7 +57,7 @@ public class QuestionService {
         }
     }
 
-    private Question findQuestionById(Long questionId) {
+    public Question findQuestionById(Long questionId) {
         return questionRepository.findById(questionId)
                 .orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));
     }
