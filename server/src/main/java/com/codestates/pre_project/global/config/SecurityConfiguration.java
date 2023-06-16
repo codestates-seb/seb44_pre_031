@@ -2,6 +2,7 @@ package com.codestates.pre_project.config;
 
 import com.codestates.pre_project.global.auth.filter.JwtAuthenticationFilter;
 import com.codestates.pre_project.global.auth.jwt.JwtTokenizer;
+import com.codestates.pre_project.member.repository.MemberRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,9 +21,11 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
+    private final MemberRepository memberRepository;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer) {
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer, MemberRepository memberRepository) {
         this.jwtTokenizer = jwtTokenizer;
+        this.memberRepository = memberRepository;
     }
 
     @Bean
@@ -47,7 +50,7 @@ public class SecurityConfiguration {
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer,memberRepository);
             jwtAuthenticationFilter.setFilterProcessesUrl("/api/users/sign-in"); // request URL 등록
 
             builder.addFilter(jwtAuthenticationFilter);

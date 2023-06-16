@@ -3,11 +3,14 @@ package com.codestates.pre_project.global.auth.filter;
 import com.codestates.pre_project.global.auth.dto.LoginDto;
 import com.codestates.pre_project.global.auth.jwt.JwtTokenizer;
 import com.codestates.pre_project.member.entity.Member;
+import com.codestates.pre_project.member.exception.MemberNotFoundException;
+import com.codestates.pre_project.member.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -16,14 +19,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
+    private final MemberRepository memberRepository;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenizer jwtTokenizer) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenizer jwtTokenizer, MemberRepository memberRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenizer = jwtTokenizer;
+        this.memberRepository = memberRepository;
     }
 
     // 인증을 시도한다.
@@ -44,7 +50,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) {
-        Member member = (Member) authResult.getPrincipal();
+        User user = (User) authResult.getPrincipal();
+        String email = user.getUsername();
+
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        Member member = optionalMember.orElseThrow(() -> new MemberNotFoundException());
 
         String accessToken = delegateAccessToken(member);      //Access Token 생성
         String refreshToken = delegateRefreshToken(member);    //Refresh Token 생성
