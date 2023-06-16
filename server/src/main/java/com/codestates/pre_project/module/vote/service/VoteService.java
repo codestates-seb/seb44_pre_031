@@ -24,6 +24,7 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final MemberRepository memberRepository;
 
+    ///////
     @Transactional
     public void voteQuestion(Long questionId) {
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));
@@ -32,7 +33,7 @@ public class VoteService {
         Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
 
         if (voteRepository.findByQuestionAndMember(question, member) == null) {
-            question.vote(question.getVoteCount() + 1);
+            question.vote();
             Vote vote = Vote.like(question, member);
             voteRepository.save(vote);
         } else {
