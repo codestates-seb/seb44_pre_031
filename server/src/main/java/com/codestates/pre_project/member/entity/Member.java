@@ -68,4 +68,11 @@ public class Member extends BaseEntity {
 
         return findMember;
     }
+
+    public Member(Long id, String email, String password, List<String> roles) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }  // Builder를 사용하지 않기 위함
 }

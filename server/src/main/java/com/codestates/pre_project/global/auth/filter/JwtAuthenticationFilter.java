@@ -24,12 +24,11 @@ import java.util.Optional;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
-    private final MemberRepository memberRepository;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenizer jwtTokenizer, MemberRepository memberRepository) {
+
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenizer jwtTokenizer) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenizer = jwtTokenizer;
-        this.memberRepository = memberRepository;
     }
 
     // 인증을 시도한다.
@@ -50,11 +49,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) {
-        User user = (User) authResult.getPrincipal();
-        String email = user.getUsername();
-
-        Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        Member member = optionalMember.orElseThrow(() -> new MemberNotFoundException());
+        Member member = (Member) authResult.getPrincipal();
 
         String accessToken = delegateAccessToken(member);      //Access Token 생성
         String refreshToken = delegateRefreshToken(member);    //Refresh Token 생성

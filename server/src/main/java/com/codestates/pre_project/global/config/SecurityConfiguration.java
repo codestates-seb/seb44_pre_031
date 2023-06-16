@@ -21,11 +21,10 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
-    private final MemberRepository memberRepository;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer, MemberRepository memberRepository) {
+
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer) {
         this.jwtTokenizer = jwtTokenizer;
-        this.memberRepository = memberRepository;
     }
 
     @Bean
@@ -50,7 +49,7 @@ public class SecurityConfiguration {
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer,memberRepository);
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
             jwtAuthenticationFilter.setFilterProcessesUrl("/api/users/sign-in"); // request URL 등록
 
             builder.addFilter(jwtAuthenticationFilter);
