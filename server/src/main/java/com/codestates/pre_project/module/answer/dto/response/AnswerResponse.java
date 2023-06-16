@@ -1,4 +1,4 @@
-package com.codestates.pre_project.module.answer.dto;
+package com.codestates.pre_project.module.answer.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AccessLevel;

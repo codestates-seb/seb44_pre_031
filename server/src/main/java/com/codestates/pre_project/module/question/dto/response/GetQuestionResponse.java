@@ -1,6 +1,6 @@
 package com.codestates.pre_project.module.question.dto.response;
 
-import com.codestates.pre_project.module.answer.dto.AnswerResponse;
+import com.codestates.pre_project.module.answer.dto.response.AnswerResponse;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

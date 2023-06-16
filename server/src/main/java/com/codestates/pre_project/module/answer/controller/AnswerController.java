@@ -1,6 +1,6 @@
 package com.codestates.pre_project.module.answer.controller;
 
-import com.codestates.pre_project.module.answer.dto.AnswerRequestDto;
+import com.codestates.pre_project.module.answer.dto.request.AnswerRequest;
 import com.codestates.pre_project.module.answer.service.AnswerService;
 import com.codestates.pre_project.module.response.Response;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +16,9 @@ public class AnswerController {
     @PostMapping("/{question-id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Response createAnswer(@PathVariable("question-id") Long questionId,
-                                 @RequestBody AnswerRequestDto request) {
+                                 @RequestBody AnswerRequest request) {
         // TODO : memberId 가져오는 로직 추가
-        answerService.createAnswer(1L, questionId, request.toEntity());
+        answerService.createAnswer(memberId, questionId, request.toEntity());
 
         return Response.success();
     }
@@ -26,7 +26,7 @@ public class AnswerController {
     @PatchMapping("/{question-id}/{answer-id}")
     @ResponseStatus(HttpStatus.OK)
     public Response updateAnswer(@PathVariable("answer-id") Long answerId,
-                                 @RequestBody AnswerRequestDto request) {
+                                 @RequestBody AnswerRequest request) {
         answerService.updateAnswer(answerId, request.toEntity());
 
         return Response.success();
