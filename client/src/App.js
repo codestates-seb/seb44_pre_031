@@ -1,15 +1,21 @@
+import { Routes, Route, useLocation } from 'react-router-dom';
 import GlobalStyle from './styles/GlobalStyle';
+import AskQuestion from './pages/AskQuestion';
+import Question from './pages/Question';
 
 function App() {
+  let location = useLocation();
+  console.log(location);
+
   return (
     <div>
       <GlobalStyle />
-      <p>초기구현 테스트 완료 - 나중에 지워주세요</p>
-      <p>초기구현 테스트 완료 - 나중에 지워주세요</p>
-      <p>초기구현 테스트 완료 - 나중에 지워주세요</p>
-      <p>초기구현 테스트 완료 - 나중에 지워주세요</p>
-      <p>초기구현 테스트 완료 - 나중에 지워주세요</p>
-      <p>초기구현 테스트 완료 - 나중에 지워주세요</p>
+      <Routes>
+        <Route path="questions">
+          <Route path="ask" element={<AskQuestion />} />
+          <Route path=":questionId" element={<Question />} />
+        </Route>
+      </Routes>
     </div>
   );
 }
