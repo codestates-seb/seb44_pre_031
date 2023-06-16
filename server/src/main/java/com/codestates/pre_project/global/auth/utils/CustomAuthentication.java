@@ -4,14 +4,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 
 public class CustomAuthentication extends UsernamePasswordAuthenticationToken {
-    private final Long memberId;
+    private final Object memberId;
 
-    public CustomAuthentication(Authentication authentication, Long memberId) {
+    public CustomAuthentication(Authentication authentication, Object memberId) {
         super(authentication.getPrincipal(),authentication.getCredentials(),authentication.getAuthorities());
         this.memberId = memberId;
     }
 
-    public Long getMemberId() {
+    public Object getMemberId() {
         return memberId;
     }
 }
