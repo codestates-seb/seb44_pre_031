@@ -19,7 +19,7 @@ import static javax.persistence.FetchType.LAZY;
 public class Vote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "save_id", nullable = false, updatable = false)
+    @Column(name = "vote_id", nullable = false, updatable = false)
     private Long id;
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "question_id", nullable = false)
@@ -37,12 +37,7 @@ public class Vote {
         this.voteType = voteType;
     }
 
-    public static Vote like(Question question, Member member) {
-        return new Vote(question, member, true);
-    }
-
-    public Vote dislike(Question question, Member member) {
-        question.vote(question.getVoteCount() - 1);
-        return new Vote(question, member, false);
+    public static Vote of(Question question, Member member, boolean voteType) {
+        return new Vote(question, member, voteType);
     }
 }
