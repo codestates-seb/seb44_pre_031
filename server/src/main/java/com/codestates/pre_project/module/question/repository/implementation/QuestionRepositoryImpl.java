@@ -1,7 +1,7 @@
 package com.codestates.pre_project.module.question.repository.implementation;
 
 import com.codestates.pre_project.module.answer.dto.response.AnswerResponse;
-import com.codestates.pre_project.module.answer.dto.QAnswerResponse;
+import com.codestates.pre_project.module.answer.dto.response.QAnswerResponse;
 import com.codestates.pre_project.module.question.dto.response.*;
 import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.repository.QuestionRepositoryCustom;
