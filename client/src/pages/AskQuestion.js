@@ -3,6 +3,7 @@ import { styled } from 'styled-components';
 import { TfiPencil } from 'react-icons/tfi';
 import AskQuestionInput from '../components/AskQuestionInput';
 // import { useNavigate } from 'react-router-dom';
+import StyledButton from '../styles/StyledButton';
 
 const AskContainer = styled.div`
   background-color: rgb(248, 249, 249);
@@ -97,36 +98,36 @@ const WriteGoodTitleNotice = styled.div`
   }
 `;
 
-const StyledButton = styled.button`
-  font-size: 1.3em;
-  color: ${(props) => (props.isCancel ? 'hsl(358,62%,47%)' : 'white')};
-  /* color: white; */
-  background-color: ${(props) =>
-    props.isCancel ? 'rgb(248, 249, 249)' : 'rgb(10, 149, 255)'};
-  border: none;
-  border-radius: 5px;
-  width: ${(props) => props.width};
-  height: 2.5em;
-  cursor: pointer;
+// const StyledButton = styled.button`
+//   font-size: 1.2em;
+//   color: ${(props) => (props.isCancel ? 'hsl(358,62%,47%)' : 'white')};
+//   background-color: ${(props) =>
+//     props.isCancel ? 'rgb(248, 249, 249)' : 'rgb(10, 149, 255)'};
+//   border: none;
+//   border-radius: 5px;
+//   width: ${(props) => props.width};
+//   height: 2.5em;
+//   box-shadow: rgba(255, 255, 255, 0.4) 0px 2px 0px 0px inset;
+//   cursor: pointer;
 
-  &:hover {
-    background-color: ${(props) =>
-      props.isCancel ? 'hsl(358,75%,97%)' : 'hsl(206, 100%, 40%)'};
-  }
-  &:active {
-    background-color: ${(props) =>
-      props.isCancel ? 'hsl(358,76%,90%)' : 'hsl(209, 100%, 37.5%)'};
-    box-shadow: 0px 0px 2px 5px
-      ${(props) =>
-        props.isCancel ? 'hsl(358,74%,83%)' : 'hsl(206, 93%, 83.5%)'};
-  }
+//   &:hover {
+//     background-color: ${(props) =>
+//       props.isCancel ? 'hsl(358,75%,97%)' : 'hsl(206, 100%, 40%)'};
+//   }
+//   &:active {
+//     background-color: ${(props) =>
+//       props.isCancel ? 'hsl(358,76%,90%)' : 'hsl(209, 100%, 37.5%)'};
+//     box-shadow: 0px 0px 2px 5px
+//       ${(props) =>
+//         props.isCancel ? 'hsl(358,74%,83%)' : 'hsl(206, 93%, 83.5%)'};
+//   }
 
-  &:disabled {
-    background-color: lightskyblue;
-    color: rgb(227, 241, 252);
-    cursor: pointer;
-  }
-`;
+//   &:disabled {
+//     background-color: lightskyblue;
+//     color: rgb(227, 241, 252);
+//     cursor: pointer;
+//   }
+// `;
 
 // 페이지 컴포넌트
 const AskQuestion = () => {
@@ -262,7 +263,10 @@ const AskQuestion = () => {
   };
 
   const handleTagsInputBlur = () => {
-    if (inputText.tags.split(' ').length < 1 || inputText.tags.length === 0) {
+    if (
+      inputText.tags.split(' ').length < 1 ||
+      inputText.tags.trim().length === 0
+    ) {
       setIsValid({ ...isValid, tags: false });
       setValidationNotice({
         ...validationNotice,
@@ -296,16 +300,13 @@ const AskQuestion = () => {
     }
   };
 
+  // submit 핸들러, 페이지 이동
   const handleSubmit = (e) => {
     e.preventDefault();
     if (
-      inputText.title.length >= 15 &&
-      inputText.title.length <= 30 &&
-      inputText.body.length >= 220 &&
-      inputText.body.length <= 500 &&
-      inputText.tags.split(' ').length >= 1 &&
-      inputText.tags.split(' ').length < 6 &&
-      inputText.tags.trim().length !== 0
+      isValid.title === true &&
+      isValid.body === true &&
+      isValid.tags === true
     ) {
       console.log(inputText.title);
       // 성공하면 navegate('/questions/{생성된questionId}') 로 리다이렉트하게 만들어야함

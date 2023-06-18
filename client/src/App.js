@@ -1,7 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import GlobalStyle from './styles/GlobalStyle';
 import AskQuestion from './pages/AskQuestion';
-import Question from './pages/Question';
+import QuestionDetail from './pages/QuestionDetail';
 
 function App() {
   let location = useLocation();
@@ -13,7 +13,7 @@ function App() {
       <Routes>
         <Route path="questions">
           <Route path="ask" element={<AskQuestion />} />
-          <Route path=":questionId" element={<Question />} />
+          <Route path=":questionId" element={<QuestionDetail />} />
         </Route>
       </Routes>
     </div>

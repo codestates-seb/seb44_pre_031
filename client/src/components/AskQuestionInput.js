@@ -1,4 +1,5 @@
 import { styled } from 'styled-components';
+import { PropTypes } from 'prop-types';
 
 export const PostInputBox = styled.div`
   display: flex;
@@ -16,10 +17,8 @@ export const PostInputBox = styled.div`
 
   input {
     height: ${(props) => props.height || '3.5em'};
-    /* height: 3.5em; */
     padding: 1em;
     font-size: 1em;
-    /* border-radius: 5px; */
     text-align: ${(props) => (props.title === 'top' ? 'start' : 'left')};
 
     &:focus {
@@ -41,13 +40,14 @@ export const PostInputBox = styled.div`
 
   button {
     display: ${(props) => (props.isButtonVisible ? 'block' : 'none')};
-    font-size: 1.3em;
+    font-size: 1.2em;
     color: white;
     background-color: rgb(10, 149, 255);
     border: none;
     border-radius: 5px;
     width: 3.5em;
     height: 2.5em;
+    box-shadow: rgba(255, 255, 255, 0.4) 0px 2px 0px 0px inset;
     cursor: pointer;
 
     &:hover {
@@ -65,37 +65,21 @@ export const PostInputBox = styled.div`
 `;
 
 const AskQuestionInput = ({
-  // eslint-disable-next-line react/prop-types
   title,
-  // eslint-disable-next-line react/prop-types
   name,
-  // eslint-disable-next-line react/prop-types
   content,
-  // eslint-disable-next-line react/prop-types
   placeholder,
-  // eslint-disable-next-line react/prop-types
   inputLabel,
-  // eslint-disable-next-line react/prop-types
   inputValue,
-  // eslint-disable-next-line react/prop-types
   isButtonVisible,
-  // eslint-disable-next-line react/prop-types
   buttonTitle,
-  // eslint-disable-next-line react/prop-types
   handleButtonClick,
-  // eslint-disable-next-line react/prop-types
   handleInputChange,
-  // eslint-disable-next-line react/prop-types
   height,
-  // eslint-disable-next-line react/prop-types
   validationNotice,
-  // eslint-disable-next-line react/prop-types
   isValid,
-  // eslint-disable-next-line react/prop-types
   minlength,
-  // eslint-disable-next-line react/prop-types
   maxlength,
-  // eslint-disable-next-line react/prop-types
   handleBlur,
 }) => {
   return (
@@ -136,6 +120,25 @@ const AskQuestionInput = ({
       </button>
     </PostInputBox>
   );
+};
+
+AskQuestionInput.propTypes = {
+  title: PropTypes.string,
+  name: PropTypes.string,
+  content: PropTypes.string,
+  placeholder: PropTypes.string,
+  inputLabel: PropTypes.string,
+  inputValue: PropTypes.string,
+  isButtonVisible: PropTypes.bool,
+  buttonTitle: PropTypes.string,
+  handleButtonClick: PropTypes.func,
+  height: PropTypes.string,
+  handleInputChange: PropTypes.func,
+  validationNotice: PropTypes.string,
+  isValid: PropTypes.bool,
+  minlength: PropTypes.string,
+  maxlength: PropTypes.string,
+  handleBlur: PropTypes.func,
 };
 
 export default AskQuestionInput;
