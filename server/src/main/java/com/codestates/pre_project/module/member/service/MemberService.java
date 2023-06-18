@@ -48,7 +48,7 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public List<QuestionSimpleDto> findBookmarks(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+        Member member = findMemberById(memberId);
         return bookmarkRepository.findAllByMember(member).stream()
                 .map(bookmark -> QuestionSimpleDto.toDto(bookmark.getQuestion()))
                 .collect(Collectors.toList());
@@ -62,7 +62,7 @@ public class MemberService {
 
     @Transactional
     public void deleteMember(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+        Member member = findMemberById(memberId);
         memberRepository.delete(member);
     }
 
@@ -80,6 +80,6 @@ public class MemberService {
     }
 
     private Member findMemberById(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
+        return memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 }
