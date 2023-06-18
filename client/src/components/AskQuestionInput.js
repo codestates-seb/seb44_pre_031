@@ -28,6 +28,17 @@ export const PostInputBox = styled.div`
     }
   }
 
+  textarea {
+    padding: 1em;
+    font-size: 1em;
+    text-align: ${(props) => (props.title === 'top' ? 'start' : 'left')};
+
+    &:focus {
+      border: 0.1em solid hsl(206, 85%, 57.5%);
+      box-shadow: 0px 0px 2px 5px hsl(206, 93%, 83.5%);
+    }
+  }
+
   button {
     display: ${(props) => (props.isButtonVisible ? 'block' : 'none')};
     font-size: 1.3em;
@@ -47,11 +58,17 @@ export const PostInputBox = styled.div`
       box-shadow: 0px 0px 2px 5px hsl(206, 93%, 83.5%);
     }
   }
+
+  .validation-notice {
+    color: red;
+  }
 `;
 
 const AskQuestionInput = ({
   // eslint-disable-next-line react/prop-types
   title,
+  // eslint-disable-next-line react/prop-types
+  name,
   // eslint-disable-next-line react/prop-types
   content,
   // eslint-disable-next-line react/prop-types
@@ -70,6 +87,16 @@ const AskQuestionInput = ({
   handleInputChange,
   // eslint-disable-next-line react/prop-types
   height,
+  // eslint-disable-next-line react/prop-types
+  validationNotice,
+  // eslint-disable-next-line react/prop-types
+  isValid,
+  // eslint-disable-next-line react/prop-types
+  minlength,
+  // eslint-disable-next-line react/prop-types
+  maxlength,
+  // eslint-disable-next-line react/prop-types
+  handleBlur,
 }) => {
   return (
     <PostInputBox isButtonVisible={isButtonVisible} height={height}>
@@ -77,13 +104,33 @@ const AskQuestionInput = ({
         <h5>{title}</h5>
         <p>{content}</p>
       </label>
-      <input
-        type="text"
-        id={inputLabel}
-        placeholder={placeholder}
-        value={inputValue}
-        onChange={handleInputChange}
-      ></input>
+      {name === 'body' ? (
+        <textarea
+          name={name}
+          id={inputLabel}
+          placeholder={placeholder}
+          value={inputValue}
+          minLength={minlength}
+          maxLength={maxlength}
+          onChange={handleInputChange}
+          rows="12"
+          cols="50"
+          onBlur={handleBlur}
+        />
+      ) : (
+        <input
+          type="text"
+          name={name}
+          id={inputLabel}
+          placeholder={placeholder}
+          value={inputValue}
+          minLength={minlength}
+          maxLength={maxlength}
+          onChange={handleInputChange}
+          onBlur={handleBlur}
+        />
+      )}
+      {!isValid && <p className="validation-notice">{validationNotice}</p>}
       <button type="button" onClick={handleButtonClick}>
         {buttonTitle}
       </button>
