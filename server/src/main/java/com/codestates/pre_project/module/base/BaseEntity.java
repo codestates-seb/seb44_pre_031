@@ -19,14 +19,8 @@ public abstract class BaseEntity {
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
-    @CreatedBy
-    @Column(updatable = false)
-    private String createdBy;
 
     @LastModifiedDate
     @Column
     private LocalDateTime updatedAt;
-    @LastModifiedBy
-    @Column
-    private String updatedBy;
 }

@@ -55,7 +55,6 @@ public class Member extends BaseEntity {
     private String twitterLink;
     @Column(name = "github_link")
     private String githubLink;
-
     @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
@@ -71,7 +70,7 @@ public class Member extends BaseEntity {
 
         return findMember;
 
-  }
+    }
 
     public Member(Long id, String email, String password, List<String> roles) {
         this.id = id;
