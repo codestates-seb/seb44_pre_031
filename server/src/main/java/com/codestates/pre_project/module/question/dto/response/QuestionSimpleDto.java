@@ -17,7 +17,7 @@ public class QuestionSimpleDto {
     private Long bookmarkCount;
 
     public static QuestionSimpleDto toDto(Question question) {
-        return new QuestionSimpleDto(question.getId(), question.getTitle(), question.getMember().getDisplayName(), question.getVoteCount(),
+        return new QuestionSimpleDto(question.getId(), question.getTitle(), question.getMember().getDisplayName(), question.getLikeCount(),
                 question.getBookmarkCount());
     }
 }

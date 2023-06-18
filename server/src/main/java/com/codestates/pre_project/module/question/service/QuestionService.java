@@ -54,6 +54,20 @@ public class QuestionService {
         questionRepository.delete(question);
     }
 
+    @Transactional
+    public void likeQuestion(Long questionId) {
+        Question question = findQuestionById(questionId);
+        // TODO: Question, Vote 매핑 다시하고 완성
+        question.like();
+    }
+
+    @Transactional
+    public void dislikeQuestion(Long questionId) {
+        Question question = findQuestionById(questionId);
+        // TODO: Question, Vote 매핑 다시하고 완성
+        question.dislike();
+    }
+
     public void checkExistSelectedAnswer(Question question) {
         if (question.isSelectedAnswer()) {
             throw new CustomException(ALREADY_SELECTED_ANSWER);
@@ -64,4 +78,5 @@ public class QuestionService {
         return questionRepository.findById(questionId)
                 .orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));
     }
+
 }

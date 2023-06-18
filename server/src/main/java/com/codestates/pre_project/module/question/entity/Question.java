@@ -26,8 +26,8 @@ public class Question extends BaseEntity {
     private Long viewCount;
     @Column(name = "selected_answer")
     private boolean selectedAnswer;
-    @Column(name = "vote_count")
-    private Long voteCount;
+    @Column(name = "like_count")
+    private Long likeCount;
     @Column(name = "bookmark_count")
     private Long bookmarkCount;
 
@@ -43,7 +43,7 @@ public class Question extends BaseEntity {
         this.title = title;
         this.content = content;
         this.viewCount = 0L;
-        this.voteCount = 0L;
+        this.likeCount = 0L;
         this.bookmarkCount = 0L;
     }
 
@@ -68,12 +68,12 @@ public class Question extends BaseEntity {
         this.viewCount++;
     }
 
-    public void vote() {
-        this.voteCount++;
+    public void like() {
+        this.likeCount++;
     }
 
-    public void cancelVote() {
-        this.voteCount--;
+    public void dislike() {
+        this.likeCount--;
     }
 
     public void bookmark() {

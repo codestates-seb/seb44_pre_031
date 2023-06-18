@@ -3,8 +3,10 @@ package com.codestates.pre_project.module.vote.service;
 import com.codestates.pre_project.global.exception.CustomException;
 import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.member.repository.MemberRepository;
+import com.codestates.pre_project.module.member.service.MemberService;
 import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.repository.QuestionRepository;
+import com.codestates.pre_project.module.question.service.QuestionService;
 import com.codestates.pre_project.module.vote.entity.Vote;
 import com.codestates.pre_project.module.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +21,13 @@ import static com.codestates.pre_project.global.exception.ErrorCode.*;
 @RequiredArgsConstructor
 public class VoteService {
 
-    private final QuestionRepository questionRepository;
+    private final QuestionService questionService;
     private final VoteRepository voteRepository;
     private final MemberRepository memberRepository;
 
     @Transactional
     public void voteQuestion(Long questionId, boolean type) throws CustomException{
-        Question question = questionRepository.findById(questionId).orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));
+        Question question = questionService.findQuestionById(questionId);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
@@ -36,11 +38,11 @@ public class VoteService {
 
         if (type) {
             deleteIfAlreadyVotes(question, member, false);
-            question.vote();
+            question.like();
             voteRepository.save(Vote.of(question, member, true));
         } else {
             deleteIfAlreadyVotes(question, member, true);
-            question.cancelVote();
+            question.dislike();
             voteRepository.save(Vote.of(question, member, false));
         }
     }
@@ -48,8 +50,8 @@ public class VoteService {
     private void deleteIfAlreadyVotes(Question question, Member member, boolean type) {
         if (voteRepository.findVoteTypeByQuestionAndMember(question.getId(), member.getId(), type).isPresent()) {
             voteRepository.delete(voteRepository.findByQuestionAndMember(question, member));
-            if (type) question.cancelVote();
-            else question.vote();
+            if (type) question.dislike();
+            else question.like();
         }
     }
 }

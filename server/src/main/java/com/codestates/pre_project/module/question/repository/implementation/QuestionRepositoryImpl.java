@@ -39,7 +39,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         asNumber(question.id),
                         question.title,
                         question.content,
-                        question.voteCount,
+                        question.likeCount,
                         // TODO : 답변 갯수 필드 추가 or 다른 방법으로 가져오기
                         question.answers.size(),
                         question.selectedAnswer,
@@ -65,7 +65,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         asNumber(questionId),
                         question.title,
                         question.content,
-                        question.voteCount,
+                        question.likeCount,
                         question.selectedAnswer,
                         question.createdAt,
                         member.displayName,

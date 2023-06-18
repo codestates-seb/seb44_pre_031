@@ -42,7 +42,7 @@ public class QuestionController {
     @PatchMapping("/{question-id}")
     @ResponseStatus(HttpStatus.OK)
     public Response updateQuestion(@PathVariable("question-id") Long questionId,
-                                  @Valid @RequestBody QuestionRequest request) {
+                                   @Valid @RequestBody QuestionRequest request) {
         questionService.updateQuestion(questionId, request.toEntity());
 
         return Response.success();
@@ -68,6 +68,22 @@ public class QuestionController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Response deleteQuestion(@PathVariable("question-id") Long questionId) {
         questionService.deleteQuestion(questionId);
+
+        return Response.success();
+    }
+
+    @PostMapping("/{question-id}/like")
+    @ResponseStatus(HttpStatus.OK)
+    public Response likeQuestion(@PathVariable("question-id") Long questionId) {
+        questionService.likeQuestion(questionId);
+
+        return Response.success();
+    }
+
+    @PostMapping("/{question-id}/dislike")
+    @ResponseStatus(HttpStatus.OK)
+    public Response dislikeQuestion(@PathVariable("question-id") Long questionId) {
+        questionService.dislikeQuestion(questionId);
 
         return Response.success();
     }
