@@ -10,11 +10,8 @@ import com.codestates.pre_project.module.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static com.codestates.pre_project.global.exception.ErrorCode.*;
 
@@ -26,9 +23,11 @@ public class QuestionService {
     private final MemberService memberService;
 
     @Transactional
-    public void createQuestion(Long memberId, Question request) {
+    public Long createQuestion(Long memberId, Question request) {
         Member member = memberService.findMember(memberId);
-        questionRepository.save(Question.of(member, request));
+        Question question = questionRepository.save(Question.of(member, request));
+
+        return question.getId();
     }
 
     @Transactional

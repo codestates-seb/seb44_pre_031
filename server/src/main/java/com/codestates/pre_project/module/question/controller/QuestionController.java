@@ -36,8 +36,9 @@ public class QuestionController {
         // TODO: memberId 가져오는 로직 추가
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-        questionService.createQuestion(member.getId(), request.toEntity());
-        return Response.success();
+
+        Long questionId = questionService.createQuestion(member.getId(), request.toEntity());
+        return Response.success(questionId);
     }
 
     @PatchMapping("/{question-id}")
@@ -54,7 +55,6 @@ public class QuestionController {
     public Response getQuestion(@PathVariable("question-id") Long questionId) {
         GetQuestionResponse response = questionService.getQuestion(questionId);
 
-        // TODO : 응답 DTO 새로 작성
         return Response.success(response);
     }
 
