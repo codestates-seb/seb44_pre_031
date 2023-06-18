@@ -1,10 +1,8 @@
 package com.codestates.pre_project.module.vote.entity;
 
-import com.codestates.pre_project.member.entity.Member;
+import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.question.entity.Question;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 

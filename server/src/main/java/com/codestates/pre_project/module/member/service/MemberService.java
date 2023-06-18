@@ -1,27 +1,20 @@
-package com.codestates.pre_project.member.service;
+package com.codestates.pre_project.module.member.service;
 
 import com.codestates.pre_project.global.auth.utils.CustomAuthorityUtils;
 import com.codestates.pre_project.global.exception.CustomException;
-import com.codestates.pre_project.member.dto.UpdateMemberDto;
-import com.codestates.pre_project.member.entity.Member;
-import com.codestates.pre_project.member.exception.MemberDisplayNameAlreadyExistsException;
-import com.codestates.pre_project.member.exception.MemberEmailAlreadyExistsException;
-import com.codestates.pre_project.member.exception.MemberNotFoundException;
-import com.codestates.pre_project.member.repository.MemberRepository;
-import com.codestates.pre_project.module.bookmark.entity.Bookmark;
+import com.codestates.pre_project.module.member.dto.UpdateMemberDto;
+import com.codestates.pre_project.module.member.entity.Member;
+import com.codestates.pre_project.module.member.exception.MemberDisplayNameAlreadyExistsException;
+import com.codestates.pre_project.module.member.exception.MemberEmailAlreadyExistsException;
+import com.codestates.pre_project.module.member.exception.MemberNotFoundException;
+import com.codestates.pre_project.module.member.repository.MemberRepository;
 import com.codestates.pre_project.module.bookmark.repository.BookmarkRepository;
-import com.codestates.pre_project.module.question.dto.response.QuestionResponse;
 import com.codestates.pre_project.module.question.dto.response.QuestionSimpleDto;
-import com.codestates.pre_project.module.question.entity.Question;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

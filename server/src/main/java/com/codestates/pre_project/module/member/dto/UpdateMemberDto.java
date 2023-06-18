@@ -1,12 +1,11 @@
-package com.codestates.pre_project.member.dto;
+package com.codestates.pre_project.module.member.dto;
 
-import com.codestates.pre_project.member.entity.Member;
+import com.codestates.pre_project.module.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Builder

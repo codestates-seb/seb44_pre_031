@@ -6,7 +6,6 @@ import com.codestates.pre_project.global.auth.handler.MemberAuthenticationFailur
 import com.codestates.pre_project.global.auth.handler.MemberAuthenticationSuccessHandler;
 import com.codestates.pre_project.global.auth.jwt.JwtTokenizer;
 import com.codestates.pre_project.global.auth.utils.CustomAuthorityUtils;
-import com.codestates.pre_project.member.repository.MemberRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

@@ -1,11 +1,10 @@
 package com.codestates.pre_project.global.auth.userdetails;
 
 import com.codestates.pre_project.global.auth.utils.CustomAuthorityUtils;
-import com.codestates.pre_project.member.entity.Member;
-import com.codestates.pre_project.member.exception.MemberNotFoundException;
-import com.codestates.pre_project.member.repository.MemberRepository;
+import com.codestates.pre_project.module.member.entity.Member;
+import com.codestates.pre_project.module.member.exception.MemberNotFoundException;
+import com.codestates.pre_project.module.member.repository.MemberRepository;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

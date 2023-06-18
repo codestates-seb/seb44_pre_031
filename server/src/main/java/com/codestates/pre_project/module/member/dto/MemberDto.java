@@ -1,6 +1,6 @@
-package com.codestates.pre_project.member.dto;
+package com.codestates.pre_project.module.member.dto;
 
-import com.codestates.pre_project.member.entity.Member;
+import com.codestates.pre_project.module.member.entity.Member;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,6 @@
-package com.codestates.pre_project.member.dto;
+package com.codestates.pre_project.module.member.dto;
 
-import com.codestates.pre_project.member.entity.Member;
+import com.codestates.pre_project.module.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +9,6 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 public class SignUpDto {

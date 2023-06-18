@@ -1,7 +1,7 @@
 package com.codestates.pre_project.module.answer.entity;
 
 import com.codestates.pre_project.module.base.BaseEntity;
-import com.codestates.pre_project.member.entity.Member;
+import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.question.entity.Question;
 import lombok.AccessLevel;
 import lombok.Builder;

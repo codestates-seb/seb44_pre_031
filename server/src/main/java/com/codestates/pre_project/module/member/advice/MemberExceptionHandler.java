@@ -1,9 +1,9 @@
-package com.codestates.pre_project.member.advice;
+package com.codestates.pre_project.module.member.advice;
 
-import com.codestates.pre_project.member.exception.LoginFailureException;
-import com.codestates.pre_project.member.exception.MemberEmailAlreadyExistsException;
-import com.codestates.pre_project.member.exception.MemberNotEqualsException;
-import com.codestates.pre_project.member.exception.MemberNotFoundException;
+import com.codestates.pre_project.module.member.exception.LoginFailureException;
+import com.codestates.pre_project.module.member.exception.MemberEmailAlreadyExistsException;
+import com.codestates.pre_project.module.member.exception.MemberNotEqualsException;
+import com.codestates.pre_project.module.member.exception.MemberNotFoundException;
 import com.codestates.pre_project.module.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;

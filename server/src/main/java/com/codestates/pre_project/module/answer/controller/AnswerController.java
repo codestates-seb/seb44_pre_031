@@ -1,17 +1,14 @@
 package com.codestates.pre_project.module.answer.controller;
 
 import com.codestates.pre_project.global.exception.CustomException;
-import com.codestates.pre_project.member.entity.Member;
-import com.codestates.pre_project.member.repository.MemberRepository;
-import com.codestates.pre_project.member.service.MemberService;
+import com.codestates.pre_project.module.member.entity.Member;
+import com.codestates.pre_project.module.member.repository.MemberRepository;
 import com.codestates.pre_project.module.answer.dto.request.AnswerRequest;
 import com.codestates.pre_project.module.answer.service.AnswerService;
 import com.codestates.pre_project.module.response.Response;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.core.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 

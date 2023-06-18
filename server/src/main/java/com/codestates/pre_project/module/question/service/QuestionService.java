@@ -1,8 +1,8 @@
 package com.codestates.pre_project.module.question.service;
 
 import com.codestates.pre_project.global.exception.CustomException;
-import com.codestates.pre_project.member.entity.Member;
-import com.codestates.pre_project.member.service.MemberService;
+import com.codestates.pre_project.module.member.entity.Member;
+import com.codestates.pre_project.module.member.service.MemberService;
 import com.codestates.pre_project.module.question.dto.response.GetQuestionResponse;
 import com.codestates.pre_project.module.question.dto.response.QuestionResponse;
 import com.codestates.pre_project.module.question.entity.Question;

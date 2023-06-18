@@ -1,6 +1,6 @@
 package com.codestates.pre_project.module.bookmark.repository;
 
-import com.codestates.pre_project.member.entity.Member;
+import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.bookmark.entity.Bookmark;
 import com.codestates.pre_project.module.question.entity.Question;
 import org.springframework.data.jpa.repository.JpaRepository;

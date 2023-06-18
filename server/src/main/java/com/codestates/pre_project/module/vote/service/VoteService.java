@@ -1,8 +1,8 @@
 package com.codestates.pre_project.module.vote.service;
 
 import com.codestates.pre_project.global.exception.CustomException;
-import com.codestates.pre_project.member.entity.Member;
-import com.codestates.pre_project.member.repository.MemberRepository;
+import com.codestates.pre_project.module.member.entity.Member;
+import com.codestates.pre_project.module.member.repository.MemberRepository;
 import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.repository.QuestionRepository;
 import com.codestates.pre_project.module.vote.entity.Vote;

@@ -1,12 +1,11 @@
 package com.codestates.pre_project.module.question.controller;
 
 import com.codestates.pre_project.global.exception.CustomException;
-import com.codestates.pre_project.member.entity.Member;
-import com.codestates.pre_project.member.repository.MemberRepository;
+import com.codestates.pre_project.module.member.entity.Member;
+import com.codestates.pre_project.module.member.repository.MemberRepository;
 import com.codestates.pre_project.module.question.dto.request.QuestionRequest;
 import com.codestates.pre_project.module.question.dto.response.GetQuestionResponse;
 import com.codestates.pre_project.module.question.dto.response.QuestionResponse;
-import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.service.QuestionService;
 import com.codestates.pre_project.module.response.Response;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 import static com.codestates.pre_project.global.exception.ErrorCode.MEMBER_NOT_FOUND;
 

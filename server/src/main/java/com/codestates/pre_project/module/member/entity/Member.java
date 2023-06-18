@@ -1,6 +1,6 @@
-package com.codestates.pre_project.member.entity;
+package com.codestates.pre_project.module.member.entity;
 
-import com.codestates.pre_project.member.dto.UpdateMemberDto;
+import com.codestates.pre_project.module.member.dto.UpdateMemberDto;
 import com.codestates.pre_project.module.base.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;

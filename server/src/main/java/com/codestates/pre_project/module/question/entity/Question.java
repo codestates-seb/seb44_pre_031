@@ -2,7 +2,7 @@ package com.codestates.pre_project.module.question.entity;
 
 import com.codestates.pre_project.module.answer.entity.Answer;
 import com.codestates.pre_project.module.base.BaseEntity;
-import com.codestates.pre_project.member.entity.Member;
+import com.codestates.pre_project.module.member.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;

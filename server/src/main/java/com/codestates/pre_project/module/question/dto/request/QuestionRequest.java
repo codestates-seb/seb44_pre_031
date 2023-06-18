@@ -1,6 +1,6 @@
 package com.codestates.pre_project.module.question.dto.request;
 
-import com.codestates.pre_project.member.entity.Member;
+import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.question.entity.Question;
 import lombok.*;
 
