@@ -26,7 +26,6 @@ public class Vote {
     private Question question;
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
     @Column(name = "vote_type")
     private boolean voteType;

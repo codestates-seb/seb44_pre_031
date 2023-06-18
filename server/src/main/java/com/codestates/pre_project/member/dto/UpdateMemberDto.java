@@ -6,13 +6,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateMemberDto {
-
     @Length(min = 3, max = 15, message = "이름은 3에서 15자 이내")
     private String displayName;
     private String location;
@@ -33,19 +33,6 @@ public class UpdateMemberDto {
                 .twitterLink(member.getTwitterLink())
                 .githubLink(member.getGithubLink())
                 .fullName(member.getFullName())
-                .build();
-    }
-
-    public static Member toEntity(UpdateMemberDto dto) {
-        return Member.builder()
-                .displayName(dto.getDisplayName())
-                .location(dto.getLocation())
-                .title(dto.getTitle())
-                .aboutMe(dto.getAboutMe())
-                .webLink(dto.getWebLink())
-                .twitterLink(dto.getTwitterLink())
-                .githubLink(dto.getGithubLink())
-                .fullName(dto.getFullName())
                 .build();
     }
 }

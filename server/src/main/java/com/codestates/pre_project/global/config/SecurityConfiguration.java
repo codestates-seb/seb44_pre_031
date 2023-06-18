@@ -52,6 +52,7 @@ public class SecurityConfiguration {
                           .antMatchers(HttpMethod.POST, "/*/sign-up").permitAll()
                           .antMatchers(HttpMethod.POST,"/*/sign-in").permitAll()
                           .antMatchers(HttpMethod.PATCH, "/*/users/**").hasRole("USER")
+                          .antMatchers(HttpMethod.GET, "/*/users/**").hasRole("USER")
                           .antMatchers(HttpMethod.GET, "/*/users/**").hasRole("ADMIN")
                           .antMatchers(HttpMethod.DELETE, "/*/users/**").hasRole("USER")
                           .anyRequest().permitAll()); // 멤버 관련 접근 권한 부여

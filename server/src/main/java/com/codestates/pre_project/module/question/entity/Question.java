@@ -79,4 +79,8 @@ public class Question extends BaseEntity {
     public void bookmark() {
         this.bookmarkCount++;
     }
+
+    public void cancelBookmark() {
+        this.bookmarkCount--;
+    }
 }

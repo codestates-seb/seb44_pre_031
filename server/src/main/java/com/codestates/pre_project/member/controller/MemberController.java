@@ -7,6 +7,9 @@ import com.codestates.pre_project.member.entity.Member;
 import com.codestates.pre_project.member.service.MemberService;
 import com.codestates.pre_project.module.response.Response;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,12 +39,23 @@ public class MemberController {
         return Response.success(MemberDto.of(member));
     }
 
+    @GetMapping("/bookmarks/{user-id}")
+    public Response findBookmarks(@PathVariable("user-id") Long memberId) {
+        return Response.success(memberService.findBookmarks(memberId));
+    }
+
     @PatchMapping("/{user-id}")
     @ResponseStatus(HttpStatus.OK)
     public Response updateMemberInfo(@PathVariable("user-id") Long memberId,
                                      @Valid @RequestBody UpdateMemberDto request) {
-        Member member = memberService.updateMemberInfo(memberId, UpdateMemberDto.toEntity(request));
+        Member member = memberService.updateMemberInfo(memberId, request);
         return Response.success(toDto(member));
     }
 
+    @DeleteMapping("/{user-id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response deleteMember(@PathVariable("user-id") Long memberId) {
+        memberService.deleteMember(memberId);
+        return Response.success();
+    }
 }

@@ -19,11 +19,11 @@ public class Bookmark {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id", nullable = false)
+    @JoinColumn(name = "question_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Question question;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
     @Column(nullable = false)
@@ -33,5 +33,10 @@ public class Bookmark {
         this.question = question;
         this.member = member;
         this.status = true;
+    }
+
+    public void cancelBookmark(Question question) {
+        this.status = false;
+        question.cancelBookmark();
     }
 }

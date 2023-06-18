@@ -1,8 +1,7 @@
 package com.codestates.pre_project.member.entity;
 
+import com.codestates.pre_project.member.dto.UpdateMemberDto;
 import com.codestates.pre_project.module.base.BaseEntity;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -27,7 +26,6 @@ import java.util.List;
 @Entity
 @Table(name = "members")
 public class Member extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id", nullable = false, updatable = false)
@@ -40,6 +38,7 @@ public class Member extends BaseEntity {
     private String password;
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
+
     @Column(name = "full_name")
     private String fullName;
     @Column(name = "reputation")
@@ -56,13 +55,13 @@ public class Member extends BaseEntity {
     private String twitterLink;
     @Column(name = "github_link")
     private String githubLink;
+
     @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
-    public static Member updateMemberInfo(Member findMember, Member dto) {
+    public static Member updateMemberInfo(Member findMember, UpdateMemberDto dto) {
         findMember.displayName = dto.getDisplayName();
         findMember.fullName = dto.getFullName();
-        findMember.reputation = dto.getReputation();
         findMember.location = dto.getLocation();
         findMember.title = dto.getTitle();
         findMember.aboutMe = dto.getAboutMe();
@@ -71,7 +70,8 @@ public class Member extends BaseEntity {
         findMember.githubLink = dto.getGithubLink();
 
         return findMember;
-    }
+
+  }
 
     public Member(Long id, String email, String password, List<String> roles) {
         this.id = id;
