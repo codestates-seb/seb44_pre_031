@@ -45,6 +45,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         question.selectedAnswer,
                         question.viewCount,
                         question.createdAt,
+                        question.updatedAt,
                         question.member.displayName))
                 .from(question)
                 .innerJoin(question.member, member)
@@ -87,7 +88,9 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                 .select(new QAnswerResponse(
                         answer.id,
                         answer.content,
+                        answer.selected,
                         answer.createdAt,
+                        answer.updatedAt,
                         member.displayName,
                         member.reputation))
                 .from(answer)

@@ -18,10 +18,11 @@ public class QuestionResponse {
     private boolean selectedAnswer;
     private Long viewCount;
     private LocalDateTime questionCreatedAt;
+    private LocalDateTime questionUpdatedAt;
     private String displayName;
 
     @QueryProjection
-    public QuestionResponse(Long questionId, String title, String content, Long voteCount, int answerCount, boolean selectedAnswer, Long viewCount, LocalDateTime questionCreatedAt, String displayName) {
+    public QuestionResponse(Long questionId, String title, String content, Long voteCount, int answerCount, boolean selectedAnswer, Long viewCount, LocalDateTime questionCreatedAt, LocalDateTime questionUpdatedAt, String displayName) {
         this.questionId = questionId;
         this.title = title;
         this.content = content;
@@ -30,6 +31,7 @@ public class QuestionResponse {
         this.selectedAnswer = selectedAnswer;
         this.viewCount = viewCount;
         this.questionCreatedAt = questionCreatedAt;
+        this.questionUpdatedAt = questionUpdatedAt;
         this.displayName = displayName;
     }
 }
