@@ -12,6 +12,10 @@ public enum ErrorCode {
 
     // 401
     NONE_AUTHORIZATION_TOKEN(HttpStatus.UNAUTHORIZED, "권한 정보가 없는 토큰입니다."),
+    MEMBER_UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"인증되지 않은 사용자입니다."),
+
+    // 403
+    MEMBER_ACCESS_DENIED(HttpStatus.FORBIDDEN,"권한이 없습니다."),
 
     // 404
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "질문이 존재하지 않습니다."),
