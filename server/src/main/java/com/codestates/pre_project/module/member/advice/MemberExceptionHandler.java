@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
-@RestControllerAdvice(basePackages = "com.codestates.pre_project.member")
+@RestControllerAdvice
 public class MemberExceptionHandler {
     // 401 응답
     // 이메일 혹은 비밀번호 오류시
