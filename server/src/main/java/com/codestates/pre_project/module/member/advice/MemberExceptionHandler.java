@@ -20,7 +20,7 @@ public class MemberExceptionHandler {
     @ExceptionHandler(LoginFailureException.class)
     @ResponseStatus(UNAUTHORIZED)
     public Response loginFailureException() {
-        return Response.failure(401, "로그인에 실패하였습니다.");
+        return Response.failure("로그인에 실패하였습니다.");
     }
 
     // 401 응답
@@ -28,7 +28,7 @@ public class MemberExceptionHandler {
     @ExceptionHandler(MemberNotEqualsException.class)
     @ResponseStatus(UNAUTHORIZED)
     public Response memberNotEqualsException() {
-        return Response.failure(401, "멤버 정보가 일치하지 않습니다.");
+        return Response.failure("멤버 정보가 일치하지 않습니다.");
     }
 
     // 409 응답
@@ -36,7 +36,7 @@ public class MemberExceptionHandler {
     @ExceptionHandler(MemberEmailAlreadyExistsException.class)
     @ResponseStatus(CONFLICT)
     public Response memberEmailAlreadyExistsException(MemberEmailAlreadyExistsException e) {
-        return Response.failure(409, e.getMessage() + "은 중복된 이메일 입니다.");
+        return Response.failure(e.getMessage() + "은 중복된 이메일 입니다.");
     }
 
     // 404 응답
@@ -44,6 +44,6 @@ public class MemberExceptionHandler {
     @ExceptionHandler(MemberNotFoundException.class)
     @ResponseStatus(NOT_FOUND)
     public Response memberNotFoundException() {
-        return Response.failure(404, "용청한 멤버를 찾을 수 없습니다.");
+        return Response.failure("용청한 멤버를 찾을 수 없습니다.");
     }
 }
