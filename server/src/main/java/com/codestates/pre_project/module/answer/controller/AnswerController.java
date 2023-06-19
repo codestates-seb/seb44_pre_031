@@ -1,19 +1,13 @@
 package com.codestates.pre_project.module.answer.controller;
 
 import com.codestates.pre_project.global.auth.utils.MemberIdExtractor;
-import com.codestates.pre_project.global.exception.CustomException;
-import com.codestates.pre_project.module.member.entity.Member;
-import com.codestates.pre_project.module.member.repository.MemberRepository;
 import com.codestates.pre_project.module.answer.dto.request.AnswerRequest;
 import com.codestates.pre_project.module.answer.service.AnswerService;
+import com.codestates.pre_project.module.member.repository.MemberRepository;
 import com.codestates.pre_project.module.response.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import static com.codestates.pre_project.global.exception.ErrorCode.MEMBER_NOT_FOUND;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,7 +30,8 @@ public class AnswerController {
     @ResponseStatus(HttpStatus.OK)
     public Response updateAnswer(@PathVariable("answer-id") Long answerId,
                                  @RequestBody AnswerRequest request) {
-        answerService.updateAnswer(answerId, request.toEntity());
+        Long memberId = MemberIdExtractor.extractMemberId();
+        answerService.updateAnswer(answerId, memberId, request.toEntity());
 
         return Response.success();
     }
@@ -45,7 +40,8 @@ public class AnswerController {
     @ResponseStatus(HttpStatus.OK)
     public Response selectAnswer(@PathVariable("question-id") Long questionId,
                                  @PathVariable("answer-id") Long answerId) {
-        answerService.selectAnswer(questionId, answerId);
+        Long memberId = MemberIdExtractor.extractMemberId();
+        answerService.selectAnswer(questionId, answerId, memberId);
 
         return Response.success();
     }
@@ -53,7 +49,8 @@ public class AnswerController {
     @DeleteMapping("/{question-id}/{answer-id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Response deleteAnswer(@PathVariable("answer-id") Long answerId) {
-        answerService.deleteAnswer(answerId);
+        Long memberId = MemberIdExtractor.extractMemberId();
+        answerService.deleteAnswer(answerId, memberId);
 
         return Response.success();
     }

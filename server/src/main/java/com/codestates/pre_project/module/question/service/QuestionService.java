@@ -5,7 +5,6 @@ import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.member.service.MemberService;
 import com.codestates.pre_project.module.question.dto.response.GetQuestionResponse;
 import com.codestates.pre_project.module.question.dto.response.QuestionResponse;
-import com.codestates.pre_project.module.question.entity.LikeStatus;
 import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +31,10 @@ public class QuestionService {
     }
 
     @Transactional
-    public void updateQuestion(Long questionId, Question request) {
+    public void updateQuestion(Long questionId, Long memberId, Question request) {
         Question question = findQuestionById(questionId);
+        validateMemberMatch(question.getMember().getId(), memberId);
+
         question.update(request);
     }
 
@@ -50,8 +51,10 @@ public class QuestionService {
     }
 
     @Transactional
-    public void deleteQuestion(Long questionId) {
+    public void deleteQuestion(Long questionId, Long memberId) {
         Question question = findQuestionById(questionId);
+        validateMemberMatch(question.getMember().getId(), memberId);
+
         questionRepository.delete(question);
     }
 
@@ -65,6 +68,12 @@ public class QuestionService {
     public void checkExistSelectedAnswer(Question question) {
         if (question.isSelectedAnswer()) {
             throw new CustomException(ALREADY_SELECTED_ANSWER);
+        }
+    }
+
+    private void validateMemberMatch(Long authorId, Long memberId) {
+        if (!authorId.equals(memberId)) {
+            throw new CustomException(NONE_AUTHORIZATION_TOKEN);
         }
     }
 

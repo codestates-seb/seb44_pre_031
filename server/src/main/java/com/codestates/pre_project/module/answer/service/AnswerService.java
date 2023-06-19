@@ -29,14 +29,16 @@ public class AnswerService {
     }
 
     @Transactional
-    public void updateAnswer(Long answerId, Answer request) {
+    public void updateAnswer(Long answerId, Long memberId, Answer request) {
         Answer answer = findAnswerById(answerId);
+        validateMemberMatch(answer.getMember().getId(), memberId);
         answer.update(request);
     }
 
     @Transactional
-    public void selectAnswer(Long questionId, Long answerId) {
+    public void selectAnswer(Long questionId, Long answerId, Long memberId) {
         Question question = questionService.findQuestionById(questionId);
+        validateMemberMatch(question.getMember().getId(), memberId);
         questionService.checkExistSelectedAnswer(question);
         question.selectAnswer();
 
@@ -45,13 +47,20 @@ public class AnswerService {
     }
 
     @Transactional
-    public void deleteAnswer(Long answerId) {
+    public void deleteAnswer(Long answerId, Long memberId) {
         Answer answer = findAnswerById(answerId);
+        validateMemberMatch(answer.getMember().getId(), memberId);
         answerRepository.delete(answer);
     }
 
     private Answer findAnswerById(Long answerId) {
         return answerRepository.findById(answerId)
                 .orElseThrow(() -> new CustomException(ANSWER_NOT_FOUND));
+    }
+
+    private void validateMemberMatch(Long authorId, Long memberId) {
+        if (!authorId.equals(memberId)) {
+            throw new CustomException(NONE_AUTHORIZATION_TOKEN);
+        }
     }
 }
