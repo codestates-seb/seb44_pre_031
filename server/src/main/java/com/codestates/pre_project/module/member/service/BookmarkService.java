@@ -1,5 +1,6 @@
-package com.codestates.pre_project.module.bookmark.service;
+package com.codestates.pre_project.module.member.service;
 
+import com.codestates.pre_project.global.auth.utils.MemberIdExtractor;
 import com.codestates.pre_project.global.exception.CustomException;
 import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.member.repository.MemberRepository;
@@ -26,19 +27,27 @@ public class BookmarkService {
 
     @Transactional
     public void bookmarkQuestion(Long questionId) {
-        Question question = questionRepository.findById(questionId).orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));
+        Question question = findQuestionById(questionId);
+        Long memberId = MemberIdExtractor.extractMemberId();
+        Member member = findMemberById(memberId);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-
-        if (bookmarkRepository.findByQuestionAndMember(question, member) == null) {
+        if (!bookmarkRepository.existsBookmarkByQuestionIdAndMemberId(questionId, memberId)) {
             question.bookmark();
-            Bookmark bookmark = new Bookmark(question, member);
-            bookmarkRepository.save(bookmark);
+            bookmarkRepository.save(Bookmark.of(question, member));
         } else {
-            Bookmark byQuestionAndMember = bookmarkRepository.findByQuestionAndMember(question, member);
+            Bookmark byQuestionAndMember = bookmarkRepository.findByQuestionIdAndMemberId(questionId, memberId);
             byQuestionAndMember.cancelBookmark(question);
             bookmarkRepository.delete(byQuestionAndMember);
         }
+    }
+
+    public Question findQuestionById(Long questionId) {
+        return questionRepository.findById(questionId)
+                .orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));
+    }
+
+    public Member findMemberById(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 }

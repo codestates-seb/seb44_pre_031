@@ -7,6 +7,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.awt.print.Book;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,17 +27,17 @@ public class Bookmark {
     @JoinColumn(name = "member_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
-    @Column(nullable = false)
-    private boolean status;
 
-    public Bookmark(Question question, Member member) {
+    private Bookmark(Question question, Member member) {
         this.question = question;
         this.member = member;
-        this.status = true;
+    }
+
+    public static Bookmark of(Question question, Member member) {
+        return new Bookmark(question, member);
     }
 
     public void cancelBookmark(Question question) {
-        this.status = false;
         question.cancelBookmark();
     }
 }

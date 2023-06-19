@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
-    Bookmark findByQuestionAndMember(Question question, Member member);
-    Bookmark findBookmarkByQuestion(Question question);
+    boolean existsBookmarkByQuestionIdAndMemberId(Long questionId, Long memberId);
+    Bookmark findByQuestionIdAndMemberId(Long questionId, Long memberId);
     List<Bookmark> findAllByMember(Member member);
 }

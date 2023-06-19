@@ -43,13 +43,6 @@ public class QuestionLikeService {
         }
     }
 
-//    @Transactional
-//    public void dislikeQuestion(Long questionId) {
-//        Question question = findQuestionById(questionId);
-//        Long memberId = MemberIdExtractor.extractMemberId();
-//        Member member = findMemberById(memberId);
-//    }
-
     public Question findQuestionById(Long questionId) {
         return questionRepository.findById(questionId)
                 .orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));

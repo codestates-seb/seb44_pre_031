@@ -4,6 +4,7 @@ import com.codestates.pre_project.module.member.dto.MemberDto;
 import com.codestates.pre_project.module.member.dto.SignUpDto;
 import com.codestates.pre_project.module.member.dto.UpdateMemberDto;
 import com.codestates.pre_project.module.member.entity.Member;
+import com.codestates.pre_project.module.member.service.BookmarkService;
 import com.codestates.pre_project.module.member.service.MemberService;
 import com.codestates.pre_project.module.response.Response;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import static com.codestates.pre_project.module.member.dto.UpdateMemberDto.toDto
 public class MemberController {
 
     private final MemberService memberService;
+    private final BookmarkService bookmarkService;
 
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
@@ -34,6 +36,13 @@ public class MemberController {
     public Response findMember(@PathVariable("user-id") Long memberId) {
         Member member = memberService.findMember(memberId);
         return Response.success(MemberDto.of(member));
+    }
+
+    @PostMapping("/{question-id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response bookmarkQuestion(@PathVariable(name = "question-id") Long questionId) {
+        bookmarkService.bookmarkQuestion(questionId);
+        return Response.success();
     }
 
     @GetMapping("/bookmarks/{user-id}")
