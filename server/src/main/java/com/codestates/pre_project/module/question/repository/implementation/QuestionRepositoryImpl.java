@@ -2,6 +2,7 @@ package com.codestates.pre_project.module.question.repository.implementation;
 
 import com.codestates.pre_project.module.answer.dto.response.AnswerResponse;
 import com.codestates.pre_project.module.answer.dto.response.QAnswerResponse;
+import com.codestates.pre_project.module.answer.entity.Answer;
 import com.codestates.pre_project.module.question.dto.response.*;
 import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.repository.QuestionRepositoryCustom;
@@ -27,7 +28,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     @Override
     public GetQuestionResponse getQuestionWithAnswer(Long questionId, Pageable pageable) {
         QuestionDetailResponse questionDetailResponse = fetchQuestionResponse(questionId);
-        List<AnswerResponse> answerResponses = fetchAnswerResponses(questionId, pageable);
+        Page<AnswerResponse> answerResponses = fetchAnswerResponses(questionId, pageable);
 
         return new GetQuestionResponse(questionDetailResponse, answerResponses);
     }
@@ -40,7 +41,6 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         question.title,
                         question.content,
                         question.likeCount,
-                        // TODO : 답변 갯수 필드 추가 or 다른 방법으로 가져오기
                         question.answers.size(),
                         question.selectedAnswer,
                         question.viewCount,
@@ -79,12 +79,13 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     }
 
     private Page<AnswerResponse> fetchAnswerResponses(Long questionId, Pageable pageable) {
-        List<AnswerResponse> answers = fetchAnswerIds(questionId, pageable).stream()
+        List<AnswerResponse> result = fetchAnswerIds(questionId, pageable).stream()
                 .map(this::fetchAnswerResponse)
                 .collect(Collectors.toList());
 
-        JPAQuery<Question> countQuery = queryFactory
-                .select(answer);
+        JPAQuery<Answer> countQuery = queryFactory
+                .selectFrom(answer)
+                .where(answer.id.eq(questionId));
 
         return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchCount);
     }
