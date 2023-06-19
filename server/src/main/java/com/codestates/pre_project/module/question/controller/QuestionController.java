@@ -4,6 +4,7 @@ import com.codestates.pre_project.global.auth.utils.MemberIdExtractor;
 import com.codestates.pre_project.module.question.dto.request.QuestionRequest;
 import com.codestates.pre_project.module.question.dto.response.GetQuestionResponse;
 import com.codestates.pre_project.module.question.dto.response.QuestionResponse;
+import com.codestates.pre_project.module.question.service.QuestionLikeService;
 import com.codestates.pre_project.module.question.service.QuestionService;
 import com.codestates.pre_project.module.response.Response;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import javax.validation.Valid;
 @RequestMapping("/api/questions")
 public class QuestionController {
     private final QuestionService questionService;
+    private final QuestionLikeService questionLikeService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -65,19 +67,19 @@ public class QuestionController {
         return Response.success();
     }
 
-    @PostMapping("/{question-id}/like")
-    @ResponseStatus(HttpStatus.OK)
-    public Response likeQuestion(@PathVariable("question-id") Long questionId) {
-        questionService.likeQuestion(questionId);
+    @PostMapping("/{question-id}/{type}/like")
+    public Response likeQuestion(@PathVariable("question-id") Long questionId,
+                                 @PathVariable("type") int type) {
+        questionLikeService.likeQuestion(questionId, type);
 
         return Response.success();
     }
 
-    @PostMapping("/{question-id}/dislike")
-    @ResponseStatus(HttpStatus.OK)
-    public Response dislikeQuestion(@PathVariable("question-id") Long questionId) {
-        questionService.dislikeQuestion(questionId);
-
-        return Response.success();
-    }
+//    @PostMapping("/{question-id}/dislike")
+//    @ResponseStatus(HttpStatus.OK)
+//    public Response dislikeQuestion(@PathVariable("question-id") Long questionId) {
+//        questionService.dislikeQuestion(questionId);
+//
+//        return Response.success();
+//    }
 }

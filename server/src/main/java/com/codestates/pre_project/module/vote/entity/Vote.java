@@ -26,15 +26,15 @@ public class Vote {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
     @Column(name = "vote_type")
-    private boolean voteType;
+    private int voteType;
 
-    private Vote(Question question, Member member, boolean voteType) {
+    private Vote(Question question, Member member, int voteType) {
         this.question = question;
         this.member = member;
         this.voteType = voteType;
     }
 
-    public static Vote of(Question question, Member member, boolean voteType) {
+    public static Vote of(Question question, Member member, int voteType) {
         return new Vote(question, member, voteType);
     }
 }

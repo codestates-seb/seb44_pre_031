@@ -18,7 +18,7 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
             "AND v.voteType = :type")
     Optional<Vote> findVoteTypeByQuestionAndMember(@Param("questionId") Long questionId,
                                                    @Param("memberId") Long memberId,
-                                                   @Param("type") boolean type);
-
+                                                   @Param("type") int type);
+    boolean existsVoteByQuestionIdAndMemberIdAndVoteType(Long questionId, Long memberId, int voteType);
     Vote findByQuestionAndMember(Question question, Member member);
 }
