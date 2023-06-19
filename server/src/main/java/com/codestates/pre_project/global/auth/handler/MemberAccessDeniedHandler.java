@@ -23,7 +23,7 @@ public class MemberAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         log.warn("Forbidden error happened: {}", accessDeniedException.getMessage());
-        ErrorResponder.sendErrorResponse(response);
+        sendErrorResponse(response);
     }
     private void sendErrorResponse(HttpServletResponse response) throws IOException {
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
