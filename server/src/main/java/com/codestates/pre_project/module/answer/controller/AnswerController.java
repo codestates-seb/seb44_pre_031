@@ -1,5 +1,6 @@
 package com.codestates.pre_project.module.answer.controller;
 
+import com.codestates.pre_project.global.auth.utils.MemberIdExtractor;
 import com.codestates.pre_project.global.exception.CustomException;
 import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.member.repository.MemberRepository;
@@ -25,10 +26,8 @@ public class AnswerController {
     @ResponseStatus(HttpStatus.CREATED)
     public Response createAnswer(@PathVariable("question-id") Long questionId,
                                  @RequestBody AnswerRequest request) {
-        // TODO : memberId 가져오는 로직 추가
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-        answerService.createAnswer(member.getId(), questionId, request.toEntity());
+        Long memberId = MemberIdExtractor.extractMemberId();
+        answerService.createAnswer(memberId, questionId, request.toEntity());
 
         return Response.success();
     }
