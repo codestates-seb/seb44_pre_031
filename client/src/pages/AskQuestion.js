@@ -98,37 +98,6 @@ const WriteGoodTitleNotice = styled.div`
   }
 `;
 
-// const StyledButton = styled.button`
-//   font-size: 1.2em;
-//   color: ${(props) => (props.isCancel ? 'hsl(358,62%,47%)' : 'white')};
-//   background-color: ${(props) =>
-//     props.isCancel ? 'rgb(248, 249, 249)' : 'rgb(10, 149, 255)'};
-//   border: none;
-//   border-radius: 5px;
-//   width: ${(props) => props.width};
-//   height: 2.5em;
-//   box-shadow: rgba(255, 255, 255, 0.4) 0px 2px 0px 0px inset;
-//   cursor: pointer;
-
-//   &:hover {
-//     background-color: ${(props) =>
-//       props.isCancel ? 'hsl(358,75%,97%)' : 'hsl(206, 100%, 40%)'};
-//   }
-//   &:active {
-//     background-color: ${(props) =>
-//       props.isCancel ? 'hsl(358,76%,90%)' : 'hsl(209, 100%, 37.5%)'};
-//     box-shadow: 0px 0px 2px 5px
-//       ${(props) =>
-//         props.isCancel ? 'hsl(358,74%,83%)' : 'hsl(206, 93%, 83.5%)'};
-//   }
-
-//   &:disabled {
-//     background-color: lightskyblue;
-//     color: rgb(227, 241, 252);
-//     cursor: pointer;
-//   }
-// `;
-
 // 페이지 컴포넌트
 const AskQuestion = () => {
   // const navigate = useNavigate();
@@ -155,110 +124,95 @@ const AskQuestion = () => {
     body: false,
     tags: false,
   });
+  const [isDisabled, setIsDisabled] = useState({ body: true, tags: true });
 
   //validation
   const handleTitleButtonClick = (e) => {
     e.preventDefault();
-    if (inputText.title.length < 15) {
+    let inputTitleLength = inputText.title.trim()?.length;
+
+    if (inputTitleLength < 15) {
       setValidationNotice({
         ...validationNotice,
-        title: `Title must be at least 15 characters; you entered ${inputText.title.length}`,
+        title: `Title must be at least 15 characters; you entered ${inputTitleLength}`,
       });
     }
-    if (inputText.title.length > 30) {
+    if (inputTitleLength > 150) {
       setValidationNotice({
         ...validationNotice,
-        title: `Title cannot be longer than 30 characters. you entered ${inputText.title.length}`,
+        title: `Title cannot be longer than 150 characters. you entered ${inputTitleLength}`,
       });
     }
-    if (inputText.title.length >= 15 && inputText.title.length <= 30) {
-      setIsValid({ ...isValid, title: true });
+    if (inputTitleLength >= 15 && inputTitleLength <= 150) {
       setIsButtonVisible({ ...isButtonVisible, title: false, body: true });
+      setIsDisabled({ ...isDisabled, body: false });
+      setIsValid({ ...isValid, title: true });
     }
   };
 
   const handleTitleInputBlur = () => {
-    if (inputText.title.length < 15) {
+    let inputTitleLength = inputText.title.trim()?.length;
+
+    if (inputTitleLength < 15) {
       setIsValid({ ...isValid, title: false });
       setValidationNotice({
         ...validationNotice,
-        title: `Title must be at least 15 characters; you entered ${inputText.title.length}`,
+        title: `Title must be at least 15 characters; you entered ${inputTitleLength}`,
       });
     }
-    if (inputText.title.length > 30) {
+    if (inputTitleLength > 150) {
       setIsValid({ ...isValid, title: false });
       setValidationNotice({
         ...validationNotice,
-        title: `Title cannot be longer than 30 characters. you entered ${inputText.title.length}`,
+        title: `Title cannot be longer than 150 characters. you entered ${inputTitleLength}`,
       });
     }
-    if (inputText.title.length >= 15 && inputText.title.length <= 30) {
+    if (inputTitleLength >= 15 && inputTitleLength <= 150) {
       setIsValid({ ...isValid, title: true });
     }
   };
 
   const handleBodyButtonClick = (e) => {
     e.preventDefault();
-    if (inputText.body.length < 220) {
+    let inputBodyLength = inputText.body.trim()?.length;
+
+    if (inputBodyLength < 220) {
       setValidationNotice({
         ...validationNotice,
-        body: `Body must be at least 220 characters; you entered ${inputText.body.length}`,
+        body: `Body must be at least 220 characters; you entered ${inputBodyLength}`,
       });
     }
-    if (inputText.body.length > 500) {
+    if (inputBodyLength > 500) {
       setValidationNotice({
         ...validationNotice,
-        body: `Body cannot be longer than 250 characters; you entered ${inputText.body.length}`,
+        body: `Body cannot be longer than 250 characters; you entered ${inputBodyLength}`,
       });
     }
-    if (inputText.body.length >= 220 && inputText.body.length <= 500) {
-      setIsValid({ ...isValid, body: true });
+    if (inputBodyLength >= 220 && inputBodyLength <= 500) {
       setIsButtonVisible({ ...isButtonVisible, body: false, tags: true });
+      setIsDisabled({ ...isDisabled, tags: false });
+      setIsValid({ ...isValid, body: true });
     }
   };
   const handleBodyInputBlur = () => {
-    if (inputText.body.length < 220) {
+    let inputBodyLength = inputText.body.trim()?.length;
+
+    if (inputBodyLength < 220) {
       setIsValid({ ...isValid, body: false });
       setValidationNotice({
         ...validationNotice,
-        body: `Body must be at least 220 characters; you entered ${inputText.body.length}`,
+        body: `Body must be at least 220 characters; you entered ${inputBodyLength}`,
       });
     }
-    if (inputText.body.length > 500) {
+    if (inputBodyLength > 500) {
       setIsValid({ ...isValid, body: false });
       setValidationNotice({
         ...validationNotice,
-        body: `Body cannot be longer than 250 characters; you entered ${inputText.body.length}`,
+        body: `Body cannot be longer than 250 characters; you entered ${inputBodyLength}`,
       });
     }
-    if (inputText.body.length >= 220 && inputText.body.length <= 500) {
+    if (inputBodyLength >= 220 && inputBodyLength <= 500) {
       setIsValid({ ...isValid, body: true });
-    }
-  };
-
-  const handleTagsButtonClick = (e) => {
-    e.preventDefault();
-
-    if (inputText.tags.split(' ').length < 1 || inputText.tags.length === 0) {
-      setValidationNotice({
-        ...validationNotice,
-        tags: 'Please enter at least one tag; see a list of popular tags.',
-      });
-      return;
-    }
-    if (inputText.tags.split(' ').length > 5) {
-      setValidationNotice({
-        ...validationNotice,
-        tags: 'Please enter no more than 5 tags.',
-      });
-    }
-    if (
-      inputText.tags.split(' ').length >= 1 &&
-      inputText.tags.split(' ').length < 6
-    ) {
-      setIsValid({ ...isValid, tags: true });
-      setIsButtonVisible((prev) => ({ ...prev, tags: false, discard: true }));
-      setIsPostDisabled(false);
     }
   };
 
@@ -286,6 +240,7 @@ const AskQuestion = () => {
       inputText.tags.split(' ').length < 6
     ) {
       setIsValid({ ...isValid, tags: true });
+      setIsButtonVisible((prev) => ({ ...prev, tags: false, discard: true }));
       setIsPostDisabled(false);
     }
   };
@@ -333,6 +288,7 @@ const AskQuestion = () => {
       tags: '',
     });
     setIsValid({ title: false, body: false, tags: false });
+    setIsDisabled({ body: true, tags: true });
   };
 
   return (
@@ -389,10 +345,11 @@ const AskQuestion = () => {
           handleButtonClick={handleTitleButtonClick}
           handleInputChange={handleInputChange}
           minlength="15"
-          maxlength="30"
+          // maxlength="150"
           validationNotice={validationNotice.title}
           isValid={isValid.title}
           handleBlur={handleTitleInputBlur}
+          isDisabled={false}
         />
         <AskQuestionInput
           title="Body"
@@ -407,10 +364,11 @@ const AskQuestion = () => {
           handleInputChange={handleInputChange}
           // height="10em"
           minlength="220"
-          maxlength="250"
+          // maxlength="250"
           validationNotice={validationNotice.body}
           isValid={isValid.body}
           handleBlur={handleBodyInputBlur}
+          isDisabled={isDisabled.body}
         />
         <AskQuestionInput
           title="Tags"
@@ -421,20 +379,26 @@ const AskQuestion = () => {
           inputValue={inputText.tags}
           isButtonVisible={isButtonVisible.tags}
           buttonTitle="Next"
-          handleButtonClick={handleTagsButtonClick}
           handleInputChange={handleInputChange}
           validationNotice={validationNotice.tags}
           isValid={isValid.tags}
           handleBlur={handleTagsInputBlur}
+          isDisabled={isDisabled.tags}
         />
         <div className="main-buttons">
-          <StyledButton type="submit" width="10em" disabled={isPostDisabled}>
+          <StyledButton
+            type="submit"
+            width="10em"
+            fontSize="1.2em"
+            disabled={isPostDisabled}
+          >
             Post your question
           </StyledButton>
           {isButtonVisible.discard ? (
             <StyledButton
               type="button"
               width="8em"
+              fontSize="1.2em"
               disabled={false}
               isCancel={true}
               onClick={handleDiscardButtonClick}

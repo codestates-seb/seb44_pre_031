@@ -7,6 +7,11 @@ const QuestionDetailContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 2em;
+  max-width: 1000px;
+
+  hr {
+    border: 0.1px solid lightgray;
+  }
 `;
 
 const QuestionDetail = () => {
@@ -16,6 +21,7 @@ const QuestionDetail = () => {
     <QuestionDetailContainer>
       {/* <p>question Id: {questionId}</p> */}
       <Question />
+      <hr />
       <Answers />
     </QuestionDetailContainer>
   );

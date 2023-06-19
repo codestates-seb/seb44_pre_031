@@ -4,43 +4,61 @@ import { FcBookmark } from 'react-icons/fc';
 import { CiBookmark } from 'react-icons/ci';
 import { RxCountdownTimer } from 'react-icons/rx';
 import { Link } from 'react-router-dom';
+import { FaCheck } from 'react-icons/fa';
 
 const PostLayoutContainer = styled.div`
   display: flex;
-  gap: 1.1em;
-  padding: 1em;
+  /* justify-content: space-around; */
+  gap: 1.2em;
+  padding-top: 0.5em;
+  padding-bottom: 2em;
+  margin-top: 1em;
 `;
+
+// const PostLayoutContainer = styled.div`
+//   display: grid;
+//   grid-template-columns: max-content 1fr;
+// `;
 
 const VoteCellContainer = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
   gap: 0.3em;
-  /* 
-  .bookmarked {
-    height: ;
-  } */
+
   div {
     cursor: pointer;
   }
 
   .upvote-icon {
-    stroke-width: 0.1em;
+    /* stroke-width: 0.1em; */
+    margin-top: 0.3em;
+    width: 1.3em;
+    height: 1.3em;
   }
   .downvote-icon {
-    stroke-width: 0.1em;
+    /* stroke-width: 0.1em; */
     margin-top: 0.3em;
+    width: 1.3em;
+    height: 1.3em;
   }
 
   .bookmark-icon {
     stroke-width: 0.1em;
-    width: 1em;
-    height: 1.2em;
+    width: 1.1em;
+    height: 1.3em;
     stroke: gray;
   }
   .bookmarked-icon {
-    width: 1.2em;
-    height: 1.1em;
+    width: 1.5em;
+    height: 1.2em;
+  }
+
+  .checkmark {
+    svg {
+      width: 1.8em;
+      height: 1.8em;
+    }
   }
 
   .votes-count {
@@ -81,7 +99,7 @@ const TagsContainer = styled.div`
   display: flex;
   gap: 0.5em;
 `;
-const StyledTagLink = styled(Link)`
+export const StyledTagLink = styled(Link)`
   font-size: 0.7em;
   color: hsl(205, 47%, 42%);
   background-color: hsl(205, 46%, 92%);
@@ -220,6 +238,9 @@ const PostLayout = () => {
         <div>
           <FcBookmark className="bookmarked-icon" />
         </div>
+        <div className="checkmark">
+          <FaCheck fill="green" />
+        </div>
         <div>
           <RxCountdownTimer />
         </div>
@@ -235,7 +256,7 @@ const PostLayout = () => {
         </PostContent>
         <TagsContainer>
           <StyledTagLink>javascript</StyledTagLink>
-          <StyledTagLink>reactjs</StyledTagLink>
+          <StyledTagLink>react</StyledTagLink>
           <StyledTagLink>jsx</StyledTagLink>
         </TagsContainer>
         <PostFooterContainer>

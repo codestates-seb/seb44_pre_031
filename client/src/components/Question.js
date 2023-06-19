@@ -6,10 +6,6 @@ const QuestionContaier = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1em;
-
-  hr {
-    border: 0.1px solid lightgray;
-  }
 `;
 
 const QuestionHeaderContainer = styled.div`

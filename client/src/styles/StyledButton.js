@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const StyledButton = styled.button`
-  font-size: 1.2em;
+  font-size: ${(props) => props.fontSize};
   color: ${(props) => (props.isCancel ? 'hsl(358,62%,47%)' : 'white')};
   background-color: ${(props) =>
     props.isCancel ? 'rgb(248, 249, 249)' : 'rgb(10, 149, 255)'};

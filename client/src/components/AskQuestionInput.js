@@ -81,6 +81,7 @@ const AskQuestionInput = ({
   minlength,
   maxlength,
   handleBlur,
+  isDisabled,
 }) => {
   return (
     <PostInputBox isButtonVisible={isButtonVisible} height={height}>
@@ -100,6 +101,7 @@ const AskQuestionInput = ({
           rows="12"
           cols="50"
           onBlur={handleBlur}
+          disabled={isDisabled}
         />
       ) : (
         <input
@@ -112,12 +114,15 @@ const AskQuestionInput = ({
           maxLength={maxlength}
           onChange={handleInputChange}
           onBlur={handleBlur}
+          disabled={isDisabled}
         />
       )}
       {!isValid && <p className="validation-notice">{validationNotice}</p>}
-      <button type="button" onClick={handleButtonClick}>
-        {buttonTitle}
-      </button>
+      {name === 'tags' ? null : (
+        <button type="button" onClick={handleButtonClick}>
+          {buttonTitle}
+        </button>
+      )}
     </PostInputBox>
   );
 };
@@ -139,6 +144,7 @@ AskQuestionInput.propTypes = {
   minlength: PropTypes.string,
   maxlength: PropTypes.string,
   handleBlur: PropTypes.func,
+  isDisabled: PropTypes.bool,
 };
 
 export default AskQuestionInput;
