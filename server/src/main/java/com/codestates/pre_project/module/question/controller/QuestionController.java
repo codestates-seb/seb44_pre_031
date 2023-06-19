@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.codestates.pre_project.global.exception.ErrorCode.MEMBER_NOT_FOUND;
 
 @RestController
@@ -26,16 +29,16 @@ import static com.codestates.pre_project.global.exception.ErrorCode.MEMBER_NOT_F
 @RequestMapping("/api/questions")
 public class QuestionController {
     private final QuestionService questionService;
-    private final MemberRepository memberRepository;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Response createQuestion(@Valid @RequestBody QuestionRequest request) {
         // TODO: memberId 가져오는 로직 추가
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Member member = memberRepository.findByEmail(authentication.getName()).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+        HashMap<String, Object> principal = (HashMap<String, Object>) authentication.getPrincipal();
+        Long memberId = Long.valueOf((Integer) principal.get("memberId"));       // memberId 가져오는 로직
 
-        Long questionId = questionService.createQuestion(member.getId(), request.toEntity());
+        Long questionId = questionService.createQuestion(memberId, request.toEntity());
         return Response.success(questionId);
     }
 
