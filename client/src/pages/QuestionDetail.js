@@ -7,7 +7,8 @@ const QuestionDetailContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 2em;
-  max-width: 1000px;
+  /* 보기좋으라고 일단 설정해놨음 */
+  max-width: 1250px;
 
   hr {
     border: 0.1px solid lightgray;

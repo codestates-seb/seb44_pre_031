@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
-import PostLayout, { StyledTagLink } from './PostLayout';
+import PostLayout from './PostLayout';
 import { useState } from 'react';
-import StyledButton from '../styles/StyledButton';
+import StyledButton, { StyledTagLink } from '../styles/StyledButton';
 import { Link } from 'react-router-dom';
 
 const AnswersContainer = styled.div`
@@ -65,10 +65,8 @@ const AnswersHeader = () => {
             <p>Sorted by:</p>
             <Link className="reset-filter">Reset to default</Link>
           </div>
-          <select onChange={handleSelectChange}>
-            <option value="highest-score" selected={true}>
-              Highest Score (default)
-            </option>
+          <select onChange={handleSelectChange} defaultValue="highest-score">
+            <option value="highest-score">Highest Score (default)</option>
             <option value="date-modified">Date modified(newest first)</option>
             <option value="date-created">Date created (oldest first)</option>
           </select>
@@ -87,7 +85,7 @@ const AnswersHeader = () => {
 const AnswerList = () => {
   return (
     <div>
-      {/* map 돌려야함 */}
+      {/* 데이터 받아서 answer map 돌려야함 */}
       <PostLayout />
       <hr />
       <PostLayout />
@@ -227,12 +225,12 @@ const AnswerBottomNoticeContainer = styled.h2`
   font-weight: 400;
   p,
   ul,
-  li,
+  div,
   a {
     display: inline;
   }
 
-  li {
+  .tags-container a {
     margin-left: 0.2em;
     margin-right: 0.2em;
   }
@@ -254,14 +252,10 @@ const AnswerBottomNotice = () => {
   return (
     <AnswerBottomNoticeContainer>
       <p>Not the answer you are looking for? Browse other questions tagged</p>
-      <ul>
-        <li className="">
-          <StyledTagLink>react</StyledTagLink>
-        </li>
-        <li>
-          <StyledTagLink>react-router-dom</StyledTagLink>
-        </li>
-      </ul>
+      <div className="tags-container">
+        <StyledTagLink>react</StyledTagLink>
+        <StyledTagLink>react-router-dom</StyledTagLink>
+      </div>
       <p> or </p>
       <Link className="ask-your-own-questipn">ask your own question</Link>
     </AnswerBottomNoticeContainer>

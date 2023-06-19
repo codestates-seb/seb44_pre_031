@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { styled } from 'styled-components';
 import { TfiPencil } from 'react-icons/tfi';
 import AskQuestionInput from '../components/AskQuestionInput';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import StyledButton from '../styles/StyledButton';
+import axios from 'axios';
 
 const AskContainer = styled.div`
   background-color: rgb(248, 249, 249);
@@ -100,7 +101,7 @@ const WriteGoodTitleNotice = styled.div`
 
 // 페이지 컴포넌트
 const AskQuestion = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [isButtonVisible, setIsButtonVisible] = useState({
     title: true,
@@ -255,19 +256,6 @@ const AskQuestion = () => {
     }
   };
 
-  // submit 핸들러, 페이지 이동
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (
-      isValid.title === true &&
-      isValid.body === true &&
-      isValid.tags === true
-    ) {
-      console.log(inputText.title);
-      // 성공하면 navegate('/questions/{생성된questionId}') 로 리다이렉트하게 만들어야함
-    }
-  };
-
   const handleDiscardButtonClick = () => {
     // programically reload 하게 만들어서 상태값을 초기화시켜야되는데
     setIsButtonVisible({
@@ -289,6 +277,31 @@ const AskQuestion = () => {
     });
     setIsValid({ title: false, body: false, tags: false });
     setIsDisabled({ body: true, tags: true });
+  };
+
+  // submit 핸들러, 페이지 이동
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (
+      isValid.title === true &&
+      isValid.body === true &&
+      isValid.tags === true
+    ) {
+      const data = {
+        title: inputText.title.trim(),
+        content: inputText.body.trim(),
+        tags: inputText.tags.trim(),
+      };
+      console.log(data);
+      try {
+        const response = await axios.post('/api/questions', data);
+        console.log(response);
+        // 성공하면 생성된 질문 상세페이지로 redirect
+        navigate(`/questions/${response.body.questionId}`);
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   return (

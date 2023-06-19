@@ -5,20 +5,17 @@ import { CiBookmark } from 'react-icons/ci';
 import { RxCountdownTimer } from 'react-icons/rx';
 import { Link } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
+import { StyledTagLink } from '../styles/StyledButton';
+import UserProfile from './UserProfile';
 
 const PostLayoutContainer = styled.div`
   display: flex;
-  /* justify-content: space-around; */
   gap: 1.2em;
   padding-top: 0.5em;
   padding-bottom: 2em;
   margin-top: 1em;
+  width: 100%;
 `;
-
-// const PostLayoutContainer = styled.div`
-//   display: grid;
-//   grid-template-columns: max-content 1fr;
-// `;
 
 const VoteCellContainer = styled.div`
   display: flex;
@@ -31,13 +28,11 @@ const VoteCellContainer = styled.div`
   }
 
   .upvote-icon {
-    /* stroke-width: 0.1em; */
     margin-top: 0.3em;
     width: 1.3em;
     height: 1.3em;
   }
   .downvote-icon {
-    /* stroke-width: 0.1em; */
     margin-top: 0.3em;
     width: 1.3em;
     height: 1.3em;
@@ -99,124 +94,34 @@ const TagsContainer = styled.div`
   display: flex;
   gap: 0.5em;
 `;
-export const StyledTagLink = styled(Link)`
-  font-size: 0.7em;
-  color: hsl(205, 47%, 42%);
-  background-color: hsl(205, 46%, 92%);
-  border: none;
-  border-radius: 3px;
-  width: 6em;
-  /* width: ${(props) => props.width}; */
-  height: 2.5em;
-  cursor: pointer;
-  text-decoration: none;
-  text-align: center;
-  padding-top: 0.5em;
-
-  &:visited {
-    /* color: hsl(205, 46%, 92%); */
-    /* background-color: hsl(209, 100%, 37.5%); */
-    text-decoration: none;
-  }
-
-  &:hover {
-    background-color: hsl(205, 53%, 88%);
-  }
-  &:active {
-    /* background-color: hsl(209, 100%, 37.5%); */
-    /* box-shadow: 0px 0px 2px 2px hsl(206, 93%, 83.5%); */
-  }
-`;
 
 const PostFooterContainer = styled.div`
   display: flex;
-  justify-content: space-between;
 
   .user-profile-container {
+    flex-grow: 1;
     display: flex;
-    gap: 1em;
   }
 `;
 
 const FooterFeatContainer = styled.div`
+  flex-grow: 2;
   display: flex;
   gap: 1em;
+  align-items: center;
 
-  button {
+  button,
+  a {
     font-size: 0.9em;
+    font-weight: 500;
     border: none;
     background-color: transparent;
     color: hsl(210, 8%, 45%);
     cursor: pointer;
+    text-decoration: none;
 
     &:hover {
       color: hsl(210, 8%, 55%);
-    }
-  }
-`;
-
-const UserProfileContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0.5em;
-  border-radius: 0.3em;
-  background-color: ${(props) => (props.asked ? 'hsl(205,53%,88%)' : 'white')};
-  width: 12em;
-
-  .date {
-    font-size: 0.8em;
-    color: ${(props) => (props.asked ? 'gray' : ' hsl(206, 100%, 40%)')};
-    text-decoration: none;
-
-    &:visited {
-      color: ${(props) => (props.asked ? 'gray' : ' hsl(206, 100%, 40%)')};
-    }
-
-    &:hover {
-      color: hsl(206, 100%, 52%);
-    }
-  }
-
-  .user-info-container {
-    display: flex;
-    gap: 0.4em;
-  }
-
-  .username {
-    font-size: 0.9em;
-    color: hsl(206, 100%, 40%);
-    text-decoration: none;
-
-    &:visited {
-      color: hsl(209, 100%, 37.5%);
-    }
-
-    &:hover {
-      color: hsl(206, 100%, 52%);
-    }
-  }
-  img {
-    height: 2.5em;
-  }
-
-  .user-name-reputation-contaienr {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .user-reputation-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    span {
-      font-size: 0.9em;
-      color: hsl(210, 8%, 55%);
-      margin-right: 0.5em;
-    }
-    .reputation {
-      font-size: 1em;
-      font-weight: 550;
-      color: hsl(210, 8%, 45%);
     }
   }
 `;
@@ -232,14 +137,19 @@ const PostLayout = () => {
         <StyledVoteButton>
           <BiDownArrow className="downvote-icon" />
         </StyledVoteButton>
+        {/* 북마크 안돼있으면 첫번째꺼, 돼있으면 두번째꺼 렌더 */}
         <div>
           <CiBookmark className="bookmark-icon" />
         </div>
         <div>
           <FcBookmark className="bookmarked-icon" />
         </div>
+        {/* 채택된 답변이면 green 체크마크 렌더 */}
         <div className="checkmark">
-          <FaCheck fill="green" />
+          <FaCheck fill="rgb(46,112,68)" />
+        </div>
+        <div className="checkmark">
+          <FaCheck fill="rgb(186,191,196)" />
         </div>
         <div>
           <RxCountdownTimer />
@@ -261,41 +171,16 @@ const PostLayout = () => {
         </TagsContainer>
         <PostFooterContainer>
           <FooterFeatContainer>
-            <button>Share</button>
-            <button>Edit</button>
+            <Link>Share</Link>
+            <Link to="/posts/1/edit">Edit</Link>
+            {/* 본인이면 Delete 아니면 Follow */}
             <button>Follow</button>
+            <button>Delete</button>
           </FooterFeatContainer>
           <div className="user-profile-container">
-            <UserProfileContainer>
-              <Link className="date">edited Feb 14, 2021 at 15:36</Link>
-              <div className="user-info-container">
-                <img src="/images/test-image.png" alt="dd" />
-                <div className="user-name-reputation-contaienr">
-                  <Link className="username">Peter Mortensen</Link>
-                  <div className="user-reputation-container">
-                    <span className="reputation">31k</span>
-                    <span>21</span>
-                    <span>105</span>
-                    <span>131</span>
-                  </div>
-                </div>
-              </div>
-            </UserProfileContainer>
-            <UserProfileContainer asked={true}>
-              <Link className="date">asked Apr 5, 2014 at 5:29</Link>
-              <div className="user-info-container">
-                <img src="/images/test-image.png" alt="dd" />
-                <div className="user-name-reputation-contaienr">
-                  <Link className="username">B Robster</Link>
-                  <div className="user-reputation-container">
-                    <span className="reputation">40.2k</span>
-                    <span>21</span>
-                    <span>89</span>
-                    <span>122</span>
-                  </div>
-                </div>
-              </div>
-            </UserProfileContainer>
+            {/* edited 기록이 있으면 edit 렌더 아니면 asked 작성자만 렌더 */}
+            <UserProfile type="edited" />
+            <UserProfile type="asked" />
           </div>
         </PostFooterContainer>
       </PostCellContainer>

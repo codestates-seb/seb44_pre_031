@@ -85,7 +85,7 @@ const QuestionHeader = () => {
         <Link className="question-title">
           How to correctly change/focusOut event
         </Link>
-        <AskQuestionLink>Ask Question</AskQuestionLink>
+        <AskQuestionLink to="/questions/ask">Ask Question</AskQuestionLink>
       </div>
       <QuestionInfoContainer>
         <div className="question-info">
