@@ -2,6 +2,8 @@ package com.codestates.pre_project.global.config;
 
 import com.codestates.pre_project.global.auth.filter.JwtAuthenticationFilter;
 import com.codestates.pre_project.global.auth.filter.JwtVerificationFilter;
+import com.codestates.pre_project.global.auth.handler.MemberAccessDeniedHandler;
+import com.codestates.pre_project.global.auth.handler.MemberAuthenticationEntryPoint;
 import com.codestates.pre_project.global.auth.handler.MemberAuthenticationFailureHandler;
 import com.codestates.pre_project.global.auth.handler.MemberAuthenticationSuccessHandler;
 import com.codestates.pre_project.global.auth.jwt.JwtTokenizer;
@@ -45,6 +47,10 @@ public class SecurityConfiguration {
                   .and()
                   .formLogin().disable() // SSR 방식이 아닌 CSR 방식
                   .httpBasic().disable()
+                  .exceptionHandling()
+                  .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
+                  .accessDeniedHandler(new MemberAccessDeniedHandler())
+                  .and()
                   .apply(new CustomFilterConfigurer()) // 구현한 filter 등록 역할
                   .and()
                   .authorizeHttpRequests(authorize -> authorize

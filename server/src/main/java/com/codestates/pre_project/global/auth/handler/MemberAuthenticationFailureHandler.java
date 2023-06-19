@@ -1,5 +1,6 @@
 package com.codestates.pre_project.global.auth.handler;
 
+import com.codestates.pre_project.global.auth.utils.ErrorResponder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -17,7 +18,7 @@ public class MemberAuthenticationFailureHandler implements AuthenticationFailure
 
         log.error("# Authentication failed: {}", exception.getMessage()); // 인증 실패 후, 로그 기록
 
-
+        ErrorResponder.sendErrorResponse(response);
     }
 }
 
