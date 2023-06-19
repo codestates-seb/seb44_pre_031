@@ -1,7 +1,6 @@
-package com.codestates.pre_project.module.vote.entity;
+package com.codestates.pre_project.module.question.entity;
 
 import com.codestates.pre_project.module.member.entity.Member;
-import com.codestates.pre_project.module.question.entity.Question;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,7 +13,7 @@ import static javax.persistence.FetchType.LAZY;
 @Builder
 @Entity
 @Table(name = "votes")
-public class Vote {
+public class QuestionLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "vote_id", nullable = false, updatable = false)
@@ -28,13 +27,13 @@ public class Vote {
     @Column(name = "vote_type")
     private int voteType;
 
-    private Vote(Question question, Member member, int voteType) {
+    private QuestionLike(Question question, Member member, int voteType) {
         this.question = question;
         this.member = member;
         this.voteType = voteType;
     }
 
-    public static Vote of(Question question, Member member, int voteType) {
-        return new Vote(question, member, voteType);
+    public static QuestionLike of(Question question, Member member, int voteType) {
+        return new QuestionLike(question, member, voteType);
     }
 }

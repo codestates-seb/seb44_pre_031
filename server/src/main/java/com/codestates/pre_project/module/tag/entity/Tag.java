@@ -1,13 +1,9 @@
 package com.codestates.pre_project.module.tag.entity;
 
 import com.codestates.pre_project.module.base.BaseEntity;
-import com.codestates.pre_project.module.member.entity.Member;
-import com.codestates.pre_project.module.question.entity.Question;
-import com.codestates.pre_project.module.vote.entity.Vote;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

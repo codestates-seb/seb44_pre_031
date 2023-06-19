@@ -78,11 +78,15 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                 .fetchOne();
     }
 
-    private List<AnswerResponse> fetchAnswerResponses(Long questionId, Pageable pageable) {
-        List<Long> answerIds = fetchAnswerIds(questionId, pageable);
-        return answerIds.stream()
+    private Page<AnswerResponse> fetchAnswerResponses(Long questionId, Pageable pageable) {
+        List<AnswerResponse> answers = fetchAnswerIds(questionId, pageable).stream()
                 .map(this::fetchAnswerResponse)
                 .collect(Collectors.toList());
+
+        JPAQuery<Question> countQuery = queryFactory
+                .select(answer);
+
+        return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchCount);
     }
 
     private AnswerResponse fetchAnswerResponse(Long answerId) {

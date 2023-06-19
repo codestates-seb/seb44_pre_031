@@ -6,8 +6,8 @@ import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.member.repository.MemberRepository;
 import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.repository.QuestionRepository;
-import com.codestates.pre_project.module.vote.entity.Vote;
-import com.codestates.pre_project.module.vote.repository.VoteRepository;
+import com.codestates.pre_project.module.question.entity.QuestionLike;
+import com.codestates.pre_project.module.question.repository.LikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +20,7 @@ public class QuestionLikeService {
 
     private final QuestionRepository questionRepository;
     private final MemberRepository memberRepository;
-    private final VoteRepository voteRepository;
+    private final LikeRepository likeRepository;
 
     @Transactional
     public void likeQuestion(Long questionId, int type) {
@@ -28,18 +28,18 @@ public class QuestionLikeService {
         Long memberId = MemberIdExtractor.extractMemberId();
         Member member = findMemberById(memberId);
 
-        if (voteRepository.existsVoteByQuestionIdAndMemberIdAndVoteType(questionId, memberId, type)) {
+        if (likeRepository.existsVoteByQuestionIdAndMemberIdAndVoteType(questionId, memberId, type)) {
             throw new CustomException(ALREADY_VOTES);
         }
 
         if (type == 1) {
             deleteIfAlreadyVotesOther(question, member, 2);
             question.like();
-            voteRepository.save(Vote.of(question, member, 1));
+            likeRepository.save(QuestionLike.of(question, member, 1));
         } else {
             deleteIfAlreadyVotesOther(question, member, 1);
             question.dislike();
-            voteRepository.save(Vote.of(question, member, 2));
+            likeRepository.save(QuestionLike.of(question, member, 2));
         }
     }
 
@@ -61,8 +61,8 @@ public class QuestionLikeService {
     }
 
     private void deleteIfAlreadyVotesOther(Question question, Member member, int type) {
-        if (voteRepository.findVoteTypeByQuestionAndMember(question.getId(), member.getId(), type).isPresent()) {
-            voteRepository.delete(voteRepository.findByQuestionAndMember(question, member));
+        if (likeRepository.findVoteTypeByQuestionAndMember(question.getId(), member.getId(), type).isPresent()) {
+            likeRepository.delete(likeRepository.findByQuestionAndMember(question, member));
             if (type == 1) question.dislike();
             else question.like();
         }
