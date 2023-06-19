@@ -58,12 +58,12 @@ public class QuestionService {
         questionRepository.delete(question);
     }
 
-    @Transactional
-    public void likeQuestion(Long questionId, int likeStatus) {
-        Question question = findQuestionById(questionId);
-        // TODO: Question, Vote 매핑 다시하고 완성
-        question.like();
-    }
+//    @Transactional
+//    public void likeQuestion(Long questionId, int likeStatus) {
+//        Question question = findQuestionById(questionId);
+//        // TODO: Question, Vote 매핑 다시하고 완성
+//        question.like();
+//    }
 
     public void checkExistSelectedAnswer(Question question) {
         if (question.isSelectedAnswer()) {
