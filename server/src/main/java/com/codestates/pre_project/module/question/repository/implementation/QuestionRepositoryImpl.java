@@ -15,8 +15,8 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.codestates.pre_project.member.entity.QMember.member;
 import static com.codestates.pre_project.module.answer.entity.QAnswer.answer;
+import static com.codestates.pre_project.module.member.entity.QMember.member;
 import static com.codestates.pre_project.module.question.entity.QQuestion.question;
 import static com.querydsl.core.types.dsl.Expressions.asNumber;
 
@@ -49,6 +49,8 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         question.member.displayName))
                 .from(question)
                 .innerJoin(question.member, member)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .orderBy(question.createdAt.desc())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -66,6 +68,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         question.title,
                         question.content,
                         question.likeCount,
+                        question.viewCount,
                         question.selectedAnswer,
                         question.createdAt,
                         member.displayName,
