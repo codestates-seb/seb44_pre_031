@@ -6,6 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface QuestionRepositoryCustom {
-    GetQuestionResponse getQuestionWithAnswer(Long questionId);
+    GetQuestionResponse getQuestionWithAnswer(Long questionId, Pageable pageable);
     Page<QuestionResponse> getQuestions(Pageable pageable);
 }

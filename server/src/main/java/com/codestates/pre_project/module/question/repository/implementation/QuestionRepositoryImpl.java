@@ -25,9 +25,9 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public GetQuestionResponse getQuestionWithAnswer(Long questionId) {
+    public GetQuestionResponse getQuestionWithAnswer(Long questionId, Pageable pageable) {
         QuestionDetailResponse questionDetailResponse = fetchQuestionResponse(questionId);
-        List<AnswerResponse> answerResponses = fetchAnswerResponses(questionId);
+        List<AnswerResponse> answerResponses = fetchAnswerResponses(questionId, pageable);
 
         return new GetQuestionResponse(questionDetailResponse, answerResponses);
     }
@@ -49,9 +49,8 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         question.member.displayName))
                 .from(question)
                 .innerJoin(question.member, member)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .orderBy(question.createdAt.desc())
+                .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
@@ -64,7 +63,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     private QuestionDetailResponse fetchQuestionResponse(Long questionId) {
         return queryFactory
                 .select(new QQuestionDetailResponse(
-                        asNumber(questionId),
+                        asNumber(question.id),
                         question.title,
                         question.content,
                         question.likeCount,
@@ -79,8 +78,8 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                 .fetchOne();
     }
 
-    private List<AnswerResponse> fetchAnswerResponses(Long questionId) {
-        List<Long> answerIds = fetchAnswerIds(questionId);
+    private List<AnswerResponse> fetchAnswerResponses(Long questionId, Pageable pageable) {
+        List<Long> answerIds = fetchAnswerIds(questionId, pageable);
         return answerIds.stream()
                 .map(this::fetchAnswerResponse)
                 .collect(Collectors.toList());
@@ -89,7 +88,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     private AnswerResponse fetchAnswerResponse(Long answerId) {
         return queryFactory
                 .select(new QAnswerResponse(
-                        answer.id,
+                        asNumber(answer.id),
                         answer.content,
                         answer.selected,
                         answer.createdAt,
@@ -102,11 +101,14 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                 .fetchOne();
     }
 
-    private List<Long> fetchAnswerIds(Long questionId) {
+    private List<Long> fetchAnswerIds(Long questionId, Pageable pageable) {
         return queryFactory
                 .select(answer.id)
                 .from(answer)
                 .where(answer.question.id.eq(questionId))
+                .orderBy(answer.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 }

@@ -38,11 +38,11 @@ public class QuestionService {
         question.update(request);
     }
 
-    public GetQuestionResponse getQuestion(Long questionId) {
+    public GetQuestionResponse getQuestion(Long questionId, Pageable pageable) {
         Question question = findQuestionById(questionId);
         question.view();
 
-        return questionRepository.getQuestionWithAnswer(questionId);
+        return questionRepository.getQuestionWithAnswer(questionId, pageable);
     }
 
     public Page<QuestionResponse> getQuestions(Pageable pageable) {

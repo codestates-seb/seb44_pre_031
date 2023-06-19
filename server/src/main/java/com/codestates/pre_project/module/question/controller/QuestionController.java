@@ -42,8 +42,9 @@ public class QuestionController {
 
     @GetMapping("/{question-id}")
     @ResponseStatus(HttpStatus.OK)
-    public Response getQuestion(@PathVariable("question-id") Long questionId) {
-        GetQuestionResponse response = questionService.getQuestion(questionId);
+    public Response getQuestion(@PathVariable("question-id") Long questionId,
+                                @PageableDefault(size = 30) Pageable pageable) {
+        GetQuestionResponse response = questionService.getQuestion(questionId, pageable);
 
         return Response.success(response);
     }
