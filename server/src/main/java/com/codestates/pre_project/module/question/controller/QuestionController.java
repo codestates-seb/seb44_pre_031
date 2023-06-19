@@ -1,5 +1,6 @@
 package com.codestates.pre_project.module.question.controller;
 
+import com.codestates.pre_project.global.auth.utils.MemberIdExtractor;
 import com.codestates.pre_project.global.exception.CustomException;
 import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.member.repository.MemberRepository;
@@ -33,12 +34,9 @@ public class QuestionController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Response createQuestion(@Valid @RequestBody QuestionRequest request) {
-        // TODO: memberId 가져오는 로직 추가
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        HashMap<String, Object> principal = (HashMap<String, Object>) authentication.getPrincipal();
-        Long memberId = Long.valueOf((Integer) principal.get("memberId"));       // memberId 가져오는 로직
-
+        Long memberId = MemberIdExtractor.extractMemberId();
         Long questionId = questionService.createQuestion(memberId, request.toEntity());
+
         return Response.success(questionId);
     }
 

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuestionSimpleDto {
+public class BookmarkedQuestionsResponse {
 
     private Long id;
     private String title;
@@ -16,8 +16,8 @@ public class QuestionSimpleDto {
     private Long voteCount;
     private Long bookmarkCount;
 
-    public static QuestionSimpleDto toDto(Question question) {
-        return new QuestionSimpleDto(question.getId(), question.getTitle(), question.getMember().getDisplayName(), question.getLikeCount(),
+    public static BookmarkedQuestionsResponse toDto(Question question) {
+        return new BookmarkedQuestionsResponse(question.getId(), question.getTitle(), question.getMember().getDisplayName(), question.getLikeCount(),
                 question.getBookmarkCount());
     }
 }

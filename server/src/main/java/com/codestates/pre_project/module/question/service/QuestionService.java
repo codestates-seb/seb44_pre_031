@@ -5,6 +5,7 @@ import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.member.service.MemberService;
 import com.codestates.pre_project.module.question.dto.response.GetQuestionResponse;
 import com.codestates.pre_project.module.question.dto.response.QuestionResponse;
+import com.codestates.pre_project.module.question.entity.LikeStatus;
 import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
@@ -55,17 +56,10 @@ public class QuestionService {
     }
 
     @Transactional
-    public void likeQuestion(Long questionId) {
+    public void likeQuestion(Long questionId, int likeStatus) {
         Question question = findQuestionById(questionId);
         // TODO: Question, Vote 매핑 다시하고 완성
         question.like();
-    }
-
-    @Transactional
-    public void dislikeQuestion(Long questionId) {
-        Question question = findQuestionById(questionId);
-        // TODO: Question, Vote 매핑 다시하고 완성
-        question.dislike();
     }
 
     public void checkExistSelectedAnswer(Question question) {

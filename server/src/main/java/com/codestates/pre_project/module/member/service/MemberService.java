@@ -6,10 +6,9 @@ import com.codestates.pre_project.module.member.dto.UpdateMemberDto;
 import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.member.exception.MemberDisplayNameAlreadyExistsException;
 import com.codestates.pre_project.module.member.exception.MemberEmailAlreadyExistsException;
-import com.codestates.pre_project.module.member.exception.MemberNotFoundException;
 import com.codestates.pre_project.module.member.repository.MemberRepository;
 import com.codestates.pre_project.module.bookmark.repository.BookmarkRepository;
-import com.codestates.pre_project.module.question.dto.response.QuestionSimpleDto;
+import com.codestates.pre_project.module.question.dto.response.BookmarkedQuestionsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,10 +46,10 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<QuestionSimpleDto> findBookmarks(Long memberId) {
+    public List<BookmarkedQuestionsResponse> findBookmarks(Long memberId) {
         Member member = findMemberById(memberId);
         return bookmarkRepository.findAllByMember(member).stream()
-                .map(bookmark -> QuestionSimpleDto.toDto(bookmark.getQuestion()))
+                .map(bookmark -> BookmarkedQuestionsResponse.toDto(bookmark.getQuestion()))
                 .collect(Collectors.toList());
     }
 
