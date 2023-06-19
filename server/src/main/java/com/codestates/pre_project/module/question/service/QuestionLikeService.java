@@ -28,7 +28,7 @@ public class QuestionLikeService {
         Long memberId = MemberIdExtractor.extractMemberId();
         Member member = findMemberById(memberId);
 
-        if (likeRepository.existsVoteByQuestionIdAndMemberIdAndVoteType(questionId, memberId, type)) {
+        if (likeRepository.existsQuestionLikeByQuestionIdAndMemberIdAndVoteType(questionId, memberId, type)) {
             throw new CustomException(ALREADY_VOTES);
         }
 

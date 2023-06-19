@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<QuestionLike, Long> {
-    @Query("SELECT v FROM Vote v " +
+    @Query("SELECT v FROM QuestionLike v " +
             "JOIN v.question q " +
             "JOIN v.member m " +
             "WHERE q.id = :questionId " +
@@ -19,6 +19,6 @@ public interface LikeRepository extends JpaRepository<QuestionLike, Long> {
     Optional<QuestionLike> findVoteTypeByQuestionAndMember(@Param("questionId") Long questionId,
                                                            @Param("memberId") Long memberId,
                                                            @Param("type") int type);
-    boolean existsVoteByQuestionIdAndMemberIdAndVoteType(Long questionId, Long memberId, int voteType);
+    boolean existsQuestionLikeByQuestionIdAndMemberIdAndVoteType(Long questionId, Long memberId, int voteType);
     QuestionLike findByQuestionAndMember(Question question, Member member);
 }
