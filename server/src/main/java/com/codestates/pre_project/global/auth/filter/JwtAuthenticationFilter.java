@@ -2,15 +2,12 @@ package com.codestates.pre_project.global.auth.filter;
 
 import com.codestates.pre_project.global.auth.dto.LoginDto;
 import com.codestates.pre_project.global.auth.jwt.JwtTokenizer;
-import com.codestates.pre_project.member.entity.Member;
-import com.codestates.pre_project.member.exception.MemberNotFoundException;
-import com.codestates.pre_project.member.repository.MemberRepository;
+import com.codestates.pre_project.module.member.entity.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -18,11 +15,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.rmi.ServerException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;

@@ -1,7 +1,9 @@
 package com.codestates.pre_project.module.answer.controller;
 
-import com.codestates.pre_project.module.answer.dto.AnswerRequestDto;
+import com.codestates.pre_project.global.auth.utils.MemberIdExtractor;
+import com.codestates.pre_project.module.answer.dto.request.AnswerRequest;
 import com.codestates.pre_project.module.answer.service.AnswerService;
+import com.codestates.pre_project.module.member.repository.MemberRepository;
 import com.codestates.pre_project.module.response.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,13 +14,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/answers")
 public class AnswerController {
     private final AnswerService answerService;
+    private final MemberRepository memberRepository;
 
     @PostMapping("/{question-id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Response createAnswer(@PathVariable("question-id") Long questionId,
-                                 @RequestBody AnswerRequestDto request) {
-        // TODO : memberId 가져오는 로직 추가
-        answerService.createAnswer(1L, questionId, request.toEntity());
+                                 @RequestBody AnswerRequest request) {
+        Long memberId = MemberIdExtractor.extractMemberId();
+        answerService.createAnswer(memberId, questionId, request.toEntity());
 
         return Response.success();
     }
@@ -26,8 +29,9 @@ public class AnswerController {
     @PatchMapping("/{question-id}/{answer-id}")
     @ResponseStatus(HttpStatus.OK)
     public Response updateAnswer(@PathVariable("answer-id") Long answerId,
-                                 @RequestBody AnswerRequestDto request) {
-        answerService.updateAnswer(answerId, request.toEntity());
+                                 @RequestBody AnswerRequest request) {
+        Long memberId = MemberIdExtractor.extractMemberId();
+        answerService.updateAnswer(answerId, memberId, request.toEntity());
 
         return Response.success();
     }
@@ -36,7 +40,8 @@ public class AnswerController {
     @ResponseStatus(HttpStatus.OK)
     public Response selectAnswer(@PathVariable("question-id") Long questionId,
                                  @PathVariable("answer-id") Long answerId) {
-        answerService.selectAnswer(questionId, answerId);
+        Long memberId = MemberIdExtractor.extractMemberId();
+        answerService.selectAnswer(questionId, answerId, memberId);
 
         return Response.success();
     }
@@ -44,7 +49,8 @@ public class AnswerController {
     @DeleteMapping("/{question-id}/{answer-id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Response deleteAnswer(@PathVariable("answer-id") Long answerId) {
-        answerService.deleteAnswer(answerId);
+        Long memberId = MemberIdExtractor.extractMemberId();
+        answerService.deleteAnswer(answerId, memberId);
 
         return Response.success();
     }

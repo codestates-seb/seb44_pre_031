@@ -1,16 +1,17 @@
 package com.codestates.pre_project.module.question.service;
 
 import com.codestates.pre_project.global.exception.CustomException;
-import com.codestates.pre_project.member.entity.Member;
-import com.codestates.pre_project.member.service.MemberService;
+import com.codestates.pre_project.module.member.entity.Member;
+import com.codestates.pre_project.module.member.service.MemberService;
 import com.codestates.pre_project.module.question.dto.response.GetQuestionResponse;
+import com.codestates.pre_project.module.question.dto.response.QuestionResponse;
 import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static com.codestates.pre_project.global.exception.ErrorCode.*;
 
@@ -22,38 +23,65 @@ public class QuestionService {
     private final MemberService memberService;
 
     @Transactional
-    public void createQuestion(Long memberId, Question request) {
+    public Long createQuestion(Long memberId, Question request) {
         Member member = memberService.findMember(memberId);
-        questionRepository.save(Question.of(member, request));
+        Question question = questionRepository.save(Question.of(member, request));
+
+        return question.getId();
     }
 
     @Transactional
-    public void updateQuestion(Long questionId, Question request) {
+    public void updateQuestion(Long questionId, Long memberId, Question request) {
         Question question = findQuestionById(questionId);
+        validateMemberMatch(question.getMember().getId(), memberId);
+
         question.update(request);
     }
 
-    public GetQuestionResponse getQuestion(Long questionId) {
+    public GetQuestionResponse getQuestion(Long questionId, Pageable pageable) {
         Question question = findQuestionById(questionId);
         question.view();
 
-        return questionRepository.getQuestionWithAnswer(questionId);
+        return questionRepository.getQuestionWithAnswer(questionId, pageable);
     }
 
-    public List<Question> getQuestions() {
+    public Page<QuestionResponse> getQuestions(Pageable pageable) {
 
-        return questionRepository.findAll();
+        return questionRepository.getQuestions(pageable);
+    }
+
+    public Page<QuestionResponse> getQuestionsWithKeyword(String keyword, Pageable pageable) {
+
+        return questionRepository.getQuestionsWithTitle(keyword, pageable);
+    }
+
+    public Page<QuestionResponse> getQuestionsWithAuthor(String author, Pageable pageable) {
+
+        return questionRepository.getQuestionsWithAuthor(author, pageable);
+    }
+
+    public Page<QuestionResponse> getUnansweredQuestions(Pageable pageable) {
+
+        return questionRepository.getUnansweredQuestions(pageable);
     }
 
     @Transactional
-    public void deleteQuestion(Long questionId) {
+    public void deleteQuestion(Long questionId, Long memberId) {
         Question question = findQuestionById(questionId);
+        validateMemberMatch(question.getMember().getId(), memberId);
+
         questionRepository.delete(question);
     }
 
     public void checkExistSelectedAnswer(Question question) {
         if (question.isSelectedAnswer()) {
             throw new CustomException(ALREADY_SELECTED_ANSWER);
+        }
+    }
+
+    private void validateMemberMatch(Long authorId, Long memberId) {
+        if (!authorId.equals(memberId)) {
+            throw new CustomException(NONE_AUTHORIZATION_TOKEN);
         }
     }
 

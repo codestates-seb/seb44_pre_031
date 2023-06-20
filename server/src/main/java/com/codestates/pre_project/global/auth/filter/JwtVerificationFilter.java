@@ -1,8 +1,9 @@
 package com.codestates.pre_project.global.auth.filter;
 
 import com.codestates.pre_project.global.auth.jwt.JwtTokenizer;
-import com.codestates.pre_project.global.auth.utils.CustomAuthentication;
 import com.codestates.pre_project.global.auth.utils.CustomAuthorityUtils;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,8 +30,16 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        Map<String, Object> claims = verifyJws(request);   // JWT 검증
-        setAuthenticationToContext(claims);
+        try {
+            Map<String, Object> claims = verifyJws(request);   // JWT 검증
+            setAuthenticationToContext(claims);
+        } catch (SignatureException se) {
+            request.setAttribute("exception",se);
+        } catch (ExpiredJwtException ee) {
+            request.setAttribute("exception",ee);
+        } catch (Exception e) {
+            request.setAttribute("exception",e);
+        }
 
         filterChain.doFilter(request,response); // 다음 필터 호출
     }
@@ -52,12 +62,12 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     // Authentication 객체를 SecurityContext에 저장
     private void setAuthenticationToContext(Map<String,Object> claims) {
-        String username = (String) claims.get("username");
-        List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles"));
-//        Long memberId = claims.get("memberId");
-        Object memberId = claims.get("memberId");
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username,null,authorities);
-        CustomAuthentication customAuthentication = new CustomAuthentication(authentication,memberId);
-        SecurityContextHolder.getContext().setAuthentication(customAuthentication);
+        Map<String, Object> principal = new HashMap<>();
+        principal.put("username",claims.get("username"));
+        principal.put("memberId",claims.get("memberId"));
+        principal.put("roles",claims.get("roles"));   // 리팩토링 부분
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(principal,null);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

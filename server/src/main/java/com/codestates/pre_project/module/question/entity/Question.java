@@ -2,7 +2,7 @@ package com.codestates.pre_project.module.question.entity;
 
 import com.codestates.pre_project.module.answer.entity.Answer;
 import com.codestates.pre_project.module.base.BaseEntity;
-import com.codestates.pre_project.member.entity.Member;
+import com.codestates.pre_project.module.member.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,13 +23,13 @@ public class Question extends BaseEntity {
     @Column(name = "content", columnDefinition = "TEXT", nullable = false)
     private String content;
     @Column(name = "view_count")
-    private Long viewCount = 100L;
+    private Long viewCount;
     @Column(name = "selected_answer")
     private boolean selectedAnswer;
-    @Column(name = "vote_count")
-    private Long voteCount = 100L;
+    @Column(name = "like_count")
+    private Long likeCount;
     @Column(name = "bookmark_count")
-    private Long bookmarkCount = 1L;
+    private Long bookmarkCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
@@ -42,6 +42,9 @@ public class Question extends BaseEntity {
         this.member = member;
         this.title = title;
         this.content = content;
+        this.viewCount = 0L;
+        this.likeCount = 0L;
+        this.bookmarkCount = 0L;
     }
 
     public static Question of(Member member, Question request) {
@@ -65,15 +68,19 @@ public class Question extends BaseEntity {
         this.viewCount++;
     }
 
-    public void vote() {
-        this.voteCount++;
+    public void like() {
+        this.likeCount++;
     }
 
-    public void cancelVote() {
-        this.voteCount--;
+    public void dislike() {
+        this.likeCount--;
     }
 
     public void bookmark() {
         this.bookmarkCount++;
+    }
+
+    public void cancelBookmark() {
+        this.bookmarkCount--;
     }
 }

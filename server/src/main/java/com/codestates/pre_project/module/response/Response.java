@@ -10,18 +10,17 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Response {
     private boolean success;
-    private int code;
     private Result result;
 
     public static Response success() {
-        return new Response(true, 0, null);
+        return new Response(true, null);
     }
 
     public static <T> Response success(T data) {
-        return new Response(true, 0, new Success<>(data));
+        return new Response(true, new Success<>(data));
     }
 
-    public static Response failure(int code, String message) {
-        return new Response(false, code, new Failure(message));
+    public static Response failure(String message) {
+        return new Response(false, new Failure(message));
     }
 }

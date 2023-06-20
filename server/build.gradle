@@ -46,6 +46,9 @@ dependencies {
 	// querydsl
 	implementation "com.querydsl:querydsl-jpa:5.0.0"
 	implementation "com.querydsl:querydsl-apt:5.0.0"
+
+	// Gson
+	implementation 'com.google.code.gson:gson:2.8.8'
 }
 
 tasks.named('test') {
@@ -76,4 +79,8 @@ configurations {
 		extendsFrom annotationProcessor
 	}
 	querydsl.extendsFrom compileClasspath
+}
+compileQuerydsl.doFirst {
+	if(file(querydslDir).exists() )
+	delete(file(querydslDir))
 }

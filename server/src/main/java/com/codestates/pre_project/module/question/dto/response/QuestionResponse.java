@@ -1,35 +1,37 @@
 package com.codestates.pre_project.module.question.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuestionDetailResponse {
+public class QuestionResponse {
     private Long questionId;
     private String title;
     private String content;
     private Long likeCount;
-    private Long viewCount;
+    private int answerCount;
     private boolean selectedAnswer;
-    private Integer answerCount;
+    private Long viewCount;
     private LocalDateTime questionCreatedAt;
+    private LocalDateTime questionUpdatedAt;
     private String displayName;
-    private int reputation;
 
     @QueryProjection
-    public QuestionDetailResponse(Long questionId, String title, String content, Long likeCount, Long viewCount, boolean selectedAnswer, Integer answerCount, LocalDateTime questionCreatedAt, String displayName, int reputation) {
+    public QuestionResponse(Long questionId, String title, String content, Long likeCount, int answerCount, boolean selectedAnswer, Long viewCount, LocalDateTime questionCreatedAt, LocalDateTime questionUpdatedAt, String displayName) {
         this.questionId = questionId;
         this.title = title;
         this.content = content;
         this.likeCount = likeCount;
-        this.viewCount = viewCount;
-        this.selectedAnswer = selectedAnswer;
         this.answerCount = answerCount;
+        this.selectedAnswer = selectedAnswer;
+        this.viewCount = viewCount;
         this.questionCreatedAt = questionCreatedAt;
+        this.questionUpdatedAt = questionUpdatedAt;
         this.displayName = displayName;
-        this.reputation = reputation;
     }
 }
