@@ -8,6 +8,7 @@ import com.codestates.pre_project.global.auth.handler.MemberAuthenticationFailur
 import com.codestates.pre_project.global.auth.handler.MemberAuthenticationSuccessHandler;
 import com.codestates.pre_project.global.auth.jwt.JwtTokenizer;
 import com.codestates.pre_project.global.auth.utils.CustomAuthorityUtils;
+import org.apache.tomcat.util.http.parser.HttpParser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -56,9 +57,12 @@ public class SecurityConfiguration {
                   .authorizeHttpRequests(authorize -> authorize
                           .antMatchers(HttpMethod.POST, "/*/sign-up").permitAll()
                           .antMatchers(HttpMethod.POST,"/*/sign-in").permitAll()
-                          .antMatchers(HttpMethod.PATCH, "/*/users/**").hasRole("USER")
-                          .antMatchers(HttpMethod.GET, "/*/users/**").hasAnyRole("USER","ADMIN")
-                          .antMatchers(HttpMethod.DELETE, "/*/users/**").hasRole("USER")
+                          .antMatchers(HttpMethod.PATCH, "/*/users/**").permitAll()
+                          .antMatchers(HttpMethod.GET, "/*/users/**").permitAll()
+                          .antMatchers(HttpMethod.DELETE, "/*/users/**").permitAll()
+//                          .antMatchers(HttpMethod.PATCH, "/*/users/**").hasRole("USER")
+//                          .antMatchers(HttpMethod.GET, "/*/users/**").hasAnyRole("USER","ADMIN")
+//                          .antMatchers(HttpMethod.DELETE, "/*/users/**").hasRole("USER")
                           .anyRequest().permitAll()); // 멤버 관련 접근 권한 부여
 
         return http.build();
