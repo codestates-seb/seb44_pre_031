@@ -29,12 +29,13 @@ public class MemberService {
     @Transactional
     public void signUp(Member request) {
         validateSignUp(request);
-        memberRepository.save(Member.builder()
-                .email(request.getEmail())
-                .displayName(request.getDisplayName())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .roles(authorityUtils.createRoles(request.getEmail()))
-                .build());
+        
+        memberRepository.save(Member.of(
+                request.getEmail(),
+                request.getDisplayName(),
+                passwordEncoder.encode(request.getPassword()),
+                authorityUtils.createRoles(request.getEmail())
+        ));
     }
 
     @Transactional(readOnly = true)

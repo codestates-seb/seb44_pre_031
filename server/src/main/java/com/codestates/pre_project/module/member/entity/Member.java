@@ -17,8 +17,6 @@ import java.util.List;
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @DynamicInsert
 @DynamicUpdate
 @SQLDelete(sql = "UPDATE members SET is_deleted = true WHERE member_id = ?")
@@ -58,6 +56,10 @@ public class Member extends BaseEntity {
     @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
+    public static Member of(String email, String getDisplayName, String password, List<String> roles) {
+        return new Member(email, getDisplayName, password, roles);
+    }
+
     public static Member updateMemberInfo(Member findMember, UpdateMemberDto dto) {
         findMember.displayName = dto.getDisplayName();
         findMember.fullName = dto.getFullName();
@@ -69,7 +71,13 @@ public class Member extends BaseEntity {
         findMember.githubLink = dto.getGithubLink();
 
         return findMember;
+    }
 
+    private Member(String email, String getDisplayName, String password, List<String> roles) {
+        this.email = email;
+        this.displayName = getDisplayName;
+        this.password = password;
+        this.roles = roles;
     }
 
     public Member(Long id, String email, String password, List<String> roles) {
