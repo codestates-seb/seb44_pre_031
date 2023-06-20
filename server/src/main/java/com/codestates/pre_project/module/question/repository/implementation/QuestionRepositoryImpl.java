@@ -35,29 +35,68 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 
     @Override
     public Page<QuestionResponse> getQuestions(Pageable pageable) {
-        List<QuestionResponse> result = queryFactory
-                .select(new QQuestionResponse(
-                        asNumber(question.id),
-                        question.title,
-                        question.content,
-                        question.likeCount,
-                        question.answers.size(),
-                        question.selectedAnswer,
-                        question.viewCount,
-                        question.createdAt,
-                        question.updatedAt,
-                        question.member.displayName))
-                .from(question)
-                .innerJoin(question.member, member)
+        List<QuestionResponse> result = getQuestion()
                 .orderBy(question.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        JPAQuery<Question> countQuery = queryFactory
-                .selectFrom(question);
+        JPAQuery<Long> countQuery = queryFactory
+                .select(question.id)
+                .from(question);
 
-        return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchCount);
+        return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Page<QuestionResponse> getQuestionsWithAuthor(String author, Pageable pageable) {
+        List<QuestionResponse> result = getQuestion()
+                .where(question.member.displayName.eq(author))
+                .orderBy(question.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(question.id)
+                .from(question)
+                .where(question.member.displayName.eq(author));
+
+        return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Page<QuestionResponse> getQuestionsWithTitle(String keyword, Pageable pageable) {
+        List<QuestionResponse> result = getQuestion()
+                .where(question.title.contains(keyword))
+                .orderBy(question.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(question.id)
+                .from(question)
+                .where(question.title.contains(keyword));
+
+        return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Page<QuestionResponse> getUnansweredQuestions(Pageable pageable) {
+        List<QuestionResponse> result = getQuestion()
+                .where(question.answers.size().eq(0))
+                .orderBy(question.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(question.id)
+                .from(question)
+                .where(question.answers.size().eq(0));
+
+        return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
     }
 
     private QuestionDetailResponse fetchQuestionResponse(Long questionId) {
@@ -83,11 +122,12 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                 .map(this::fetchAnswerResponse)
                 .collect(Collectors.toList());
 
-        JPAQuery<Answer> countQuery = queryFactory
-                .selectFrom(answer)
-                .where(answer.id.eq(questionId));
+        JPAQuery<Long> countQuery = queryFactory
+                .select(answer.count())
+                .from(answer)
+                .where(answer.question.id.eq(questionId));
 
-        return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchCount);
+        return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
     }
 
     private AnswerResponse fetchAnswerResponse(Long answerId) {
@@ -115,5 +155,22 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+    }
+
+    private JPAQuery<QuestionResponse> getQuestion() {
+        return queryFactory
+                .select(new QQuestionResponse(
+                        asNumber(question.id),
+                        question.title,
+                        question.content,
+                        question.likeCount,
+                        question.answers.size(),
+                        question.selectedAnswer,
+                        question.viewCount,
+                        question.createdAt,
+                        question.updatedAt,
+                        question.member.displayName))
+                .from(question)
+                .innerJoin(question.member, member);
     }
 }

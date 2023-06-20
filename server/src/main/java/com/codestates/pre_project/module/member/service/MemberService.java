@@ -78,7 +78,7 @@ public class MemberService {
         return findMember;
     }
 
-    private Member findMemberById(Long memberId) {
+    public Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 }

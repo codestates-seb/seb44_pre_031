@@ -50,6 +50,21 @@ public class QuestionService {
         return questionRepository.getQuestions(pageable);
     }
 
+    public Page<QuestionResponse> getQuestionsWithKeyword(String keyword, Pageable pageable) {
+
+        return questionRepository.getQuestionsWithTitle(keyword, pageable);
+    }
+
+    public Page<QuestionResponse> getQuestionsWithAuthor(String author, Pageable pageable) {
+
+        return questionRepository.getQuestionsWithAuthor(author, pageable);
+    }
+
+    public Page<QuestionResponse> getUnansweredQuestions(Pageable pageable) {
+
+        return questionRepository.getUnansweredQuestions(pageable);
+    }
+
     @Transactional
     public void deleteQuestion(Long questionId, Long memberId) {
         Question question = findQuestionById(questionId);
@@ -57,13 +72,6 @@ public class QuestionService {
 
         questionRepository.delete(question);
     }
-
-//    @Transactional
-//    public void likeQuestion(Long questionId, int likeStatus) {
-//        Question question = findQuestionById(questionId);
-//        // TODO: Question, Vote 매핑 다시하고 완성
-//        question.like();
-//    }
 
     public void checkExistSelectedAnswer(Question question) {
         if (question.isSelectedAnswer()) {
@@ -81,5 +89,4 @@ public class QuestionService {
         return questionRepository.findById(questionId)
                 .orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));
     }
-
 }

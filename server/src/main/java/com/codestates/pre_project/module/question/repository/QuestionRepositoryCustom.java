@@ -8,4 +8,7 @@ import org.springframework.data.domain.Pageable;
 public interface QuestionRepositoryCustom {
     GetQuestionResponse getQuestionWithAnswer(Long questionId, Pageable pageable);
     Page<QuestionResponse> getQuestions(Pageable pageable);
+    Page<QuestionResponse> getQuestionsWithAuthor(String author, Pageable pageable);
+    Page<QuestionResponse> getQuestionsWithTitle(String keyword, Pageable pageable);
+    Page<QuestionResponse> getUnansweredQuestions(Pageable pageable);
 }

@@ -4,6 +4,7 @@ import com.codestates.pre_project.global.auth.utils.MemberIdExtractor;
 import com.codestates.pre_project.global.exception.CustomException;
 import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.member.repository.MemberRepository;
+import com.codestates.pre_project.module.member.service.MemberService;
 import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.repository.QuestionRepository;
 import com.codestates.pre_project.module.question.entity.QuestionLike;
@@ -18,15 +19,15 @@ import static com.codestates.pre_project.global.exception.ErrorCode.*;
 @RequiredArgsConstructor
 public class QuestionLikeService {
 
-    private final QuestionRepository questionRepository;
-    private final MemberRepository memberRepository;
+    private final QuestionService questionService;
+    private final MemberService memberService;
     private final LikeRepository likeRepository;
 
     @Transactional
     public void likeQuestion(Long questionId, int type) {
-        Question question = findQuestionById(questionId);
+        Question question = questionService.findQuestionById(questionId);
         Long memberId = MemberIdExtractor.extractMemberId();
-        Member member = findMemberById(memberId);
+        Member member = memberService.findMemberById(memberId);
 
         if (likeRepository.existsQuestionLikeByQuestionIdAndMemberIdAndVoteType(questionId, memberId, type)) {
             throw new CustomException(ALREADY_VOTES);
@@ -49,16 +50,15 @@ public class QuestionLikeService {
 //        Long memberId = MemberIdExtractor.extractMemberId();
 //        Member member = findMemberById(memberId);
 //    }
-
-    public Question findQuestionById(Long questionId) {
-        return questionRepository.findById(questionId)
-                .orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));
-    }
-
-    public Member findMemberById(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-    }
+//    public Question findQuestionById(Long questionId) {
+//        return questionRepository.findById(questionId)
+//                .orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));
+//    }
+//
+//    public Member findMemberById(Long memberId) {
+//        return memberRepository.findById(memberId)
+//                .orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+//    }
 
     private void deleteIfAlreadyVotesOther(Question question, Member member, int type) {
         if (likeRepository.findVoteTypeByQuestionAndMember(question.getId(), member.getId(), type).isPresent()) {

@@ -59,6 +59,32 @@ public class QuestionController {
         return Response.success(questions);
     }
 
+    @GetMapping("/search-keyword/{keyword}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response getQuestionsWithKeyword(@PathVariable("keyword") String keyword,
+                                            @PageableDefault(size = 30) Pageable pageable) {
+        Page<QuestionResponse> questions = questionService.getQuestionsWithKeyword(keyword, pageable);
+
+        return Response.success(questions);
+    }
+
+    @GetMapping("/search-author/{author}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response getQuestionsWithAuthor(@PathVariable("author") String author,
+                                           @PageableDefault(size = 30) Pageable pageable) {
+        Page<QuestionResponse> questions = questionService.getQuestionsWithAuthor(author, pageable);
+
+        return Response.success(questions);
+    }
+
+    @GetMapping("/search-unanswered")
+    @ResponseStatus(HttpStatus.OK)
+    public Response getUnansweredQuestion(@PageableDefault(size = 30) Pageable pageable) {
+        Page<QuestionResponse> questions = questionService.getUnansweredQuestions(pageable);
+
+        return Response.success(questions);
+    }
+
     @DeleteMapping("/{question-id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Response deleteQuestion(@PathVariable("question-id") Long questionId) {
@@ -75,12 +101,4 @@ public class QuestionController {
 
         return Response.success();
     }
-
-//    @PostMapping("/{question-id}/dislike")
-//    @ResponseStatus(HttpStatus.OK)
-//    public Response dislikeQuestion(@PathVariable("question-id") Long questionId) {
-//        questionService.dislikeQuestion(questionId);
-//
-//        return Response.success();
-//    }
 }
