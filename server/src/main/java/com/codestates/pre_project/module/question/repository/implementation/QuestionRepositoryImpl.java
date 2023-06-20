@@ -2,9 +2,7 @@ package com.codestates.pre_project.module.question.repository.implementation;
 
 import com.codestates.pre_project.module.answer.dto.response.AnswerResponse;
 import com.codestates.pre_project.module.answer.dto.response.QAnswerResponse;
-import com.codestates.pre_project.module.answer.entity.Answer;
 import com.codestates.pre_project.module.question.dto.response.*;
-import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.repository.QuestionRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -108,6 +106,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         question.likeCount,
                         question.viewCount,
                         question.selectedAnswer,
+                        question.answers.size(),
                         question.createdAt,
                         member.displayName,
                         member.reputation))
