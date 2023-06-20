@@ -12,7 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import static com.codestates.pre_project.global.exception.ErrorCode.*;
@@ -21,14 +24,15 @@ import static com.codestates.pre_project.global.exception.ErrorCode.*;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final PasswordEncoder passwordEncoder;
-    private final MemberRepository memberRepository;
-    private final CustomAuthorityUtils authorityUtils;
     private final BookmarkRepository bookmarkRepository;
+    private final MemberRepository memberRepository;
+    private final EmailService emailService;
+    private final CustomAuthorityUtils authorityUtils;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public void signUp(Member request) {
-        validateSignUp(request);
+        validateEmail(request.getEmail());
         List<String> roles = authorityUtils.createRoles(request.getEmail());
         memberRepository.save(Member.builder()
                 .email(request.getEmail())
@@ -36,6 +40,18 @@ public class MemberService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .roles(roles)
                 .build());
+    }
+
+    @Transactional
+    public void sendCodeToEmail(String to) {
+        validateEmail(to);
+        String title = "스택오버플로우 이메일 인증 번호";
+        String code = createRandomCode();
+
+        // 일단 임시방편으로 이메일 인증 코드를 보내면 member 에 업데이트
+        emailService.sendEmail(to, title, code);
+        Member member = findMemberByEmail(to);
+        member.setEmailCode(code);
     }
 
     @Transactional(readOnly = true)
@@ -62,8 +78,8 @@ public class MemberService {
         memberRepository.delete(findMemberById(memberId));
     }
 
-    private void validateSignUp(Member member) {
-        memberRepository.existsByEmail(member.getEmail())
+    private void validateEmail(String email) {
+        memberRepository.existsByEmail(email)
                 .orElseThrow(() -> new CustomException(MEMBER_EMAIL_ALREADY_EXISTS));
     }
 
@@ -77,5 +93,23 @@ public class MemberService {
 
     public Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+    }
+
+    public Member findMemberByEmail(String email) {
+        return memberRepository.findByEmail(email).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
+    }
+
+    private String createRandomCode() {
+        int length = 6;
+        try {
+            Random random = SecureRandom.getInstanceStrong();
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < length; i++) {
+                builder.append(random.nextInt(10));
+            }
+            return builder.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new CustomException(INTERNAL_SERVER_ERROR);
+        }
     }
 }
