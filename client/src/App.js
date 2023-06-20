@@ -5,6 +5,9 @@ import AskQuestion from './pages/AskQuestion';
 import QuestionDetail from './pages/QuestionDetail';
 import UpdateQuestion from './pages/UpdateQuestion';
 import UpdateAnswer from './pages/UpdateAnswer';
+import SignUp from './pages/SignUp';
+import Login from './pages/Login';
+import Users from './pages/Users';
 
 function App() {
   let location = useLocation();
@@ -13,8 +16,12 @@ function App() {
   return (
     <div>
       <GlobalStyle />
-
       <Routes>
+        <Route path="users">
+          <Route path="sign-up" element={<SignUp />} />
+          <Route path="sign-in" element={<Login />} />
+          <Route path="mypage" element={<Users />} />
+        </Route>
         <Route path="questions">
           <Route index element={<Questions />} />
           <Route path="ask" element={<AskQuestion />} />
