@@ -26,6 +26,8 @@ public enum ErrorCode {
     ALREADY_SELECTED_ANSWER(HttpStatus.CONFLICT, "이미 채택된 답변이 존재합니다."),
     ALREADY_VOTES(HttpStatus.CONFLICT, "이미 질문에 투표하셨습니다."),
     NOT_SUPPORTED_IMAGE_TYPE(HttpStatus.CONFLICT, "지원하지 않는 이미지 형식입니다."),
+    MEMBER_EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "중복된 이메일 입니다."),
+    MEMBER_DISPLAY_NAME_ALREADY_EXISTS(HttpStatus.CONFLICT, "중복된 이름 입니다."),
 
     // 500
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다. 관리자에게 문의하세요.")

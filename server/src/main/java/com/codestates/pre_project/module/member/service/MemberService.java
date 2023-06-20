@@ -2,12 +2,10 @@ package com.codestates.pre_project.module.member.service;
 
 import com.codestates.pre_project.global.auth.utils.CustomAuthorityUtils;
 import com.codestates.pre_project.global.exception.CustomException;
+import com.codestates.pre_project.module.bookmark.repository.BookmarkRepository;
 import com.codestates.pre_project.module.member.dto.UpdateMemberDto;
 import com.codestates.pre_project.module.member.entity.Member;
-import com.codestates.pre_project.module.member.exception.MemberDisplayNameAlreadyExistsException;
-import com.codestates.pre_project.module.member.exception.MemberEmailAlreadyExistsException;
 import com.codestates.pre_project.module.member.repository.MemberRepository;
-import com.codestates.pre_project.module.bookmark.repository.BookmarkRepository;
 import com.codestates.pre_project.module.question.dto.response.BookmarkedQuestionsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.codestates.pre_project.global.exception.ErrorCode.MEMBER_NOT_FOUND;
+import static com.codestates.pre_project.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -31,12 +29,11 @@ public class MemberService {
     @Transactional
     public void signUp(Member request) {
         validateSignUp(request);
-        List<String> roles = authorityUtils.createRoles(request.getEmail());
         memberRepository.save(Member.builder()
                 .email(request.getEmail())
                 .displayName(request.getDisplayName())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .roles(roles)
+                .roles(authorityUtils.createRoles(request.getEmail()))
                 .build());
     }
 
@@ -61,19 +58,18 @@ public class MemberService {
 
     @Transactional
     public void deleteMember(Long memberId) {
-        Member member = findMemberById(memberId);
-        memberRepository.delete(member);
+        memberRepository.delete(findMemberById(memberId));
     }
 
     private void validateSignUp(Member member) {
-        if (memberRepository.existsByEmail(member.getEmail()))
-            throw new MemberEmailAlreadyExistsException(member.getEmail());
+        memberRepository.existsByEmail(member.getEmail())
+                .orElseThrow(() -> new CustomException(MEMBER_EMAIL_ALREADY_EXISTS));
     }
 
     private Member validateUpdate(Long memberId, UpdateMemberDto request) {
         Member findMember = findMemberById(memberId);
         memberRepository.findByDisplayName(request.getDisplayName()).ifPresent(alreadyExists -> {
-            throw new MemberDisplayNameAlreadyExistsException(request.getDisplayName() + "은 이미 사용중!!!!!!!!!!!!!!");
+            throw new CustomException(MEMBER_DISPLAY_NAME_ALREADY_EXISTS);
         });
         return findMember;
     }
