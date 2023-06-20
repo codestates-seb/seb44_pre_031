@@ -9,13 +9,9 @@ spring:
       password:
       driver-class-name: org.h2.Driver
   jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create-drop
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      use-new-id-generator-mappings: false
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     properties:
       hibernate:
         show_sql: true
@@ -29,3 +25,8 @@ jwt:
   key: kevin12312421512312431@!kfjiejwf
   access-token-expiration-minutes: 40
   refresh-token-expiration-minutes: 420
+
+# 관리자 이메일
+mail:
+  address:
+    admin: admin@gmail.com
