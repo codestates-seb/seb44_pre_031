@@ -32,6 +32,8 @@ public class Member extends BaseEntity {
     private String displayName;
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+    @Column(name = "email_code")
+    private String emailCode;
     @Column(name = "password", nullable = false)
     private String password;
     @ElementCollection(fetch = FetchType.EAGER)
@@ -60,6 +62,10 @@ public class Member extends BaseEntity {
         return new Member(email, getDisplayName, password, roles);
     }
 
+    public void setEmailCode(String code) {
+        this.emailCode = code;
+    }
+
     public static Member updateMemberInfo(Member findMember, UpdateMemberDto dto) {
         findMember.displayName = dto.getDisplayName();
         findMember.fullName = dto.getFullName();
@@ -85,5 +91,11 @@ public class Member extends BaseEntity {
         this.email = email;
         this.password = password;
         this.roles = roles;
+    }
+
+    public Member(String email, String password, String displayName) {
+        this.email = email;
+        this.password = password;
+        this.displayName = displayName;
     }
 }

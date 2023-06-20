@@ -30,10 +30,6 @@ public class SignUpDto {
     }
 
     public static Member toEntity(SignUpRequest request) {
-        return Member.builder()
-                .email(request.getEmail())
-                .displayName(request.getDisplayName())
-                .password(request.getPassword())
-                .build();
+        return new Member(request.getEmail(), request.getDisplayName(), request.getPassword());
     }
 }
