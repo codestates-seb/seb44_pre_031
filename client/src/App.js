@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import GlobalStyle from './styles/GlobalStyle';
+import Questions from './pages/Questions';
 import AskQuestion from './pages/AskQuestion';
 import QuestionDetail from './pages/QuestionDetail';
 import UpdateQuestion from './pages/UpdateQuestion';
@@ -12,8 +13,10 @@ function App() {
   return (
     <div>
       <GlobalStyle />
+
       <Routes>
         <Route path="questions">
+          <Route index element={<Questions />} />
           <Route path="ask" element={<AskQuestion />} />
           <Route path=":questionId" element={<QuestionDetail />} />
           <Route path=":questionId/edit" element={<UpdateQuestion />} />
