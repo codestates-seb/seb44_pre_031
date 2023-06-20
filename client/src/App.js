@@ -1,15 +1,20 @@
 import GlobalStyle from './styles/GlobalStyle';
+import Header from './components/Header';
+
+import Questions from './pages/Questions';
+import Nav from './components/Nav';
+import Aside from './components/Aside';
 
 function App() {
   return (
     <div>
       <GlobalStyle />
-      <p>초기구현 테스트 완료 - 나중에 지워주세요</p>
-      <p>초기구현 테스트 완료 - 나중에 지워주세요</p>
-      <p>초기구현 테스트 완료 - 나중에 지워주세요</p>
-      <p>초기구현 테스트 완료 - 나중에 지워주세요</p>
-      <p>초기구현 테스트 완료 - 나중에 지워주세요</p>
-      <p>초기구현 테스트 완료 - 나중에 지워주세요</p>
+      <Header />
+      <div className="wrap">
+        <Nav />
+        <Questions />
+        <Aside />
+      </div>
     </div>
   );
 }
