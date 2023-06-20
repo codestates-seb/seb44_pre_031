@@ -33,11 +33,12 @@ public class QuestionService {
     @Transactional
     public void updateQuestion(Long questionId, Long memberId, Question request) {
         Question question = findQuestionById(questionId);
-        validateMemberMatch(question.getMember().getId(), memberId);
+        validateAuthorEqualMember(question.getMember().getId(), memberId);
 
         question.update(request);
     }
 
+    @Transactional
     public GetQuestionResponse getQuestion(Long questionId, Pageable pageable) {
         Question question = findQuestionById(questionId);
         question.view();
@@ -68,7 +69,7 @@ public class QuestionService {
     @Transactional
     public void deleteQuestion(Long questionId, Long memberId) {
         Question question = findQuestionById(questionId);
-        validateMemberMatch(question.getMember().getId(), memberId);
+        validateAuthorEqualMember(question.getMember().getId(), memberId);
 
         questionRepository.delete(question);
     }
@@ -79,7 +80,7 @@ public class QuestionService {
         }
     }
 
-    private void validateMemberMatch(Long authorId, Long memberId) {
+    private void validateAuthorEqualMember(Long authorId, Long memberId) {
         if (!authorId.equals(memberId)) {
             throw new CustomException(NONE_AUTHORIZATION_TOKEN);
         }
