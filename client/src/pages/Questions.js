@@ -1,7 +1,17 @@
 import { styled } from 'styled-components';
 import { BasicBlueButton } from '../styles/Buttons';
 import QuestionList from '../components/QuestionList';
-
+import Aside from '../components/Aside';
+import Header from '../components/Header';
+import Nav from '../components/Nav';
+const WrapContainer = styled.div`
+  .wrap {
+    position: relative;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+  }
+`;
 const QuestionContainer = styled.div`
   width: 720px;
 `;
@@ -73,44 +83,51 @@ const SortNavBtn = styled.a`
 const QuestionsContent = styled.div``;
 export default function Questions() {
   return (
-    <QuestionContainer>
-      <PageHeader>
-        <h1>All Questions</h1>
-        <div className="bluebutton">
-          <BasicBlueButton>Ask Question</BasicBlueButton>
-        </div>
-      </PageHeader>
+    <>
+      <Header />
+      <WrapContainer className="wrap">
+        <Nav />
+        <QuestionContainer>
+          <PageHeader>
+            <h1>All Questions</h1>
+            <div className="bluebutton">
+              <BasicBlueButton>Ask Question</BasicBlueButton>
+            </div>
+          </PageHeader>
 
-      <div>
-        <QuestionsH2 className="data">
-          <div>23,752,022 questions</div>
           <div>
-            <SortNavBox>
-              <SortNav>
-                <SortNavBtn start selected>
-                  <div>View</div>
-                </SortNavBtn>
-                <SortNavBtn middle>
-                  <div>Vote</div>
-                </SortNavBtn>
-                <SortNavBtn end>
-                  <div>Score</div>
-                </SortNavBtn>
-              </SortNav>
-            </SortNavBox>
+            <QuestionsH2 className="data">
+              <div>23,752,022 questions</div>
+              <div>
+                <SortNavBox>
+                  <SortNav>
+                    <SortNavBtn start selected>
+                      <div>View</div>
+                    </SortNavBtn>
+                    <SortNavBtn middle>
+                      <div>Vote</div>
+                    </SortNavBtn>
+                    <SortNavBtn end>
+                      <div>Score</div>
+                    </SortNavBtn>
+                  </SortNav>
+                </SortNavBox>
+              </div>
+            </QuestionsH2>
           </div>
-        </QuestionsH2>
-      </div>
 
-      <QuestionsContent>
-        <QuestionList />
-        <QuestionList />
-        <QuestionList />
-        <QuestionList />
-        <QuestionList />
-        <QuestionList />
-        <QuestionList />
-      </QuestionsContent>
-    </QuestionContainer>
+          <QuestionsContent>
+            <QuestionList />
+            <QuestionList />
+            <QuestionList />
+            <QuestionList />
+            <QuestionList />
+            <QuestionList />
+            <QuestionList />
+          </QuestionsContent>
+        </QuestionContainer>
+        <Aside />
+      </WrapContainer>
+    </>
   );
 }
