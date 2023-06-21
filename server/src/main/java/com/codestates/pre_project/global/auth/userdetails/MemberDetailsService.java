@@ -37,12 +37,10 @@ public class MemberDetailsService implements UserDetailsService {
 
    private final class MemberDetails extends Member implements UserDetails {
         MemberDetails(Member member) {
-            super(
-                    member.getId(),
-                    member.getEmail(),
-                    member.getPassword(),
-                    member.getRoles()
-            );
+             setId(member.getId());
+             setEmail(member.getEmail());
+             setPassword(member.getPassword());
+             setRoles(member.getRoles());
         }
 
        @Override

@@ -16,6 +16,7 @@ import java.util.List;
  * TODO : 이미지는 나중에
  */
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
@@ -38,6 +39,8 @@ public class Member extends BaseEntity {
     private String emailCode;
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Builder.Default
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
