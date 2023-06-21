@@ -26,7 +26,6 @@ public class MemberService {
 
     private final BookmarkRepository bookmarkRepository;
     private final MemberRepository memberRepository;
-    private final EmailService emailService;
     private final CustomAuthorityUtils authorityUtils;
     private final PasswordEncoder passwordEncoder;
 
@@ -42,17 +41,17 @@ public class MemberService {
                 .build());
     }
 
-    @Transactional
-    public void sendCodeToEmail(String to) {
-        validateEmail(to);
-        String title = "스택오버플로우 이메일 인증 번호";
-        String code = createRandomCode();
-
-        // 일단 임시방편으로 이메일 인증 코드를 보내면 member 에 업데이트
-        emailService.sendEmail(to, title, code);
-        Member member = findMemberByEmail(to);
-        member.setEmailCode(code);
-    }
+//    @Transactional
+//    public void sendCodeToEmail(String to) {
+//        validateEmail(to);
+//        String title = "스택오버플로우 이메일 인증 번호";
+//        String code = createRandomCode();
+//
+//        // 일단 임시방편으로 이메일 인증 코드를 보내면 member 에 업데이트
+//        emailService.sendEmail(to, title, code);
+//        Member member = findMemberByEmail(to);
+//        member.setEmailCode(code);
+//    }
 
     @Transactional(readOnly = true)
     public Member findMember(Long memberId) {
