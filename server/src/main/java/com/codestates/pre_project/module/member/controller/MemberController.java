@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 
 import static com.codestates.pre_project.module.member.dto.UpdateMemberDto.toDto;
 
@@ -26,9 +27,14 @@ public class MemberController {
 
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    public Response signUp(@Valid @RequestBody SignUpDto.SignUpRequest request) {
+    public Response signUp(@Valid @RequestBody SignUpDto request) {
         memberService.signUp(SignUpDto.toEntity(request));
         return Response.success();
+    }
+
+    @PostMapping("/emails")
+    public Response sendMessage(@RequestParam("email") @Valid @Email String email) {
+        return null;
     }
 
     @GetMapping("/{user-id}")

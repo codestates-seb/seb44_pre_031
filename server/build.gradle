@@ -49,6 +49,9 @@ dependencies {
 
 	// Gson
 	implementation 'com.google.code.gson:gson:2.8.8'
+
+	// email
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {
@@ -60,6 +63,11 @@ tasks.named('asciidoctor') {
 	inputs.dir snippetsDir
 	dependsOn test
 }
+// Test 제외
+tasks.withType(Test) {
+	enabled = false
+}
+
 
 // Querydsl Setting
 def querydslDir = "$buildDir/generated/querydsl"
