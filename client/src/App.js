@@ -16,6 +16,7 @@ function App() {
   return (
     <div>
       <GlobalStyle />
+
       <Routes>
         <Route path="users">
           <Route path="sign-up" element={<SignUp />} />

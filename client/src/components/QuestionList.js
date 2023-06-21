@@ -114,6 +114,79 @@ const UserCardContainer = styled.div`
 `;
 
 export default function QuestionList() {
+  // const [allquestions, setallquestions] = useState([
+  //   {
+  //     questionId: 1,
+  //     userId: null,
+  //     title: 'How can I count repeating intervals in a graph?',
+  //     content:
+  //       'enter image description here Through the image, you can see five repetitive sections. I want to write an algorithm that counts this number, but I cant think of it. I tried to draw a regression curve ...',
+  //     voteCount: 0,
+  //     answerCount: 2,
+  //     countView: 0,
+  //     selectedAnswer: false,
+  //     questionCreatedAt: '2023-06-17T17:06:03',
+  //     displayName: 'Yeahhun Jeon',
+  //     reputation: 0,
+  //   },
+  //   {
+  //     questionId: 2,
+  //     userId: null,
+  //     title: 'How can I count repeating intervals in a graph?',
+  //     content:
+  //       'enter image description here Through the image, you can see five repetitive sections. I want to write an algorithm that counts this number, but I cant think of it. I tried to draw a regression curve ...',
+  //     voteCount: 0,
+  //     answerCount: 2,
+  //     countView: 0,
+  //     selectedAnswer: false,
+  //     questionCreatedAt: '2023-06-17T17:06:03',
+  //     displayName: 'Yeahhun Jeon',
+  //     reputation: 0,
+  //   },
+  //   {
+  //     questionId: 3,
+  //     userId: null,
+  //     title: 'How can I count repeating intervals in a graph?',
+  //     content:
+  //       'enter image description here Through the image, you can see five repetitive sections. I want to write an algorithm that counts this number, but I cant think of it. I tried to draw a regression curve ...',
+  //     voteCount: 0,
+  //     answerCount: 2,
+  //     countView: 5,
+  //     selectedAnswer: false,
+  //     questionCreatedAt: '2023-06-17T17:06:03',
+  //     displayName: 'Yeahhun Jeon',
+  //     reputation: 0,
+  //   },
+  //   {
+  //     questionId: 4,
+  //     userId: null,
+  //     title: 'How can I count repeating intervals in a graph?',
+  //     content:
+  //       'enter image description here Through the image, you can see five repetitive sections. I want to write an algorithm that counts this number, but I cant think of it. I tried to draw a regression curve ...',
+  //     voteCount: 4,
+  //     answerCount: 2,
+  //     countView: 0,
+  //     selectedAnswer: false,
+  //     questionCreatedAt: '2023-06-17T17:06:03',
+  //     displayName: 'Yeahhun Jeon',
+  //     reputation: 0,
+  //   },
+  //   {
+  //     questionId: 5,
+  //     userId: null,
+  //     title: 'How can I count repeating intervals in a graph?',
+  //     content:
+  //       'enter image description here Through the image, you can see five repetitive sections. I want to write an algorithm that counts this number, but I cant think of it. I tried to draw a regression curve ...',
+  //     voteCount: 0,
+  //     answerCount: 2,
+  //     countView: 0,
+  //     selectedAnswer: false,
+  //     questionCreatedAt: '2023-06-17T17:06:03',
+  //     displayName: 'Yeahhun Jeon',
+  //     reputation: 0,
+  //   },
+  // ]);
+
   let question = {
     questionId: 1,
     title: 'How can I count repeating intervals in a graph?',
@@ -121,7 +194,7 @@ export default function QuestionList() {
       'enter image description here Through the image, you can see five repetitive sections. I want to write an algorithm that counts this number, but I cant think of it. I tried to draw a regression curve ...',
     voteCount: 0,
     answerCount: 2,
-    viewCount: 0,
+    countView: 0,
     selectedAnswer: false,
     questionCreatedAt: '2023-06-17T17:06:03',
     displayName: 'Yeahhun Jeon',
@@ -150,7 +223,7 @@ export default function QuestionList() {
           <span>{question.answerCount} answers</span>
         </div>
         <div>
-          <span>{question.viewCount} views</span>
+          <span>{question.countView} views</span>
         </div>
       </PostSummaryStats>
       <PostSummaryContent>

@@ -9,6 +9,7 @@ const WrapContainer = styled.div`
     position: relative;
     margin: 0 auto;
     display: flex;
+
     justify-content: center;
   }
 `;

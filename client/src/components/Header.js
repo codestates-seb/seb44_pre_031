@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { IoIosSearch } from 'react-icons/io';
 import { BasicBlueButton } from '../styles/Buttons';
+import { useState } from 'react';
+import SearchGuide from './SearchGuide';
 const Headercontainer = styled.div`
   position: sticky;
   display: flex;
@@ -76,6 +78,11 @@ const SearchInput = styled.input`
 `;
 
 export default function Header() {
+  const [isFocus, setIsFocus] = useState(false);
+  const [searchInputValue, setSearchInputValue] = useState('');
+  const focusHandler = () => {
+    setIsFocus(!isFocus);
+  };
   return (
     <>
       <Headercontainer>
@@ -90,8 +97,22 @@ export default function Header() {
           <HeaderTextButton>For Teams</HeaderTextButton>
         </HeaderTextButtonContainer>
         <SearchBox>
-          <SearchInput type="text" maxLength={240} placeholder="Search..." />
+          <SearchInput
+            type="text"
+            maxLength={240}
+            value={searchInputValue}
+            placeholder="Search..."
+            onChange={(e) => {
+              setSearchInputValue(e.target.value);
+            }}
+            //! 여러분 그거 아세요? 한글에서 엔터를 누르면 onKeyDown이 두번 발생된다는 사실
+            //! 알고싶지 않았습니다.
+
+            onFocus={focusHandler}
+            onBlur={focusHandler}
+          />
           <StyledIoIosSearch />
+          {isFocus && <SearchGuide />}
         </SearchBox>
         <BasicBlueButton skyblue>Log in</BasicBlueButton>
         <BasicBlueButton>Sign up</BasicBlueButton>
