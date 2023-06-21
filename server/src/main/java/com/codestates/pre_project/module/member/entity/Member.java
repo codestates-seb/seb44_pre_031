@@ -16,6 +16,7 @@ import java.util.List;
  * TODO : 이미지는 나중에
  */
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
