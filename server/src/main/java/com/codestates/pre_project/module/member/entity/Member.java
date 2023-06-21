@@ -39,6 +39,8 @@ public class Member extends BaseEntity {
     private String emailCode;
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Builder.Default
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
