@@ -1,3 +1,50 @@
 spring:
-  profiles:
-    active: local
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
+#  profiles:
+#    active: local
+#  datasource:
+#    url: jdbc:h2:mem:test
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+  datasource:
+    url: jdbc:mysql://database-1.cb1tmltkopsz.ap-northeast-2.rds.amazonaws.com/test?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    username: admin
+    password: zheldqkdqjaeo1!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+#    database-platform: org.hibernate.dialect.H2Dialect
+#    hibernate:
+#      ddl-auto: create-drop
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+logging.level:
+  org.hibernate.SQL: debug
+# jwt 관련
+jwt:
+  key: kevin12312421512312431@!kfjiejwf
+  access-token-expiration-minutes: 40
+  refresh-token-expiration-minutes: 420
+# 관리자 이메일
+mail:
+  address:
+    admin: admin@gmail.com
+config:
+  domain: http://pre-project-fe-bucket.s3-website.ap-northeast-2.amazonaws.com
