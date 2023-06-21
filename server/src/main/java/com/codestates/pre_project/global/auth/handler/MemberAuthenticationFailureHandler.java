@@ -16,8 +16,8 @@ public class MemberAuthenticationFailureHandler implements AuthenticationFailure
                                         HttpServletResponse response,
                                         AuthenticationException exception) throws IOException {
 
-        log.error("# Authentication failed: {}", exception.getMessage()); // 인증 실패 후, 로그 기록
-
+        log.error("# Authentication failed: {}", exception.getClass().getSimpleName()); // 인증 실패 후, 로그 기록
+        log.error("# Stack trace:", exception); // Stack Trace
         ErrorResponder.sendErrorResponse(response);
     }
 }
