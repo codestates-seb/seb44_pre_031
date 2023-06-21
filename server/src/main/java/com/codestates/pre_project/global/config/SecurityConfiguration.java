@@ -98,9 +98,10 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // 모든 출처에 대한 통신 허용
+        configuration.setAllowedOrigins(Arrays.asList("*")); // 모든 출처에 대한 통신 허용
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PATCH","DELETE")); // HTTP Method에 대한 통신 허용
-
+        configuration.setAllowedHeaders(Arrays.asList("*")); // CORS 정책 추가 (1)
+        configuration.setExposedHeaders(Arrays.asList("*")); // CORS 정책 추가 (2)
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // 모든 URL에 CORS 정책 적용
         return source;
