@@ -4,7 +4,9 @@ import StyledButton, {
   StyledInputText,
   StyledTextarea,
 } from '../styles/StyledButton';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+// import { useSelector } from 'react-redux';
+// import { selectAllAnswers } from '../slices/questionSlice';
 
 const UpdateQuestionContainer = styled.form`
   display: flex;
@@ -39,6 +41,12 @@ const UpdateQuestionContainer = styled.form`
 `;
 
 const UpdateQuestion = () => {
+  const params = useParams();
+  console.log(params);
+  // const answer = useSelector(
+  //   (state) => state.question.answers[params.answersId - 1]
+  // );
+
   const handleSubmit = (e) => {
     e.preventDefault;
     // http POST 요청 보내야함
@@ -50,7 +58,7 @@ const UpdateQuestion = () => {
       <div>
         <label htmlFor="body">Body</label>
         {/* <textarea id="body" /> */}
-        <StyledTextarea id="body" height="12em" />
+        <StyledTextarea id="body" height="12em" value="" />
       </div>
       <div>
         <label htmlFor="summary">Edit Summary</label>
@@ -64,7 +72,7 @@ const UpdateQuestion = () => {
         <StyledButton type="submit" fontSize="1em" width="6em">
           Save edits
         </StyledButton>
-        <StyledButtonLink to="/questions/1" fontSize="1em">
+        <StyledButtonLink to={`/questions/${params.questionId}`} fontSize="1em">
           Cancel
         </StyledButtonLink>
       </div>

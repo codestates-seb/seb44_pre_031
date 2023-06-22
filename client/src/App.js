@@ -8,6 +8,8 @@ import UpdateAnswer from './pages/UpdateAnswer';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Users from './pages/Users';
+import Header from './components/Header';
+import Nav from './components/Nav';
 
 function App() {
   let location = useLocation();
@@ -16,6 +18,8 @@ function App() {
   return (
     <div>
       <GlobalStyle />
+      <Header />
+      <Nav />
       <Routes>
         <Route path="/" element={<Questions />} />
         <Route path="users">
@@ -24,13 +28,10 @@ function App() {
           <Route path="mypage" element={<Users />} />
         </Route>
         <Route path="questions">
-          <Route index element={<Questions />} />
           <Route path="ask" element={<AskQuestion />} />
           <Route path=":questionId" element={<QuestionDetail />} />
           <Route path=":questionId/edit" element={<UpdateQuestion />} />
-        </Route>
-        <Route path="answers">
-          <Route path=":answerId/edit" element={<UpdateAnswer />} />
+          <Route path=":questionId/:answerId/edit" element={<UpdateAnswer />} />
         </Route>
       </Routes>
     </div>

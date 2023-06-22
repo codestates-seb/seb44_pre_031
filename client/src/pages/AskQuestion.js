@@ -5,6 +5,7 @@ import AskQuestionInput from '../components/AskQuestionInput';
 import { useNavigate } from 'react-router-dom';
 import StyledButton from '../styles/StyledButton';
 import axios from 'axios';
+import { AWS_URL_PATH } from '../slices/questionSlice';
 
 const AskContainer = styled.div`
   background-color: rgb(248, 249, 249);
@@ -287,17 +288,23 @@ const AskQuestion = () => {
       isValid.body === true &&
       isValid.tags === true
     ) {
-      const data = {
-        title: inputText.title.trim(),
-        content: inputText.body.trim(),
-        tags: inputText.tags.trim(),
-      };
-      console.log(data);
       try {
-        const response = await axios.post('/api/questions', data);
+        const data = {
+          title: inputText.title.trim(),
+          content: inputText.body.trim(),
+          // tags: inputText.tags.trim(),
+        };
+        console.log(data);
+
+        const response = await axios.post(
+          `${AWS_URL_PATH}/api/questions`,
+          data
+        );
+        // const response = await axios('https://swapi.dev/api/');
         console.log(response);
+
+        navigate(`/questions/${response.data.result.data}`);
         // 성공하면 생성된 질문 상세페이지로 redirect
-        navigate(`/questions/${response.body.questionId}`);
       } catch (error) {
         console.log(error);
       }
