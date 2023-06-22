@@ -55,7 +55,9 @@ public class SecurityConfiguration {
                   .apply(new CustomFilterConfigurer()) // 구현한 filter 등록 역할
                   .and()
                   .authorizeHttpRequests(authorize -> authorize
-                          .anyRequest().permitAll());
+                                  .antMatchers("/","/**").permitAll()
+                                  .anyRequest().permitAll()
+                          );
 
         return http.build();
     }
