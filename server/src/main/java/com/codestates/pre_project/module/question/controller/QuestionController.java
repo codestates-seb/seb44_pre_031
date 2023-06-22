@@ -25,9 +25,10 @@ public class QuestionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Response createQuestion(@Valid @RequestBody QuestionRequest request) {
+    public Response createQuestion(@Valid @RequestBody QuestionRequest request,
+                                   @RequestBody String tags) {
         Long memberId = MemberIdExtractor.extractMemberId();
-        Long questionId = questionService.createQuestion(memberId, request.toEntity());
+        Long questionId = questionService.createQuestion(memberId, request.toEntity(), tags);
 
         return Response.success(questionId);
     }

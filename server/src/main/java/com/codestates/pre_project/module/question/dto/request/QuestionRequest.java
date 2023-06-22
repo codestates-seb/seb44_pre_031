@@ -16,10 +16,6 @@ public class QuestionRequest {
     @NotEmpty(message = "내용을 입력해주세요.")
     private String content;
 
-    public QuestionRequest(Member member) {
-        this.member = member;
-    }
-
     public Question toEntity() {
         return Question.builder()
                 .title(title)

@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.codestates.pre_project.global.exception.ErrorCode.*;
 
 @Service
@@ -21,11 +23,14 @@ import static com.codestates.pre_project.global.exception.ErrorCode.*;
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final MemberService memberService;
+    private final QuestionTagService questionTagService;
 
     @Transactional
-    public Long createQuestion(Long memberId, Question request) {
+    public Long createQuestion(Long memberId, Question request, String tags) {
         Member member = memberService.findMember(memberId);
         Question question = questionRepository.save(Question.of(member, request));
+        List<String> tagList = stringToTagList(tags);
+        questionTagService.addTagToQuestion(question, tagList);
 
         return question.getId();
     }
@@ -89,5 +94,9 @@ public class QuestionService {
     public Question findQuestionById(Long questionId) {
         return questionRepository.findById(questionId)
                 .orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));
+    }
+
+    private List<String> stringToTagList(String tags) {
+        return List.of(tags.toLowerCase().split(" "));
     }
 }
