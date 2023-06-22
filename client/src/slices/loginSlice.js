@@ -53,4 +53,4 @@ export const loginSlice = createSlice({
   },
 });
 
-export default loginSlice;
+export default loginSlice.reducer;
