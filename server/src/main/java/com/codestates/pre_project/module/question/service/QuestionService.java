@@ -76,6 +76,12 @@ public class QuestionService {
         return questionRepository.getUnansweredQuestions(pageable);
     }
 
+    public Page<QuestionResponse> getQuestionsWithTag(String tag, Pageable pageable) {
+        List<Long> questionIds = tagService.getQuestionIdsByTag(tag);
+
+        return questionRepository.getQuestionsWithTag(questionIds, pageable);
+    }
+
     @Transactional
     public void deleteQuestion(Long questionId, Long memberId) {
         Question question = findQuestionById(questionId);

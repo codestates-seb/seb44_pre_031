@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface TagRepositoryCustom {
     List<TagResponse> getAllTagResponses(List<Long> tagIds);
+    List<Long> getQuestionIds(Long tagId);
 }

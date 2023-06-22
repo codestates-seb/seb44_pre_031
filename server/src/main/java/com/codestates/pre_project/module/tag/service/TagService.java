@@ -1,5 +1,6 @@
 package com.codestates.pre_project.module.tag.service;
 
+import com.codestates.pre_project.global.exception.CustomException;
 import com.codestates.pre_project.module.tag.dto.response.TagResponse;
 import com.codestates.pre_project.module.tag.entity.Tag;
 import com.codestates.pre_project.module.tag.repository.TagRepository;
@@ -10,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.codestates.pre_project.global.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +51,12 @@ public class TagService {
         }
 
         return result;
+    }
+
+    public List<Long> getQuestionIdsByTag(String tag) {
+        Long tagId = tagRepository.findByName(tag)
+                .orElseThrow(() -> new CustomException(TAG_NOT_FOUND)).getId();
+
+        return tagRepository.getQuestionIds(tagId);
     }
 }

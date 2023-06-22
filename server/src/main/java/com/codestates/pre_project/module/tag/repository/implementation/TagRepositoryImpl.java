@@ -24,6 +24,16 @@ public class TagRepositoryImpl implements TagRepositoryCustom {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<Long> getQuestionIds(Long tagId) {
+        return queryFactory
+                .select(question.id)
+                .from(question)
+                .leftJoin(question).on(question.eq(questionTag.question))
+                .leftJoin(questionTag).on(questionTag.tag.id.eq(tagId))
+                .fetch();
+    }
+
     private TagResponse getTagResponse(Long tagId) {
         return queryFactory
                 .select(new QTagResponse(

@@ -10,9 +10,11 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -127,6 +129,17 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                 .where(question.answers.size().eq(0));
 
         return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Page<QuestionResponse> getQuestionsWithTag(List<Long> questionIds, Pageable pageable) {
+        List<QuestionResponse> result = new ArrayList<>();
+        JPAQuery<QuestionResponse> questions = getQuestion();
+        for (Long id : questionIds) {
+            result.add(questions.where(question.id.eq(id)).fetchOne());
+        }
+
+        return new PageImpl<>(result, pageable, result.size());
     }
 
     private QuestionDetailResponse fetchQuestionResponse(Long questionId) {

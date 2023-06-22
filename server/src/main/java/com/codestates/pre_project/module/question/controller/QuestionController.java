@@ -85,6 +85,16 @@ public class QuestionController {
         return Response.success(questions);
     }
 
+    // TODO : tag 검색 오류 수정
+    @GetMapping("/search-tag/{tag}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response getQuestionsWithTag(@PathVariable("tag") String tag,
+                                       @PageableDefault(size = 30) Pageable pageable) {
+        Page<QuestionResponse> questions = questionService.getQuestionsWithTag(tag, pageable);
+
+        return Response.success(questions);
+    }
+
     @DeleteMapping("/{question-id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Response deleteQuestion(@PathVariable("question-id") Long questionId) {
