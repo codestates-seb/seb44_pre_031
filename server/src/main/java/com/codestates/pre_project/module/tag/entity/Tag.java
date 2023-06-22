@@ -1,30 +1,44 @@
 package com.codestates.pre_project.module.tag.entity;
 
-import com.codestates.pre_project.module.base.BaseEntity;
-import lombok.*;
+import com.codestates.pre_project.module.question.entity.QuestionTag;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "tags")
-public class Tag extends BaseEntity {
+public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tag_id")
+    @Column(name = "tag_id", nullable = false, updatable = false)
     private Long id;
-    @Column(name = "tag_name", nullable = false)
-    private String tagName;
-    @Column(name = "tag_description")
-    private String tagDescription;
+    @Column(name = "tag_name")
+    private String name;
 
-    private Tag(String tagName, String tagDescription) {
-        this.tagName = tagName;
-        this.tagDescription = tagDescription;
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.PERSIST)
+    private List<QuestionTag> questionTags = new ArrayList<>();
+
+    @Builder
+    private Tag(String name) {
+        this.name = name;
     }
 
-    public static Tag of(String tagName, String tagDescription) {
-        return new Tag(tagName, tagDescription);
+    public static Tag from(String name) {
+        return Tag.builder()
+                .name(name)
+                .build();
+    }
+
+    public void addQuestionTag(QuestionTag questionTag) {
+        questionTags.add(questionTag);
+        questionTag.setTag(this);
     }
 }
