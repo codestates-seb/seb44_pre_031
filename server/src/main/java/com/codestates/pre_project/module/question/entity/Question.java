@@ -36,6 +36,8 @@ public class Question extends BaseEntity {
     private Member member;
     @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
     private List<Answer> answers = new ArrayList<>();
+    @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
+    private List<QuestionTag> tags = new ArrayList<>();
 
     @Builder
     private Question(Member member, String title, String content) {
