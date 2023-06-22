@@ -56,17 +56,7 @@ public class SecurityConfiguration {
                   .and()
                   .authorizeRequests()
                   .antMatchers("/", "/**").permitAll()
-                  .and()
-                  .authorizeHttpRequests(authorize -> authorize
-                          .antMatchers(HttpMethod.POST, "/*/sign-up").permitAll()
-                          .antMatchers(HttpMethod.POST,"/*/sign-in").permitAll()
-                          .antMatchers(HttpMethod.PATCH, "/*/users/**").permitAll()
-                          .antMatchers(HttpMethod.GET, "/*/users/**").permitAll()
-                          .antMatchers(HttpMethod.DELETE, "/*/users/**").permitAll()
-//                          .antMatchers(HttpMethod.PATCH, "/*/users/**").hasRole("USER")
-//                          .antMatchers(HttpMethod.GET, "/*/users/**").hasAnyRole("USER","ADMIN")
-//                          .antMatchers(HttpMethod.DELETE, "/*/users/**").hasRole("USER")
-                          .anyRequest().permitAll()); // 멤버 관련 접근 권한 부여
+                  .anyRequest().permitAll();
 
         return http.build();
     }
