@@ -2,8 +2,10 @@ import { styled } from 'styled-components';
 import { AnswerLayout } from './PostLayout';
 import { useState } from 'react';
 import StyledButton, { StyledTagLink } from '../styles/StyledButton';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { AWS_URL_PATH } from '../slices/questionSlice';
 
 const AnswersContainer = styled.div`
   display: flex;
@@ -143,6 +145,8 @@ const AnswerForm = () => {
   const [inputText, setInputText] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [validationNotice, setValidationNotice] = useState('');
+  const params = useParams();
+  const navigate = useNavigate();
 
   const handleInputText = (e) => {
     setInputText(e.target.value);
@@ -166,16 +170,36 @@ const AnswerForm = () => {
     }
   };
 
-  const handleSumbitClick = (e) => {
+  const handleSumbitClick = async (e) => {
     e.preventDefault();
     validateInput();
 
     // POST 요청 보내야됨
-    console.log(isValid);
+    // console.log(isValid);
     if (isValid) {
-      console.log('submit success');
+      // console.log('submit success');
+      try {
+        const response = await axios.post(
+          `${AWS_URL_PATH}/questions/${params.questionId}`,
+          { content: inputText.trim() },
+          {
+            headers: {
+              Authorization:
+                'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sIm1lbWJlcklkIjoyLCJ1c2VybmFtZSI6InFxcXFxcUBuYXZlci5jb20iLCJzdWIiOiJxcXFxcXFAbmF2ZXIuY29tIiwiaWF0IjoxNjg3NDIyMjY5LCJleHAiOjE2ODc0MjQ2Njl9.9zqwpuYIYVXbBxJbOldZf7EuYtB2gJpG9a0v2Nh7bWM',
+              // 'Content-Type': 'application/json',
+            },
+          }
+        );
+        // const response = await axios('https://swapi.dev/api/');
+        console.log(response);
+
+        // 성공하면 해당 질문 상세페이지로 다시 redirect
+        navigate(`/questions/${params.questionId}`);
+      } catch (error) {
+        console.log(error);
+      }
     } else if (!isValid) {
-      console.log('submit failed');
+      // console.log('submit failed');
     }
   };
 

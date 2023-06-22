@@ -7,12 +7,27 @@ import StyledButton, {
 import { Link, useParams } from 'react-router-dom';
 // import { useSelector } from 'react-redux';
 // import { selectAllAnswers } from '../slices/questionSlice';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
+import Aside from '../components/Aside';
+import Nav from '../components/Nav';
 
-const UpdateQuestionContainer = styled.form`
+const UpdateAnswerPageContainer = styled.div`
+  .nav-main-container {
+    display: flex;
+    width: 100%;
+  }
+  .aside {
+    margin: 10px;
+  }
+`;
+
+const UpdateAnswerContainer = styled.form`
   display: flex;
   flex-direction: column;
   margin: 2em;
   gap: 1em;
+  width: 80em;
 
   .title {
     text-decoration: none;
@@ -53,30 +68,41 @@ const UpdateQuestion = () => {
   };
 
   return (
-    <UpdateQuestionContainer onSubmit={handleSubmit}>
-      <Link className="title">How Can I submit a POST?</Link>
-      <div>
-        <label htmlFor="body">Body</label>
-        {/* <textarea id="body" /> */}
-        <StyledTextarea id="body" height="12em" value="" />
+    <UpdateAnswerPageContainer>
+      <Header />
+      <div className="nav-main-container">
+        <Nav />
+        <UpdateAnswerContainer onSubmit={handleSubmit}>
+          <Link className="title">How Can I submit a POST?</Link>
+          <div>
+            <label htmlFor="body">Body</label>
+            {/* <textarea id="body" /> */}
+            <StyledTextarea id="body" height="12em" value="" />
+          </div>
+          <div>
+            <label htmlFor="summary">Edit Summary</label>
+            <StyledInputText
+              id="summary"
+              type="text"
+              placeholder="briefly explain your changes (corrected spelling, fixed grammar, improved formatting)"
+            />
+          </div>
+          <div className="button-container">
+            <StyledButton type="submit" fontSize="1em" width="6em">
+              Save edits
+            </StyledButton>
+            <StyledButtonLink
+              to={`/questions/${params.questionId}`}
+              fontSize="1em"
+            >
+              Cancel
+            </StyledButtonLink>
+          </div>
+        </UpdateAnswerContainer>
+        <Aside />
       </div>
-      <div>
-        <label htmlFor="summary">Edit Summary</label>
-        <StyledInputText
-          id="summary"
-          type="text"
-          placeholder="briefly explain your changes (corrected spelling, fixed grammar, improved formatting)"
-        />
-      </div>
-      <div className="button-container">
-        <StyledButton type="submit" fontSize="1em" width="6em">
-          Save edits
-        </StyledButton>
-        <StyledButtonLink to={`/questions/${params.questionId}`} fontSize="1em">
-          Cancel
-        </StyledButtonLink>
-      </div>
-    </UpdateQuestionContainer>
+      <Footer />
+    </UpdateAnswerPageContainer>
   );
 };
 

@@ -6,6 +6,9 @@ export const AWS_URL_PATH =
 
 // const MOCK_UP_API = 'http://localhost:3500';
 
+export const TEMP_ACCESS_TOKEN =
+  'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sIm1lbWJlcklkIjoyLCJ1c2VybmFtZSI6InFxcXFxcUBuYXZlci5jb20iLCJzdWIiOiJxcXFxcXFAbmF2ZXIuY29tIiwiaWF0IjoxNjg3NDIyMjY5LCJleHAiOjE2ODc0MjQ2Njl9.9zqwpuYIYVXbBxJbOldZf7EuYtB2gJpG9a0v2Nh7bWM';
+
 const initialState = {
   status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
   error: null,
