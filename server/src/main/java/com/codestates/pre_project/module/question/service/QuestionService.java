@@ -29,11 +29,10 @@ public class QuestionService {
     private final QuestionTagService questionTagService;
 
     @Transactional
-    public Long createQuestion(Long memberId, Question request, String tagString) {
+    public Long createQuestion(Long memberId, Question request, String[] tagList) {
         Member member = memberService.findMember(memberId);
         Question question = questionRepository.save(Question.of(member, request));
 
-        List<String> tagList = stringToTagList(tagString);
         List<Tag> tags = tagService.addTags(tagList);
 
         questionTagService.save(question, tags);
@@ -100,9 +99,5 @@ public class QuestionService {
     public Question findQuestionById(Long questionId) {
         return questionRepository.findById(questionId)
                 .orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));
-    }
-
-    private List<String> stringToTagList(String tags) {
-        return List.of(tags.toLowerCase().split(" "));
     }
 }

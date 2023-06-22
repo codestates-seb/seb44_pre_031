@@ -16,7 +16,7 @@ import java.util.Optional;
 public class TagService {
     private final TagRepository tagRepository;
 
-    public List<Tag> addTags(List<String> tagList) {
+    public List<Tag> addTags(String[] tagList) {
         List<Tag> tags = new ArrayList<>();
         for (String tag : tagList) {
             tags.add(registerTag(tag));

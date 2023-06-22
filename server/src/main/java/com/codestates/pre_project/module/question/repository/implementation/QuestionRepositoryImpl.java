@@ -6,8 +6,6 @@ import com.codestates.pre_project.module.question.dto.response.*;
 import com.codestates.pre_project.module.question.repository.QuestionRepositoryCustom;
 import com.codestates.pre_project.module.tag.dto.response.QTagResponse;
 import com.codestates.pre_project.module.tag.dto.response.TagResponse;
-import com.codestates.pre_project.module.tag.entity.QTag;
-import com.codestates.pre_project.module.tag.entity.Tag;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -33,38 +31,36 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     public GetQuestionResponse getQuestionWithAnswer(Long questionId, Pageable pageable) {
         QuestionDetailResponse questionDetailResponse = fetchQuestionResponse(questionId);
         Page<AnswerResponse> answerResponses = fetchAnswerResponses(questionId, pageable);
-        List<TagResponse> tagResponses = fetchTagResponses(questionId);
+        List<TagResponse> tagResponses = getTagResponses(questionId);
 
         return new GetQuestionResponse(questionDetailResponse, answerResponses, tagResponses);
     }
 
-    private  List<TagResponse> fetchTagResponses(Long questionId) {
-        List<TagResponse> result = fetchTags(questionId).stream()
+    private List<TagResponse> getTagResponses(Long questionId) {
+        return fetchTagIds(questionId).stream()
                 .map(this::fetchTagResponse)
                 .collect(Collectors.toList());
-
-        return result;
     }
 
     private TagResponse fetchTagResponse(Long tagId) {
         return queryFactory
-                .select(new QTagResponse(tag.name,
-                        questionTag.question.count(),
+                .select(new QTagResponse(
+                        tag.name,
+                        question.count(),
                         tag.createdAt))
                 .from(tag)
-                .innerJoin(tag, questionTag.tag)
+                .leftJoin(questionTag).on(questionTag.tag.eq(tag))
+                .leftJoin(question).on(question.eq(questionTag.question))
                 .where(tag.id.eq(tagId))
                 .fetchOne();
     }
 
-    private List<Long> fetchTags(Long questionId) {
-        List<Long> tagIds = queryFactory
+    private  List<Long> fetchTagIds(Long questionId) {
+        return queryFactory
                 .select(questionTag.tag.id)
                 .from(questionTag)
                 .where(questionTag.question.id.eq(questionId))
                 .fetch();
-
-        return tagIds;
     }
 
     @Override
