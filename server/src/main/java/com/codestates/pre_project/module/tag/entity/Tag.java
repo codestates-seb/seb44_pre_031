@@ -23,9 +23,6 @@ public class Tag {
     @Column(name = "tag_name")
     private String name;
 
-    @OneToMany(mappedBy = "tag", cascade = CascadeType.PERSIST)
-    private List<QuestionTag> questionTags = new ArrayList<>();
-
     @Builder
     private Tag(String name) {
         this.name = name;
@@ -35,10 +32,5 @@ public class Tag {
         return Tag.builder()
                 .name(name)
                 .build();
-    }
-
-    public void addQuestionTag(QuestionTag questionTag) {
-        questionTags.add(questionTag);
-        questionTag.setTag(this);
     }
 }

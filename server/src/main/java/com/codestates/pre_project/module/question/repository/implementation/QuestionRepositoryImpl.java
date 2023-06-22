@@ -108,6 +108,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         question.selectedAnswer,
                         question.answers.size(),
                         question.createdAt,
+                        question.updatedAt,
                         member.displayName,
                         member.reputation))
                 .from(question)
@@ -132,6 +133,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     private AnswerResponse fetchAnswerResponse(Long answerId) {
         return queryFactory
                 .select(new QAnswerResponse(
+                        asNumber(answer.question.id),
                         asNumber(answer.id),
                         answer.content,
                         answer.selected,

@@ -36,8 +36,6 @@ public class Question extends BaseEntity {
     private Member member;
     @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
     private List<Answer> answers = new ArrayList<>();
-    @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
-    private List<QuestionTag> questionTags = new ArrayList<>();
 
     @Builder
     private Question(Member member, String title, String content) {
@@ -60,11 +58,6 @@ public class Question extends BaseEntity {
     public void update(Question question) {
         this.title = question.title;
         this.content = question.content;
-    }
-
-    public void addQuestionTags(QuestionTag questionTag) {
-        questionTags.add(questionTag);
-        questionTag.setQuestion(this);
     }
 
     public void selectAnswer() {

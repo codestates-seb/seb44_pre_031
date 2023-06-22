@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AnswerResponse {
+    private Long questionId;
     private Long answerId;
     private String content;
     private boolean selected;
@@ -19,7 +20,8 @@ public class AnswerResponse {
     private int reputation;
 
     @QueryProjection
-    public AnswerResponse(Long answerId, String content, boolean selected, LocalDateTime answerCreatedAt, LocalDateTime answerUpdatedAt, String displayName, int reputation) {
+    public AnswerResponse(Long questionId, Long answerId, String content, boolean selected, LocalDateTime answerCreatedAt, LocalDateTime answerUpdatedAt, String displayName, int reputation) {
+        this.questionId = questionId;
         this.answerId = answerId;
         this.content = content;
         this.selected = selected;
