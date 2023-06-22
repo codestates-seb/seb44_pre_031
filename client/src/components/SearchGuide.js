@@ -1,9 +1,11 @@
 import { styled } from 'styled-components';
 import { BasicBlueButton } from '../styles/Buttons';
+import { Link } from 'react-router-dom';
 
 const SearchGuideBox = styled.div`
   position: absolute;
   padding-top: 30px;
+
   top: 45px;
   left: 0;
   right: 0;
@@ -56,6 +58,10 @@ const AskBox = styled.div`
     color: #0074cc;
   }
 `;
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: hsl(205, 47%, 42%);
+`;
 
 export default function SearchGuide() {
   return (
@@ -73,7 +79,7 @@ export default function SearchGuide() {
         </div>
         <div>
           <Hintele>
-            <span>answers: 0</span> {/* 수정: 공백 추가 */}
+            <span>answers: 0</span>
             <span>unanswered questions</span>
           </Hintele>
           <Hintele>
@@ -83,7 +89,9 @@ export default function SearchGuide() {
         </div>
       </SearchHint>
       <AskBox>
-        <BasicBlueButton skyblue>ask question</BasicBlueButton>
+        <BasicBlueButton skyblue>
+          <StyledLink to="/questions/ask">ask question</StyledLink>
+        </BasicBlueButton>
         <span>search help</span>
       </AskBox>
     </SearchGuideBox>

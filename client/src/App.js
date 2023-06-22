@@ -18,6 +18,7 @@ function App() {
       <GlobalStyle />
 
       <Routes>
+        <Route path="/" element={<Questions />} />
         <Route path="users">
           <Route path="sign-up" element={<SignUp />} />
           <Route path="sign-in" element={<Login />} />

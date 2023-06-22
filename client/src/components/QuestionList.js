@@ -113,93 +113,24 @@ const UserCardContainer = styled.div`
   }
 `;
 
-export default function QuestionList() {
-  // const [allquestions, setallquestions] = useState([
-  //   {
-  //     questionId: 1,
-  //     userId: null,
-  //     title: 'How can I count repeating intervals in a graph?',
-  //     content:
-  //       'enter image description here Through the image, you can see five repetitive sections. I want to write an algorithm that counts this number, but I cant think of it. I tried to draw a regression curve ...',
-  //     voteCount: 0,
-  //     answerCount: 2,
-  //     countView: 0,
-  //     selectedAnswer: false,
-  //     questionCreatedAt: '2023-06-17T17:06:03',
-  //     displayName: 'Yeahhun Jeon',
-  //     reputation: 0,
-  //   },
-  //   {
-  //     questionId: 2,
-  //     userId: null,
-  //     title: 'How can I count repeating intervals in a graph?',
-  //     content:
-  //       'enter image description here Through the image, you can see five repetitive sections. I want to write an algorithm that counts this number, but I cant think of it. I tried to draw a regression curve ...',
-  //     voteCount: 0,
-  //     answerCount: 2,
-  //     countView: 0,
-  //     selectedAnswer: false,
-  //     questionCreatedAt: '2023-06-17T17:06:03',
-  //     displayName: 'Yeahhun Jeon',
-  //     reputation: 0,
-  //   },
-  //   {
-  //     questionId: 3,
-  //     userId: null,
-  //     title: 'How can I count repeating intervals in a graph?',
-  //     content:
-  //       'enter image description here Through the image, you can see five repetitive sections. I want to write an algorithm that counts this number, but I cant think of it. I tried to draw a regression curve ...',
-  //     voteCount: 0,
-  //     answerCount: 2,
-  //     countView: 5,
-  //     selectedAnswer: false,
-  //     questionCreatedAt: '2023-06-17T17:06:03',
-  //     displayName: 'Yeahhun Jeon',
-  //     reputation: 0,
-  //   },
-  //   {
-  //     questionId: 4,
-  //     userId: null,
-  //     title: 'How can I count repeating intervals in a graph?',
-  //     content:
-  //       'enter image description here Through the image, you can see five repetitive sections. I want to write an algorithm that counts this number, but I cant think of it. I tried to draw a regression curve ...',
-  //     voteCount: 4,
-  //     answerCount: 2,
-  //     countView: 0,
-  //     selectedAnswer: false,
-  //     questionCreatedAt: '2023-06-17T17:06:03',
-  //     displayName: 'Yeahhun Jeon',
-  //     reputation: 0,
-  //   },
-  //   {
-  //     questionId: 5,
-  //     userId: null,
-  //     title: 'How can I count repeating intervals in a graph?',
-  //     content:
-  //       'enter image description here Through the image, you can see five repetitive sections. I want to write an algorithm that counts this number, but I cant think of it. I tried to draw a regression curve ...',
-  //     voteCount: 0,
-  //     answerCount: 2,
-  //     countView: 0,
-  //     selectedAnswer: false,
-  //     questionCreatedAt: '2023-06-17T17:06:03',
-  //     displayName: 'Yeahhun Jeon',
-  //     reputation: 0,
-  //   },
-  // ]);
-
-  let question = {
-    questionId: 1,
-    title: 'How can I count repeating intervals in a graph?',
-    content:
-      'enter image description here Through the image, you can see five repetitive sections. I want to write an algorithm that counts this number, but I cant think of it. I tried to draw a regression curve ...',
-    voteCount: 0,
-    answerCount: 2,
-    countView: 0,
-    selectedAnswer: false,
-    questionCreatedAt: '2023-06-17T17:06:03',
-    displayName: 'Yeahhun Jeon',
-    reputation: 0,
-  };
+export default function QuestionList({
+  // eslint-disable-next-line react/prop-types
+  title,
+  // eslint-disable-next-line react/prop-types
+  content,
+  // eslint-disable-next-line react/prop-types
+  voteCount,
+  // eslint-disable-next-line react/prop-types
+  answerCount,
+  // eslint-disable-next-line react/prop-types
+  countView,
+  // eslint-disable-next-line react/prop-types
+  displayName,
+  // eslint-disable-next-line react/prop-types
+  reputation,
+  // eslint-disable-next-line react/prop-types
+  questionCreatedAt,
+}) {
   let tag = [
     {
       title: 'javascript',
@@ -211,26 +142,25 @@ export default function QuestionList() {
       title: 'python',
     },
   ];
+
   return (
     <QLiContainer>
       <PostSummaryStats>
         <div>
-          <span>{question.voteCount} votes</span>
+          <span>{voteCount} votes</span>
         </div>
-        <div
-          className={`${question.answerCount}` !== '0' ? 'has-answer' : 'null'}
-        >
-          <span>{question.answerCount} answers</span>
+        <div className={answerCount !== '0' ? 'has-answer' : 'null'}>
+          <span>{answerCount} answers</span>
         </div>
         <div>
-          <span>{question.countView} views</span>
+          <span>{countView} views</span>
         </div>
       </PostSummaryStats>
       <PostSummaryContent>
         <h3 className="Post-summary-title">
-          <a href="/">{question.title}</a>
+          <a href="/">{title}</a>
         </h3>
-        <div className="Post-summary-content">{question.content}</div>
+        <div className="Post-summary-content">{content}</div>
         <div className="Post-summary-meta">
           <div>
             <ul>
@@ -244,9 +174,9 @@ export default function QuestionList() {
             </ul>
           </div>
           <UserCardContainer>
-            <div className="namecolor">{question.displayName}</div>
-            <div>{question.reputation}</div>
-            <div>{question.questionCreatedAt}</div>
+            <div className="namecolor">{displayName}</div>
+            <div>{reputation}</div>
+            <div>{questionCreatedAt}</div>
           </UserCardContainer>
         </div>
       </PostSummaryContent>

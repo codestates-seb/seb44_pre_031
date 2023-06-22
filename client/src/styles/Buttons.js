@@ -10,6 +10,7 @@ export const BasicBlueButton = styled(Link)`
   font-size: 14px;
   text-decoration: none;
   white-space: nowrap;
+  pointer-events: auto;
   color: ${(props) => (props.skyblue ? 'hsl(205,47%,42%)' : 'white')};
   background-color: ${(props) =>
     props.skyblue ? 'hsl(205,46%,92%)' : 'hsl(206,100%,52%)'};

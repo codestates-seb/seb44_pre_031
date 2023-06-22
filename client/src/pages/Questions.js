@@ -4,6 +4,8 @@ import QuestionList from '../components/QuestionList';
 import Aside from '../components/Aside';
 import Header from '../components/Header';
 import Nav from '../components/Nav';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 const WrapContainer = styled.div`
   .wrap {
     position: relative;
@@ -83,6 +85,43 @@ const SortNavBtn = styled.a`
 `;
 const QuestionsContent = styled.div``;
 export default function Questions() {
+  const [allquestions, setallquesitons] = useState([
+    {
+      questionId: 1,
+      title: 'How can I count repeating intervals in a graph?',
+      content:
+        'enter image description here Through the image, you can see five repetitive sections. I want to write an algorithm that counts this number, but I cant think of it. I tried to draw a regression curve ...',
+      voteCount: 0,
+      answerCount: 2,
+      countView: 0,
+      selectedAnswer: false,
+      questionCreatedAt: '2023-06-17T17:06:03',
+      displayName: 'Yeahhun Jeon',
+      reputation: 0,
+    },
+  ]);
+
+  const authHandler = () => {
+    axios
+      .get(
+        'http://ec2-52-79-240-48.ap-northeast-2.compute.amazonaws.com:8080/api/questions'
+      )
+      .then((res) => {
+        const data = res.data.result.data.content;
+        if (Array.isArray(data)) {
+          setallquesitons(data);
+        } else {
+          console.error('Data is not an array:', data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    authHandler();
+  }, []);
+
   return (
     <>
       <Header />
@@ -118,13 +157,21 @@ export default function Questions() {
           </div>
 
           <QuestionsContent>
-            <QuestionList />
-            <QuestionList />
-            <QuestionList />
-            <QuestionList />
-            <QuestionList />
-            <QuestionList />
-            <QuestionList />
+            {allquestions.map((el) => {
+              return (
+                <QuestionList
+                  key={el.id}
+                  title={el.title}
+                  content={el.content}
+                  questionCreatedAt={el.questionCreatedAt}
+                  voteCount={el.voteCount}
+                  countView={el.countView}
+                  answerCount={el.answerCount}
+                  displayName={el.displayName}
+                  reputation={el.reputation}
+                />
+              );
+            })}
           </QuestionsContent>
         </QuestionContainer>
         <Aside />

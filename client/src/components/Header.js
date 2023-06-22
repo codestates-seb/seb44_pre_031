@@ -87,7 +87,7 @@ export default function Header() {
     <>
       <Headercontainer>
         <Headerlogo>
-          <Link to="/">
+          <Link to="/questions">
             <img src="/images/logo-stackoverflow.png" alt="logo" />
           </Link>
         </Headerlogo>
@@ -105,11 +105,7 @@ export default function Header() {
             onChange={(e) => {
               setSearchInputValue(e.target.value);
             }}
-            //! 여러분 그거 아세요? 한글에서 엔터를 누르면 onKeyDown이 두번 발생된다는 사실
-            //! 알고싶지 않았습니다.
-
             onFocus={focusHandler}
-            onBlur={focusHandler}
           />
           <StyledIoIosSearch />
           {isFocus && <SearchGuide />}
