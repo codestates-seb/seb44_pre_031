@@ -1,5 +1,6 @@
-package com.codestates.pre_project.module.question.entity;
+package com.codestates.pre_project.module.tag.entity;
 
+import com.codestates.pre_project.module.question.entity.QuestionTag;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,8 +10,6 @@ import javax.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static javax.persistence.FetchType.LAZY;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

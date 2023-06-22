@@ -1,5 +1,6 @@
 package com.codestates.pre_project.module.question.entity;
 
+import com.codestates.pre_project.module.tag.entity.Tag;
 import lombok.*;
 
 import javax.persistence.*;
