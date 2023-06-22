@@ -1,12 +1,16 @@
+/* eslint-disable react/prop-types */
 import { styled } from 'styled-components';
 import { BiUpArrow, BiDownArrow } from 'react-icons/bi';
-import { FcBookmark } from 'react-icons/fc';
+// import { FcBookmark } from 'react-icons/fc';
 import { CiBookmark } from 'react-icons/ci';
 import { RxCountdownTimer } from 'react-icons/rx';
 import { Link } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
 import { StyledTagLink } from '../styles/StyledButton';
 import UserProfile from './UserProfile';
+import { useSelector } from 'react-redux';
+// import { useState } from 'react';
+// import { useState } from 'react';
 
 const PostLayoutContainer = styled.div`
   display: flex;
@@ -21,7 +25,7 @@ const VoteCellContainer = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
-  gap: 0.3em;
+  gap: 0.5em;
 
   div {
     cursor: pointer;
@@ -85,6 +89,7 @@ const PostCellContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2em;
+  width: 1000px;
 `;
 const PostContent = styled.div`
   /* height: 8em; */
@@ -126,14 +131,16 @@ const FooterFeatContainer = styled.div`
   }
 `;
 
-const PostLayout = () => {
+export const QuestionLayout = () => {
+  const question = useSelector((state) => state.question.question);
+
   return (
     <PostLayoutContainer>
       <VoteCellContainer>
         <StyledVoteButton>
           <BiUpArrow className="upvote-icon" />
         </StyledVoteButton>
-        <p className="votes-count">12</p>
+        <p className="votes-count">{question.likeCount}</p>
         <StyledVoteButton>
           <BiDownArrow className="downvote-icon" />
         </StyledVoteButton>
@@ -141,46 +148,46 @@ const PostLayout = () => {
         <div>
           <CiBookmark className="bookmark-icon" />
         </div>
-        <div>
+        {/* <div>
           <FcBookmark className="bookmarked-icon" />
-        </div>
-        {/* 채택된 답변이면 green 체크마크 렌더 */}
-        <div className="checkmark">
-          <FaCheck fill="rgb(46,112,68)" />
-        </div>
-        <div className="checkmark">
-          <FaCheck fill="rgb(186,191,196)" />
-        </div>
+        </div> */}
         <div>
           <RxCountdownTimer />
         </div>
       </VoteCellContainer>
       <PostCellContainer>
-        <PostContent>
-          I am trying to do something like the following in React JSX (where
-          ObjectRow is a separate component):
-          <br />I am trying to do something like the following in React JSX
-          (where ObjectRow is a separate component):
-          <br />I am trying to do something like the following in React JSX
-          (where ObjectRow is a separate component):
-        </PostContent>
+        <PostContent>{question.content}</PostContent>
+        {/* 나중에 태그 구현되면 추가해야됨 */}
         <TagsContainer>
           <StyledTagLink>javascript</StyledTagLink>
           <StyledTagLink>react</StyledTagLink>
-          <StyledTagLink>jsx</StyledTagLink>
+          <StyledTagLink>springboot</StyledTagLink>
+          <StyledTagLink>aws</StyledTagLink>
         </TagsContainer>
         <PostFooterContainer>
           <FooterFeatContainer>
             <Link>Share</Link>
-            <Link to="/posts/1/edit">Edit</Link>
+            <Link to={`../${question.questionId}/edit`}>Edit</Link>
             {/* 본인이면 Delete 아니면 Follow */}
             <button>Follow</button>
             <button>Delete</button>
           </FooterFeatContainer>
           <div className="user-profile-container">
             {/* edited 기록이 있으면 edit 렌더 아니면 asked 작성자만 렌더 */}
-            <UserProfile type="edited" />
-            <UserProfile type="asked" />
+            {question.questionCreatedAt !== question.questionUpdatedAt && (
+              <UserProfile
+                type="edited"
+                updatedDate={question.questionUpdatedAt}
+                username={question.displayName}
+                reputation={question.reputation}
+              />
+            )}
+            <UserProfile
+              type="asked"
+              createdDate={question.questionCreatedAt}
+              username={question.displayName}
+              reputation={question.reputation}
+            />
           </div>
         </PostFooterContainer>
       </PostCellContainer>
@@ -188,4 +195,77 @@ const PostLayout = () => {
   );
 };
 
-export default PostLayout;
+export const AnswerLayout = ({ answer }) => {
+  return (
+    <PostLayoutContainer>
+      <VoteCellContainer>
+        <StyledVoteButton>
+          <BiUpArrow className="upvote-icon" />
+        </StyledVoteButton>
+        {/* 나중에 투표수 추가되면 바꿔야함 */}
+        <p className="votes-count">{1}</p>
+        <StyledVoteButton>
+          <BiDownArrow className="downvote-icon" />
+        </StyledVoteButton>
+        {/* 북마크 안돼있으면 첫번째꺼, 돼있으면 두번째꺼 렌더 */}
+        <div>
+          <CiBookmark className="bookmark-icon" />
+        </div>
+        {/* <div>
+          <FcBookmark className="bookmarked-icon" />
+        </div> */}
+        {/* 채택된 답변이면 green 체크마크 렌더 */}
+        {answer.selected === true ? (
+          <div className="checkmark">
+            <FaCheck fill="rgb(46,112,68)" />
+          </div>
+        ) : (
+          <div className="checkmark">
+            <FaCheck fill="rgb(186,191,196)" />
+          </div>
+        )}
+        <div>
+          <RxCountdownTimer />
+        </div>
+      </VoteCellContainer>
+      <PostCellContainer>
+        <PostContent>{answer.content}</PostContent>
+        {/* 나중에 태그 구현되면 추가해야됨 */}
+        <TagsContainer>
+          <StyledTagLink>javascript</StyledTagLink>
+          <StyledTagLink>react</StyledTagLink>
+          <StyledTagLink>springboot</StyledTagLink>
+          <StyledTagLink>aws</StyledTagLink>
+        </TagsContainer>
+        <PostFooterContainer>
+          <FooterFeatContainer>
+            <Link>Share</Link>
+            <Link to={`../${answer.questionId}/${answer.answerId}/edit`}>
+              Edit
+            </Link>
+            {/* 본인이면 Delete 아니면 Follow */}
+            <button>Follow</button>
+            <button>Delete</button>
+          </FooterFeatContainer>
+          <div className="user-profile-container">
+            {/* edited 기록이 있으면 edit 렌더 아니면 asked 작성자만 렌더 */}
+            {answer.answerCreatedAt !== answer.answerUpdatedAt && (
+              <UserProfile
+                type="edited"
+                updatedDate={answer.answerUpdatedAt}
+                username={answer.displayName}
+                reputation={answer.reputation}
+              />
+            )}
+            <UserProfile
+              type="asked"
+              createdDate={answer.answerCreatedAt}
+              username={answer.displayName}
+              reputation={answer.reputation}
+            />
+          </div>
+        </PostFooterContainer>
+      </PostCellContainer>
+    </PostLayoutContainer>
+  );
+};

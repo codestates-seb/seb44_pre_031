@@ -1,8 +1,9 @@
 import { styled } from 'styled-components';
-import PostLayout from './PostLayout';
+import { AnswerLayout } from './PostLayout';
 import { useState } from 'react';
 import StyledButton, { StyledTagLink } from '../styles/StyledButton';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const AnswersContainer = styled.div`
   display: flex;
@@ -52,6 +53,10 @@ const AnswersHeaderContainer = styled.div`
 `;
 
 const AnswersHeader = () => {
+  const answerCount = useSelector(
+    (state) => state.question.question.answerCount
+  );
+
   const handleSelectChange = (e) => {
     console.log(e.target.value);
   };
@@ -59,7 +64,7 @@ const AnswersHeader = () => {
   return (
     <AnswersHeaderContainer>
       <div className="answers-header">
-        <div className="number-of-answers">2 Answers</div>
+        <div className="number-of-answers">{`${answerCount} Answers`}</div>
         <div className="answers-filter-container">
           <div className="answers-filter-title">
             <p>Sorted by:</p>
@@ -83,13 +88,21 @@ const AnswersHeader = () => {
 };
 
 const AnswerList = () => {
+  const answers = useSelector((state) => state.question.answers);
+
   return (
     <div>
       {/* 데이터 받아서 answer map 돌려야함 */}
-      <PostLayout />
-      <hr />
-      <PostLayout />
-      <hr />
+      {answers.map((answer) => {
+        return (
+          <>
+            <AnswerLayout key={answer.answerId} answer={answer} />
+            <hr />
+          </>
+        );
+      })}
+      {/* <AnswerLayout /> */}
+      {/* <hr /> */}
     </div>
   );
 };

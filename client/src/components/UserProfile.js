@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
@@ -82,26 +83,31 @@ const ColorCircleSpan = styled.span`
   text-align: center;
 `;
 
-const UserProfile = ({ type }) => {
+const UserProfile = ({
+  type,
+  createdDate,
+  updatedDate,
+  username,
+  reputation,
+}) => {
   const randomNumber1 = Math.floor(Math.random() * 200) + 1;
   const randomNumber2 = Math.floor(Math.random() * 200) + 1;
   const randomNumber3 = Math.floor(Math.random() * 200) + 1;
 
   return (
     <UserProfileContainer type={type}>
-      {type === 'asked' ? (
-        <p className="date">asked 8 hours ago</p>
-      ) : (
-        <Link className="date">edited Feb 14, 2021 at 15:36</Link>
+      {type === 'asked' && <p className="date">{`asked ${createdDate}`}</p>}
+      {type === 'edited' && (
+        <Link className="date">{`edited ${updatedDate}`}</Link>
       )}
       <div className="user-info-container">
         <img src="/images/test-image.png" alt="" />
         <div className="user-name-reputation-contaienr">
           <div>
-            <Link className="username">Peter Mortensen</Link>
+            <Link className="username">{username}</Link>
           </div>
           <div className="user-reputation-container">
-            <span className="reputation">31k</span>
+            <span className="reputation">{reputation}</span>
             <div>
               <ColorCircleSpan color="hsl(47.95,100%,50.2%)"></ColorCircleSpan>
               <span>{randomNumber1}</span>
