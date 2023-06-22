@@ -33,9 +33,10 @@ public class QuestionService {
         Member member = memberService.findMember(memberId);
         Question question = questionRepository.save(Question.of(member, request));
 
-        List<Tag> tags = tagService.addTags(tagList);
-
-        questionTagService.save(question, tags);
+        if (tagList.length != 0) {
+            List<Tag> tags = tagService.addTags(tagList);
+            questionTagService.save(question, tags);
+        }
 
         return question.getId();
     }
