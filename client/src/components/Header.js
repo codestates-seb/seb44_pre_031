@@ -110,8 +110,12 @@ export default function Header() {
           <StyledIoIosSearch />
           {isFocus && <SearchGuide />}
         </SearchBox>
-        <BasicBlueButton skyblue>Log in</BasicBlueButton>
-        <BasicBlueButton>Sign up</BasicBlueButton>
+        <BasicBlueButton skyblue>
+          <Link to="/users/sign-in">Log in</Link>
+        </BasicBlueButton>
+        <BasicBlueButton>
+          <Link to="/users/sign-up">Sign up</Link>
+        </BasicBlueButton>
       </Headercontainer>
     </>
   );

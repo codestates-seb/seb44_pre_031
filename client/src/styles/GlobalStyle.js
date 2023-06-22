@@ -6,6 +6,8 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     font-family: 'Noto Sans', 'Noto Sans KR', sans-serif;
+    text-decoration: none;
+
     }
 .wrap{
   position: relative;
@@ -14,6 +16,7 @@ const GlobalStyle = createGlobalStyle`
     justify-content:center;
   
 }
+
 `;
 
 export default GlobalStyle;

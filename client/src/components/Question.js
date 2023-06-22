@@ -1,6 +1,9 @@
+/* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom';
-import PostLayout from './PostLayout';
+import { QuestionLayout } from './PostLayout';
 import { styled } from 'styled-components';
+import { useSelector } from 'react-redux';
+// import { selectQuestion } from '../slices/questionSlice';
 
 const QuestionContaier = styled.div`
   display: flex;
@@ -26,6 +29,8 @@ const QuestionHeaderContainer = styled.div`
     :visited {
       color: hsl(210, 8%, 25%);
     }
+    // 일단 설정해놓음
+    width: 900px;
   }
 `;
 
@@ -79,26 +84,29 @@ const QuestionInfoContainer = styled.div`
 `;
 
 const QuestionHeader = () => {
+  // const question = useSelector(selectQuestion);
+  const question = useSelector((state) => state.question.question);
+
   return (
     <QuestionHeaderContainer>
       <div className="question-header">
-        <Link className="question-title">
-          How to correctly change/focusOut event
-        </Link>
+        <Link className="question-title">{question.title}</Link>
         <AskQuestionLink to="/questions/ask">Ask Question</AskQuestionLink>
       </div>
       <QuestionInfoContainer>
         <div className="question-info">
           <span>Asked</span>
-          <span>7 years ago</span>
+          {/* <span>7 years ago</span> */}
+          <span>{question.questionCreatedAt}</span>
         </div>
         <div className="question-info">
           <span>Modified</span>
-          <span>3 months ago</span>
+          {/* <span>3 months ago</span> */}
+          <span>{question.questionUpdatedAt}</span>
         </div>
         <div className="question-info">
           <span>Viewed</span>
-          <span>261k times</span>
+          <span>{question.viewCount}</span>
         </div>
       </QuestionInfoContainer>
     </QuestionHeaderContainer>
@@ -110,7 +118,7 @@ const Question = () => {
     <QuestionContaier>
       <QuestionHeader />
       <hr />
-      <PostLayout />
+      <QuestionLayout />
     </QuestionContaier>
   );
 };

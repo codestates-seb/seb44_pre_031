@@ -8,7 +8,6 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 const WrapContainer = styled.div`
   .wrap {
-    position: relative;
     margin: 0 auto;
     display: flex;
 

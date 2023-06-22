@@ -25,13 +25,10 @@ function App() {
           <Route path="mypage" element={<Users />} />
         </Route>
         <Route path="questions">
-          <Route index element={<Questions />} />
           <Route path="ask" element={<AskQuestion />} />
           <Route path=":questionId" element={<QuestionDetail />} />
           <Route path=":questionId/edit" element={<UpdateQuestion />} />
-        </Route>
-        <Route path="answers">
-          <Route path=":answerId/edit" element={<UpdateAnswer />} />
+          <Route path=":questionId/:answerId/edit" element={<UpdateAnswer />} />
         </Route>
       </Routes>
     </div>

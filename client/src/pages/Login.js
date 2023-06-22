@@ -198,7 +198,9 @@ const Login = () => {
   return (
     <Container>
       <Contents>
-        <Logo>logo</Logo>
+        <Logo>
+          <img src="/images/logo-simple.png" alt="logo stackflow"></img>
+        </Logo>
         <Ouths>
           <Outh id="Google">
             <OuthContents>
