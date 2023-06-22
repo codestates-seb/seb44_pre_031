@@ -6,7 +6,6 @@ import Header from '../components/Header';
 import Nav from '../components/Nav';
 const WrapContainer = styled.div`
   .wrap {
-    position: relative;
     margin: 0 auto;
     display: flex;
     justify-content: center;

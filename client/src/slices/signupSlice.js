@@ -54,4 +54,4 @@ export const signupSlice = createSlice({
   },
 });
 
-export default signupSlice;
+export default signupSlice.reducer;

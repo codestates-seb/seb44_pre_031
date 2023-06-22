@@ -14,7 +14,7 @@ import Nav from './components/Nav';
 function App() {
   let location = useLocation();
   console.log(location);
-
+  //https://github.com/codestates-seb/seb42_pre_022/blob/main/front/src/App.js
   return (
     <div>
       <GlobalStyle />
@@ -22,7 +22,6 @@ function App() {
       <Nav />
       <Routes>
         <Route path="/" element={<Questions />} />
-        {/* <Route index element={<Questions />} /> */}
         <Route path="users">
           <Route path="sign-up" element={<SignUp />} />
           <Route path="sign-in" element={<Login />} />
