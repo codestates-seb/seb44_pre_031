@@ -1,5 +1,6 @@
 package com.codestates.pre_project.module.tag.service;
 
+import com.codestates.pre_project.module.tag.dto.response.TagResponse;
 import com.codestates.pre_project.module.tag.entity.Tag;
 import com.codestates.pre_project.module.tag.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,22 @@ public class TagService {
             return tagRepository.save(Tag.from(tagString));
         }
         return tag.get();
+    }
+
+    @Transactional(readOnly = true)
+    public List<TagResponse> getTags() {
+        List<Tag> tags = tagRepository.findAll();
+        List<Long> tagIds = tagsToTagIds(tags);
+
+        return tagRepository.getAllTagResponses(tagIds);
+    }
+
+    private List<Long> tagsToTagIds(List<Tag> tags) {
+        List<Long> result = new ArrayList<>();
+        for (Tag tag : tags) {
+            result.add(tag.getId());
+        }
+
+        return result;
     }
 }
