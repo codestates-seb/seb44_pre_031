@@ -7,6 +7,8 @@ import com.codestates.pre_project.module.question.dto.response.GetQuestionRespon
 import com.codestates.pre_project.module.question.dto.response.QuestionResponse;
 import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.repository.QuestionRepository;
+import com.codestates.pre_project.module.tag.entity.Tag;
+import com.codestates.pre_project.module.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,14 +25,18 @@ import static com.codestates.pre_project.global.exception.ErrorCode.*;
 public class QuestionService {
     private final QuestionRepository questionRepository;
     private final MemberService memberService;
+    private final TagService tagService;
     private final QuestionTagService questionTagService;
 
     @Transactional
-    public Long createQuestion(Long memberId, Question request, String tags) {
+    public Long createQuestion(Long memberId, Question request, String tagString) {
         Member member = memberService.findMember(memberId);
         Question question = questionRepository.save(Question.of(member, request));
-        List<String> tagList = stringToTagList(tags);
-        questionTagService.addTagToQuestion(question, tagList);
+
+        List<String> tagList = stringToTagList(tagString);
+        List<Tag> tags = tagService.addTags(tagList);
+
+        questionTagService.save(question, tags);
 
         return question.getId();
     }
