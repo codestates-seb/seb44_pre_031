@@ -56,17 +56,7 @@ public class SecurityConfiguration {
                   .and()
                   .authorizeRequests()
                   .antMatchers("/", "/**").permitAll()
-                  .and()
-                  .authorizeHttpRequests(authorize -> authorize
-                          .antMatchers(HttpMethod.POST, "/*/sign-up").permitAll()
-                          .antMatchers(HttpMethod.POST,"/*/sign-in").permitAll()
-                          .antMatchers(HttpMethod.PATCH, "/*/users/**").permitAll()
-                          .antMatchers(HttpMethod.GET, "/*/users/**").permitAll()
-                          .antMatchers(HttpMethod.DELETE, "/*/users/**").permitAll()
-//                          .antMatchers(HttpMethod.PATCH, "/*/users/**").hasRole("USER")
-//                          .antMatchers(HttpMethod.GET, "/*/users/**").hasAnyRole("USER","ADMIN")
-//                          .antMatchers(HttpMethod.DELETE, "/*/users/**").hasRole("USER")
-                          .anyRequest().permitAll()); // 멤버 관련 접근 권한 부여
+                  .anyRequest().permitAll();
 
         return http.build();
     }
@@ -103,7 +93,8 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*")); // 모든 출처에 대한 통신 허용
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PATCH","DELETE")); // HTTP Method에 대한 통신 허용
-
+        configuration.setAllowedHeaders(Arrays.asList("*")); // CORS 정책 추가 (1)
+        configuration.setExposedHeaders(Arrays.asList("*")); // CORS 정책 추가 (2)
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // 모든 URL에 CORS 정책 적용
         return source;
