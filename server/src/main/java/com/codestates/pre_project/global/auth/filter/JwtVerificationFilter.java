@@ -66,6 +66,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         principal.put("username",claims.get("username"));
         principal.put("memberId",claims.get("memberId"));
         principal.put("roles",claims.get("roles"));   // 리팩토링 부분
+        principal.put("id",claims.get("id"));
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(principal,null);
         SecurityContextHolder.getContext().setAuthentication(authentication);
