@@ -4,8 +4,8 @@ import com.codestates.pre_project.module.answer.dto.response.AnswerResponse;
 import com.codestates.pre_project.module.answer.dto.response.QAnswerResponse;
 import com.codestates.pre_project.module.question.dto.response.*;
 import com.codestates.pre_project.module.question.repository.QuestionRepositoryCustom;
-import com.codestates.pre_project.module.tag.dto.response.QTagResponse;
-import com.codestates.pre_project.module.tag.dto.response.TagResponse;
+import com.codestates.pre_project.module.question.repository.QuestionTagRepository;
+import com.codestates.pre_project.module.tag.repository.TagRepository;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -20,31 +20,37 @@ import java.util.stream.Collectors;
 import static com.codestates.pre_project.module.answer.entity.QAnswer.answer;
 import static com.codestates.pre_project.module.member.entity.QMember.member;
 import static com.codestates.pre_project.module.question.entity.QQuestion.question;
-import static com.codestates.pre_project.module.question.entity.QQuestionTag.questionTag;
-import static com.codestates.pre_project.module.tag.entity.QTag.tag;
 import static com.querydsl.core.types.dsl.Expressions.asNumber;
 
 @RequiredArgsConstructor
 public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     private final JPAQueryFactory queryFactory;
+    private final QuestionTagRepository questionTagRepository;
+    private final TagRepository tagRepository;
 
     // 질문 상세 페이지 response
     @Override
     public GetQuestionDetailResponse getQuestionDetail(Long questionId, Pageable pageable) {
         QuestionDetailResponse questionDetailResponse = fetchQuestionDetailResponse(questionId);
         Page<AnswerResponse> answerResponses = fetchAnswerResponses(questionId, pageable);
-        List<TagResponse> tagResponses = getTagResponses(questionId);
+        List<String> tags = fetchTagsByQuestionId(questionId);
 
-        return new GetQuestionDetailResponse(questionDetailResponse, answerResponses, tagResponses);
+        return new GetQuestionDetailResponse(questionDetailResponse, answerResponses, tags);
     }
 
     // 질문 개별 response (질문 + 태그들)
     @Override
     public GetQuestionsResponse getQuestionAndTags(Long questionId) {
         QuestionResponse question = fetchQuestionResponse(questionId);
-        List<TagResponse> tags = getTagResponses(questionId);
+        List<String> tags = fetchTagsByQuestionId(questionId);
 
         return new GetQuestionsResponse(question, tags);
+    }
+
+    private List<String> fetchTagsByQuestionId(Long questionId) {
+        return questionTagRepository.findByQuestionId(questionId).stream()
+                .map(questionTag -> questionTag.getTag().getName())
+                .collect(Collectors.toList());
     }
 
     // 질문 전체 페이지 response
@@ -67,33 +73,24 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     }
 
     // 태그 전체 response
-    private List<TagResponse> getTagResponses(Long questionId) {
-        return fetchTagIds(questionId).stream()
-                .map(this::fetchTagResponse)
-                .collect(Collectors.toList());
-    }
+//    private List<TagResponse> getTagResponses(Long questionId) {
+//        return questionTagRepository.findTagIdsByQuestionId(questionId).stream()
+//                .map(this::fetchTagResponse)
+//                .collect(Collectors.toList());
+//    }
 
     // 개별 태그 response
-    private TagResponse fetchTagResponse(Long tagId) {
-        return queryFactory
-                .select(new QTagResponse(
-                        tag.name,
-                        question.count(),
-                        tag.createdAt))
-                .from(tag)
-                .leftJoin(questionTag).on(questionTag.tag.id.eq(tagId))
-                .leftJoin(question).on(question.eq(questionTag.question))
-                .fetchOne();
-    }
-
-    // 질문 id로 모든 태그 id 가져오기
-    private  List<Long> fetchTagIds(Long questionId) {
-        return queryFactory
-                .select(questionTag.tag.id)
-                .from(questionTag)
-                .where(questionTag.question.id.eq(questionId))
-                .fetch();
-    }
+//    private TagResponse fetchTagResponse(Long tagId) {
+//        return queryFactory
+//                .select(new QTagResponse(
+//                        tag.name,
+//                        question.count(),
+//                        tag.createdAt))
+//                .from(tag)
+//                .leftJoin(questionTag).on(questionTag.tag.id.eq(tagId))
+//                .leftJoin(question).on(question.eq(questionTag.question))
+//                .fetchOne();
+//    }
 
     // 작성자 검색
     @Override
