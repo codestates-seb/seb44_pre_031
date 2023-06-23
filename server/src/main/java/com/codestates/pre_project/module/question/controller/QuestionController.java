@@ -25,10 +25,9 @@ public class QuestionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Response createQuestion(@Valid @RequestBody QuestionRequest request,
-                                   @RequestBody String tags) {
+    public Response createQuestion(@Valid @RequestBody QuestionRequest request) {
         Long memberId = MemberIdExtractor.extractMemberId();
-        Long questionId = questionService.createQuestion(memberId, request.toEntity(), tags);
+        Long questionId = questionService.createQuestion(memberId, request.toEntity(), request.tags);
 
         return Response.success(questionId);
     }
@@ -82,6 +81,16 @@ public class QuestionController {
     @ResponseStatus(HttpStatus.OK)
     public Response getUnansweredQuestion(@PageableDefault(size = 30) Pageable pageable) {
         Page<QuestionResponse> questions = questionService.getUnansweredQuestions(pageable);
+
+        return Response.success(questions);
+    }
+
+    // TODO : tag 검색 오류 수정
+    @GetMapping("/search-tag/{tag}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response getQuestionsWithTag(@PathVariable("tag") String tag,
+                                       @PageableDefault(size = 30) Pageable pageable) {
+        Page<QuestionResponse> questions = questionService.getQuestionsWithTag(tag, pageable);
 
         return Response.success(questions);
     }

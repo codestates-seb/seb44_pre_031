@@ -4,19 +4,25 @@ import com.codestates.pre_project.module.answer.dto.response.AnswerResponse;
 import com.codestates.pre_project.module.answer.dto.response.QAnswerResponse;
 import com.codestates.pre_project.module.question.dto.response.*;
 import com.codestates.pre_project.module.question.repository.QuestionRepositoryCustom;
+import com.codestates.pre_project.module.tag.dto.response.QTagResponse;
+import com.codestates.pre_project.module.tag.dto.response.TagResponse;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.codestates.pre_project.module.answer.entity.QAnswer.answer;
 import static com.codestates.pre_project.module.member.entity.QMember.member;
 import static com.codestates.pre_project.module.question.entity.QQuestion.question;
+import static com.codestates.pre_project.module.question.entity.QQuestionTag.*;
+import static com.codestates.pre_project.module.tag.entity.QTag.*;
 import static com.querydsl.core.types.dsl.Expressions.asNumber;
 
 @RequiredArgsConstructor
@@ -27,8 +33,36 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     public GetQuestionResponse getQuestionWithAnswer(Long questionId, Pageable pageable) {
         QuestionDetailResponse questionDetailResponse = fetchQuestionResponse(questionId);
         Page<AnswerResponse> answerResponses = fetchAnswerResponses(questionId, pageable);
+        List<TagResponse> tagResponses = getTagResponses(questionId);
 
-        return new GetQuestionResponse(questionDetailResponse, answerResponses);
+        return new GetQuestionResponse(questionDetailResponse, answerResponses, tagResponses);
+    }
+
+    private List<TagResponse> getTagResponses(Long questionId) {
+        return fetchTagIds(questionId).stream()
+                .map(this::fetchTagResponse)
+                .collect(Collectors.toList());
+    }
+
+    private TagResponse fetchTagResponse(Long tagId) {
+        return queryFactory
+                .select(new QTagResponse(
+                        tag.name,
+                        question.count(),
+                        tag.createdAt))
+                .from(tag)
+                .leftJoin(questionTag).on(questionTag.tag.eq(tag))
+                .leftJoin(question).on(question.eq(questionTag.question))
+                .where(tag.id.eq(tagId))
+                .fetchOne();
+    }
+
+    private  List<Long> fetchTagIds(Long questionId) {
+        return queryFactory
+                .select(questionTag.tag.id)
+                .from(questionTag)
+                .where(questionTag.question.id.eq(questionId))
+                .fetch();
     }
 
     @Override
@@ -95,6 +129,17 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                 .where(question.answers.size().eq(0));
 
         return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Page<QuestionResponse> getQuestionsWithTag(List<Long> questionIds, Pageable pageable) {
+        List<QuestionResponse> result = new ArrayList<>();
+        JPAQuery<QuestionResponse> questions = getQuestion();
+        for (Long id : questionIds) {
+            result.add(questions.where(question.id.eq(id)).fetchOne());
+        }
+
+        return new PageImpl<>(result, pageable, result.size());
     }
 
     private QuestionDetailResponse fetchQuestionResponse(Long questionId) {

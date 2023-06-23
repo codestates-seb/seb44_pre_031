@@ -29,14 +29,14 @@ public class QuestionService {
     private final QuestionTagService questionTagService;
 
     @Transactional
-    public Long createQuestion(Long memberId, Question request, String tagString) {
+    public Long createQuestion(Long memberId, Question request, String[] tagList) {
         Member member = memberService.findMember(memberId);
         Question question = questionRepository.save(Question.of(member, request));
 
-        List<String> tagList = stringToTagList(tagString);
-        List<Tag> tags = tagService.addTags(tagList);
-
-        questionTagService.save(question, tags);
+        if (tagList.length != 0) {
+            List<Tag> tags = tagService.addTags(tagList);
+            questionTagService.save(question, tags);
+        }
 
         return question.getId();
     }
@@ -77,6 +77,12 @@ public class QuestionService {
         return questionRepository.getUnansweredQuestions(pageable);
     }
 
+    public Page<QuestionResponse> getQuestionsWithTag(String tag, Pageable pageable) {
+        List<Long> questionIds = tagService.getQuestionIdsByTag(tag);
+
+        return questionRepository.getQuestionsWithTag(questionIds, pageable);
+    }
+
     @Transactional
     public void deleteQuestion(Long questionId, Long memberId) {
         Question question = findQuestionById(questionId);
@@ -100,9 +106,5 @@ public class QuestionService {
     public Question findQuestionById(Long questionId) {
         return questionRepository.findById(questionId)
                 .orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));
-    }
-
-    private List<String> stringToTagList(String tags) {
-        return List.of(tags.toLowerCase().split(" "));
     }
 }
