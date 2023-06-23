@@ -14,36 +14,66 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.codestates.pre_project.module.answer.entity.QAnswer.answer;
 import static com.codestates.pre_project.module.member.entity.QMember.member;
 import static com.codestates.pre_project.module.question.entity.QQuestion.question;
-import static com.codestates.pre_project.module.question.entity.QQuestionTag.*;
-import static com.codestates.pre_project.module.tag.entity.QTag.*;
+import static com.codestates.pre_project.module.question.entity.QQuestionTag.questionTag;
+import static com.codestates.pre_project.module.tag.entity.QTag.tag;
 import static com.querydsl.core.types.dsl.Expressions.asNumber;
 
 @RequiredArgsConstructor
 public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
+    // 질문 상세 페이지 response
     @Override
-    public GetQuestionResponse getQuestionWithAnswer(Long questionId, Pageable pageable) {
-        QuestionDetailResponse questionDetailResponse = fetchQuestionResponse(questionId);
+    public GetQuestionDetailResponse getQuestionDetail(Long questionId, Pageable pageable) {
+        QuestionDetailResponse questionDetailResponse = fetchQuestionDetailResponse(questionId);
         Page<AnswerResponse> answerResponses = fetchAnswerResponses(questionId, pageable);
         List<TagResponse> tagResponses = getTagResponses(questionId);
 
-        return new GetQuestionResponse(questionDetailResponse, answerResponses, tagResponses);
+        return new GetQuestionDetailResponse(questionDetailResponse, answerResponses, tagResponses);
     }
 
+    // 질문 개별 response (질문 + 태그들)
+    @Override
+    public GetQuestionsResponse getQuestionAndTags(Long questionId) {
+        QuestionResponse question = fetchQuestionResponse(questionId);
+        List<TagResponse> tags = getTagResponses(questionId);
+
+        return new GetQuestionsResponse(question, tags);
+    }
+
+    // 질문 전체 페이지 response
+    @Override
+    public Page<GetQuestionsResponse> getQuestions(Pageable pageable) {
+        List<Long> questionIds = fetchAllQuestionIds().fetch();
+        List<GetQuestionsResponse> result = questionIds.stream()
+                .map(this::getQuestionAndTags)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(result, pageable, questionIds.size());
+    }
+
+    // 모든 질문 id 가져오기
+    private JPAQuery<Long> fetchAllQuestionIds() {
+        return queryFactory
+                .select(question.id)
+                .from(question)
+                .orderBy(question.createdAt.desc());
+    }
+
+    // 태그 전체 response
     private List<TagResponse> getTagResponses(Long questionId) {
         return fetchTagIds(questionId).stream()
                 .map(this::fetchTagResponse)
                 .collect(Collectors.toList());
     }
 
+    // 개별 태그 response
     private TagResponse fetchTagResponse(Long tagId) {
         return queryFactory
                 .select(new QTagResponse(
@@ -51,12 +81,12 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         question.count(),
                         tag.createdAt))
                 .from(tag)
-                .leftJoin(questionTag).on(questionTag.tag.eq(tag))
+                .leftJoin(questionTag).on(questionTag.tag.id.eq(tagId))
                 .leftJoin(question).on(question.eq(questionTag.question))
-                .where(tag.id.eq(tagId))
                 .fetchOne();
     }
 
+    // 질문 id로 모든 태그 id 가져오기
     private  List<Long> fetchTagIds(Long questionId) {
         return queryFactory
                 .select(questionTag.tag.id)
@@ -65,84 +95,61 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                 .fetch();
     }
 
+    // 작성자 검색
     @Override
-    public Page<QuestionResponse> getQuestions(Pageable pageable) {
-        List<QuestionResponse> result = getQuestion()
-                .orderBy(question.createdAt.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+    public Page<GetQuestionsResponse> getQuestionsByAuthor(String author, Pageable pageable) {
+        List<Long> questionIds = fetchAllQuestionIds()
+                .where(member.displayName.eq(author))
+                .innerJoin(question.member, member)
                 .fetch();
 
-        JPAQuery<Long> countQuery = queryFactory
-                .select(question.id)
-                .from(question);
+        List<GetQuestionsResponse> result = questionIds.stream()
+                .map(this::getQuestionAndTags)
+                .collect(Collectors.toList());
 
-        return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
+        return new PageImpl<>(result, pageable, questionIds.size());
     }
 
+    // 제목 검색
     @Override
-    public Page<QuestionResponse> getQuestionsWithAuthor(String author, Pageable pageable) {
-        List<QuestionResponse> result = getQuestion()
-                .where(question.member.displayName.eq(author))
-                .orderBy(question.createdAt.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        JPAQuery<Long> countQuery = queryFactory
-                .select(question.id)
-                .from(question)
-                .where(question.member.displayName.eq(author));
-
-        return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
-    }
-
-    @Override
-    public Page<QuestionResponse> getQuestionsWithTitle(String keyword, Pageable pageable) {
-        List<QuestionResponse> result = getQuestion()
+    public Page<GetQuestionsResponse> getQuestionsByTitle(String keyword, Pageable pageable) {
+        List<Long> questionIds = fetchAllQuestionIds()
                 .where(question.title.contains(keyword))
-                .orderBy(question.createdAt.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .fetch();
 
-        JPAQuery<Long> countQuery = queryFactory
-                .select(question.id)
-                .from(question)
-                .where(question.title.contains(keyword));
+        List<GetQuestionsResponse> result = questionIds.stream()
+                .map(this::getQuestionAndTags)
+                .collect(Collectors.toList());
 
-        return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
+        return new PageImpl<>(result, pageable, questionIds.size());
     }
 
+    // 답변 0 질문 검색
     @Override
-    public Page<QuestionResponse> getUnansweredQuestions(Pageable pageable) {
-        List<QuestionResponse> result = getQuestion()
+    public Page<GetQuestionsResponse> getUnansweredQuestions(Pageable pageable) {
+        List<Long> questionIds = fetchAllQuestionIds()
                 .where(question.answers.size().eq(0))
-                .orderBy(question.createdAt.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .fetch();
 
-        JPAQuery<Long> countQuery = queryFactory
-                .select(question.id)
-                .from(question)
-                .where(question.answers.size().eq(0));
+        List<GetQuestionsResponse> result = questionIds.stream()
+                .map(this::getQuestionAndTags)
+                .collect(Collectors.toList());
 
-        return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchOne);
+        return new PageImpl<>(result, pageable, questionIds.size());
     }
 
+    // 태그 검색
     @Override
-    public Page<QuestionResponse> getQuestionsWithTag(List<Long> questionIds, Pageable pageable) {
-        List<QuestionResponse> result = new ArrayList<>();
-        JPAQuery<QuestionResponse> questions = getQuestion();
-        for (Long id : questionIds) {
-            result.add(questions.where(question.id.eq(id)).fetchOne());
-        }
+    public Page<GetQuestionsResponse> getQuestionsByTag(List<Long> questionIds, Pageable pageable) {
+        List<GetQuestionsResponse> result = questionIds.stream()
+                .map(this::getQuestionAndTags)
+                .collect(Collectors.toList());
 
         return new PageImpl<>(result, pageable, result.size());
     }
 
-    private QuestionDetailResponse fetchQuestionResponse(Long questionId) {
+    // 개별 질문 상세 response
+    private QuestionDetailResponse fetchQuestionDetailResponse(Long questionId) {
         return queryFactory
                 .select(new QQuestionDetailResponse(
                         asNumber(question.id),
@@ -162,6 +169,27 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                 .fetchOne();
     }
 
+    // 개별 답변 response
+    private QuestionResponse fetchQuestionResponse(Long questionId) {
+        return queryFactory
+                .select(new QQuestionResponse(
+                        asNumber(question.id),
+                        question.title,
+                        question.content,
+                        question.likeCount,
+                        question.answers.size(),
+                        question.selectedAnswer,
+                        question.viewCount,
+                        question.createdAt,
+                        question.updatedAt,
+                        member.displayName))
+                .from(question)
+                .innerJoin(question.member, member)
+                .where(question.id.eq(questionId))
+                .fetchOne();
+    }
+
+    // 전체 답변 response
     private Page<AnswerResponse> fetchAnswerResponses(Long questionId, Pageable pageable) {
         List<AnswerResponse> result = fetchAnswerIds(questionId, pageable).stream()
                 .map(this::fetchAnswerResponse)
@@ -201,22 +229,5 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-    }
-
-    private JPAQuery<QuestionResponse> getQuestion() {
-        return queryFactory
-                .select(new QQuestionResponse(
-                        asNumber(question.id),
-                        question.title,
-                        question.content,
-                        question.likeCount,
-                        question.answers.size(),
-                        question.selectedAnswer,
-                        question.viewCount,
-                        question.createdAt,
-                        question.updatedAt,
-                        question.member.displayName))
-                .from(question)
-                .innerJoin(question.member, member);
     }
 }

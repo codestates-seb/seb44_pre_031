@@ -3,8 +3,8 @@ package com.codestates.pre_project.module.question.service;
 import com.codestates.pre_project.global.exception.CustomException;
 import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.member.service.MemberService;
-import com.codestates.pre_project.module.question.dto.response.GetQuestionResponse;
-import com.codestates.pre_project.module.question.dto.response.QuestionResponse;
+import com.codestates.pre_project.module.question.dto.response.GetQuestionDetailResponse;
+import com.codestates.pre_project.module.question.dto.response.GetQuestionsResponse;
 import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.repository.QuestionRepository;
 import com.codestates.pre_project.module.tag.entity.Tag;
@@ -50,37 +50,37 @@ public class QuestionService {
     }
 
     @Transactional
-    public GetQuestionResponse getQuestion(Long questionId, Pageable pageable) {
+    public GetQuestionDetailResponse getQuestion(Long questionId, Pageable pageable) {
         Question question = findQuestionById(questionId);
         question.view();
 
-        return questionRepository.getQuestionWithAnswer(questionId, pageable);
+        return questionRepository.getQuestionDetail(questionId, pageable);
     }
 
-    public Page<QuestionResponse> getQuestions(Pageable pageable) {
+    public Page<GetQuestionsResponse> getQuestions(Pageable pageable) {
 
         return questionRepository.getQuestions(pageable);
     }
 
-    public Page<QuestionResponse> getQuestionsWithKeyword(String keyword, Pageable pageable) {
+    public Page<GetQuestionsResponse> getQuestionsWithKeyword(String keyword, Pageable pageable) {
 
-        return questionRepository.getQuestionsWithTitle(keyword, pageable);
+        return questionRepository.getQuestionsByTitle(keyword, pageable);
     }
 
-    public Page<QuestionResponse> getQuestionsWithAuthor(String author, Pageable pageable) {
+    public Page<GetQuestionsResponse> getQuestionsWithAuthor(String author, Pageable pageable) {
 
-        return questionRepository.getQuestionsWithAuthor(author, pageable);
+        return questionRepository.getQuestionsByAuthor(author, pageable);
     }
 
-    public Page<QuestionResponse> getUnansweredQuestions(Pageable pageable) {
+    public Page<GetQuestionsResponse> getUnansweredQuestions(Pageable pageable) {
 
         return questionRepository.getUnansweredQuestions(pageable);
     }
 
-    public Page<QuestionResponse> getQuestionsWithTag(String tag, Pageable pageable) {
+    public Page<GetQuestionsResponse> getQuestionsWithTag(String tag, Pageable pageable) {
         List<Long> questionIds = tagService.getQuestionIdsByTag(tag);
 
-        return questionRepository.getQuestionsWithTag(questionIds, pageable);
+        return questionRepository.getQuestionsByTag(questionIds, pageable);
     }
 
     @Transactional
