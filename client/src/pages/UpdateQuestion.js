@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import {
   AWS_URL_PATH,
   TEMP_ACCESS_TOKEN,
+  selectAllTags,
   selectQuestion,
 } from '../slices/questionSlice';
 import Header from '../components/Header';
@@ -31,7 +32,7 @@ const UpdateQuestionContainer = styled.form`
   display: flex;
   flex-direction: column;
   margin: 2em;
-  gap: 1em;
+  gap: 1.2em;
   width: 80em;
 
   label {
@@ -39,6 +40,10 @@ const UpdateQuestionContainer = styled.form`
     font-size: 1.1em;
     font-weight: 600;
     margin-bottom: 0.4em;
+  }
+
+  p {
+    margin-bottom: 0.5em;
   }
 
   button {
@@ -56,11 +61,12 @@ const UpdateQuestion = () => {
   const navigate = useNavigate();
 
   const question = useSelector(selectQuestion);
+  const tags = useSelector(selectAllTags);
 
   const [inputText, setInputText] = useState({
     title: question.title,
     body: question.content,
-    tags: '',
+    tags: tags.map((tag) => tag.name).join(' '),
     summary: '',
   });
 
@@ -81,8 +87,10 @@ const UpdateQuestion = () => {
     const data = {
       title: inputText.title.trim(),
       content: inputText.body.trim(),
+      // tags 배열로 보내져야됨
+      // "tags": ["java", "spring", "임정민"]
       tags: inputText.tags.trim(),
-      summary: inputText.summary.trim(),
+      // summary: inputText.summary.trim(),
     };
     // http POST 요청 보내야함, 성공하면 해당 /quetions/:questionId 로 리다이렉트
     try {
@@ -109,6 +117,10 @@ const UpdateQuestion = () => {
         <UpdateQuestionContainer onSubmit={handleSubmit}>
           <div>
             <label htmlFor="title">Title</label>
+            <p>
+              Be specific and imagine you’re asking a question to another
+              person. Minimum 15 characters.
+            </p>
             <StyledInputText
               id="title"
               type="text"
@@ -122,6 +134,10 @@ const UpdateQuestion = () => {
           </div>
           <div>
             <label htmlFor="body">Body</label>
+            <p>
+              The body of your question contains your problem details and
+              results. Minimum 220 characters.
+            </p>
             <StyledTextarea
               id="body"
               height="12em"
@@ -133,6 +149,10 @@ const UpdateQuestion = () => {
           </div>
           <div>
             <label htmlFor="tags">Tags</label>
+            <p>
+              Add up to 5 tags to describe what your question is about. Start
+              typing to see suggestions.
+            </p>
             <StyledInputText
               id="tags"
               type="text"

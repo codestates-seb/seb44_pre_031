@@ -5,7 +5,11 @@ import StyledButton, { StyledTagLink } from '../styles/StyledButton';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { AWS_URL_PATH } from '../slices/questionSlice';
+import {
+  AWS_URL_PATH,
+  TEMP_ACCESS_TOKEN,
+  selectAllTags,
+} from '../slices/questionSlice';
 
 const AnswersContainer = styled.div`
   display: flex;
@@ -180,12 +184,11 @@ const AnswerForm = () => {
       // console.log('submit success');
       try {
         const response = await axios.post(
-          `${AWS_URL_PATH}/questions/${params.questionId}`,
+          `${AWS_URL_PATH}/answers/${params.questionId}`,
           { content: inputText.trim() },
           {
             headers: {
-              Authorization:
-                'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sIm1lbWJlcklkIjoyLCJ1c2VybmFtZSI6InFxcXFxcUBuYXZlci5jb20iLCJzdWIiOiJxcXFxcXFAbmF2ZXIuY29tIiwiaWF0IjoxNjg3NDIyMjY5LCJleHAiOjE2ODc0MjQ2Njl9.9zqwpuYIYVXbBxJbOldZf7EuYtB2gJpG9a0v2Nh7bWM',
+              Authorization: TEMP_ACCESS_TOKEN,
               // 'Content-Type': 'application/json',
             },
           }
@@ -194,7 +197,8 @@ const AnswerForm = () => {
         console.log(response);
 
         // 성공하면 해당 질문 상세페이지로 다시 redirect
-        navigate(`/questions/${params.questionId}`);
+        // navigate(`/questions/${params.questionId}`);
+        navigate(0);
       } catch (error) {
         console.log(error);
       }
@@ -286,15 +290,20 @@ const AnswerBottomNoticeContainer = styled.h2`
 `;
 
 const AnswerBottomNotice = () => {
+  const tags = useSelector(selectAllTags);
+
   return (
     <AnswerBottomNoticeContainer>
       <p>Not the answer you are looking for? Browse other questions tagged</p>
       <div className="tags-container">
-        <StyledTagLink>react</StyledTagLink>
-        <StyledTagLink>react-router-dom</StyledTagLink>
+        {tags.map((tag) => (
+          <StyledTagLink key={tag.name}>{tag.name}</StyledTagLink>
+        ))}
       </div>
       <p> or </p>
-      <Link className="ask-your-own-questipn">ask your own question</Link>
+      <Link className="ask-your-own-questipn" to="../ask">
+        ask your own question
+      </Link>
     </AnswerBottomNoticeContainer>
   );
 };

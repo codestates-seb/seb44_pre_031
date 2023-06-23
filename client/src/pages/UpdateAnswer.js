@@ -4,13 +4,21 @@ import StyledButton, {
   StyledInputText,
   StyledTextarea,
 } from '../styles/StyledButton';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 // import { useSelector } from 'react-redux';
 // import { selectAllAnswers } from '../slices/questionSlice';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Aside from '../components/Aside';
 import Nav from '../components/Nav';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import {
+  AWS_URL_PATH,
+  TEMP_ACCESS_TOKEN,
+  selectAllAnswers,
+} from '../slices/questionSlice';
+import axios from 'axios';
 
 const UpdateAnswerPageContainer = styled.div`
   .nav-main-container {
@@ -56,15 +64,49 @@ const UpdateAnswerContainer = styled.form`
 `;
 
 const UpdateQuestion = () => {
+  const navigate = useNavigate();
   const params = useParams();
-  console.log(params);
+  // console.log(params);
   // const answer = useSelector(
   //   (state) => state.question.answers[params.answersId - 1]
   // );
+  const answers = useSelector(selectAllAnswers);
+  // console.log(answers);
+  const selectedAnswer = answers.find(
+    (answer) => Number(params.answerId) === answer.answerId
+  );
+  // console.log(selectedAnswer);
 
-  const handleSubmit = (e) => {
-    e.preventDefault;
+  const [inputText, setInputText] = useState({
+    body: selectedAnswer.content,
+    summary: '',
+  });
+
+  const handleInputChange = (e) => {
+    if (e.target.id === 'body') {
+      setInputText({ ...inputText, body: e.target.value });
+    } else if (e.target.id === 'summary') {
+      setInputText({ ...inputText, summary: e.target.value });
+    }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     // http POST 요청 보내야함
+    try {
+      const response = await axios.patch(
+        `${AWS_URL_PATH}/answers/${params.questionId}/${params.answerId}`,
+        { content: inputText.body },
+        {
+          headers: {
+            Authorization: TEMP_ACCESS_TOKEN,
+          },
+        }
+      );
+      console.log(response);
+      navigate(`/questions/${params.questionId}`);
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   return (
@@ -77,7 +119,12 @@ const UpdateQuestion = () => {
           <div>
             <label htmlFor="body">Body</label>
             {/* <textarea id="body" /> */}
-            <StyledTextarea id="body" height="12em" value="" />
+            <StyledTextarea
+              id="body"
+              height="12em"
+              value={inputText.body}
+              onChange={handleInputChange}
+            />
           </div>
           <div>
             <label htmlFor="summary">Edit Summary</label>
@@ -85,6 +132,7 @@ const UpdateQuestion = () => {
               id="summary"
               type="text"
               placeholder="briefly explain your changes (corrected spelling, fixed grammar, improved formatting)"
+              onChange={handleInputChange}
             />
           </div>
           <div className="button-container">

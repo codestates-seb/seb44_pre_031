@@ -306,7 +306,7 @@ const AskQuestion = () => {
         const data = {
           title: inputText.title.trim(),
           content: inputText.body.trim(),
-          tags: inputText.tags.trim(),
+          tags: inputText.tags.trim().split(' '),
         };
         console.log(data);
 
@@ -386,7 +386,7 @@ const AskQuestion = () => {
           <AskQuestionInput
             title="Title"
             name="title"
-            content=" Be specific and imagine you’re asking a question to another
+            content="Be specific and imagine you’re asking a question to another
           person."
             placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
             inputLabel="title"
