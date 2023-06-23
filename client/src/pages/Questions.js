@@ -83,42 +83,24 @@ const SortNavBtn = styled.a`
   text-decoration: none;
 `;
 const QuestionsContent = styled.div``;
-export default function Questions() {
-  const [allquestions, setallquesitons] = useState([
-    {
-      questionId: 1,
-      title: 'How can I count repeating intervals in a graph?',
-      content:
-        'enter image description here Through the image, you can see five repetitive sections. I want to write an algorithm that counts this number, but I cant think of it. I tried to draw a regression curve ...',
-      voteCount: 0,
-      answerCount: 2,
-      countView: 0,
-      selectedAnswer: false,
-      questionCreatedAt: '2023-06-17T17:06:03',
-      displayName: 'Yeahhun Jeon',
-      reputation: 0,
-    },
-  ]);
 
-  const authHandler = () => {
-    axios
-      .get(
+export default function Questions() {
+  const [allquestions, setAllQuestions] = useState([]);
+
+  const fetchQuestions = async () => {
+    try {
+      const response = await axios.get(
         'http://ec2-52-79-240-48.ap-northeast-2.compute.amazonaws.com:8080/api/questions'
-      )
-      .then((res) => {
-        const data = res.data.result.data.content;
-        if (Array.isArray(data)) {
-          setallquesitons(data);
-        } else {
-          console.error('Data is not an array:', data);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      );
+      const questions = response.data.result.data.content;
+      setAllQuestions(questions);
+    } catch (error) {
+      console.error('Error fetching questions:', error);
+    }
   };
+
   useEffect(() => {
-    authHandler();
+    fetchQuestions();
   }, []);
 
   return (
@@ -136,7 +118,7 @@ export default function Questions() {
 
           <div>
             <QuestionsH2 className="data">
-              <div>23,752,022 questions</div>
+              <div>{allquestions.length} questions</div>
               <div>
                 <SortNavBox>
                   <SortNav>
@@ -147,7 +129,7 @@ export default function Questions() {
                       <div>Vote</div>
                     </SortNavBtn>
                     <SortNavBtn end>
-                      <div>Score</div>
+                      <div>Answer</div>
                     </SortNavBtn>
                   </SortNav>
                 </SortNavBox>
@@ -156,21 +138,9 @@ export default function Questions() {
           </div>
 
           <QuestionsContent>
-            {allquestions.map((el) => {
-              return (
-                <QuestionList
-                  key={el.id}
-                  title={el.title}
-                  content={el.content}
-                  questionCreatedAt={el.questionCreatedAt}
-                  voteCount={el.voteCount}
-                  countView={el.countView}
-                  answerCount={el.answerCount}
-                  displayName={el.displayName}
-                  reputation={el.reputation}
-                />
-              );
-            })}
+            {allquestions.map((el) => (
+              <QuestionList key={el.questionId} question={el} />
+            ))}
           </QuestionsContent>
         </QuestionContainer>
         <Aside />

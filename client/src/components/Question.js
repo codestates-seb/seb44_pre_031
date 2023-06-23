@@ -84,7 +84,6 @@ const QuestionInfoContainer = styled.div`
 `;
 
 const QuestionHeader = () => {
-  // const question = useSelector(selectQuestion);
   const question = useSelector((state) => state.question.question);
 
   return (

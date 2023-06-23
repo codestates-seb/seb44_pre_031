@@ -87,7 +87,7 @@ export default function Header() {
     <>
       <Headercontainer>
         <Headerlogo>
-          <Link to="/questions">
+          <Link to="/">
             <img src="/images/logo-stackoverflow.png" alt="logo" />
           </Link>
         </Headerlogo>
