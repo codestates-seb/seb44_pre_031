@@ -2,9 +2,12 @@ package com.codestates.pre_project.module.member.service;
 
 import com.codestates.pre_project.global.auth.utils.CustomAuthorityUtils;
 import com.codestates.pre_project.global.exception.CustomException;
+import com.codestates.pre_project.global.exception.ErrorCode;
 import com.codestates.pre_project.module.bookmark.repository.BookmarkRepository;
 import com.codestates.pre_project.module.member.dto.UpdateMemberDto;
+import com.codestates.pre_project.module.member.entity.Email;
 import com.codestates.pre_project.module.member.entity.Member;
+import com.codestates.pre_project.module.member.repository.EmailRepository;
 import com.codestates.pre_project.module.member.repository.MemberRepository;
 import com.codestates.pre_project.module.question.dto.response.BookmarkedQuestionsResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -24,34 +28,52 @@ import static com.codestates.pre_project.global.exception.ErrorCode.*;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final BookmarkRepository bookmarkRepository;
     private final MemberRepository memberRepository;
-    private final CustomAuthorityUtils authorityUtils;
+    private final BookmarkRepository bookmarkRepository;
+    private final EmailRepository emailRepository;
+    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
+    private final CustomAuthorityUtils authorityUtils;
 
     @Transactional
     public void signUp(Member request) {
         validateEmail(request.getEmail());
+        verifiedCode(request.getEmail(), request.getCode());
+
         List<String> roles = authorityUtils.createRoles(request.getEmail());
+        String encode = passwordEncoder.encode(request.getPassword());
+
         memberRepository.save(Member.builder()
                 .email(request.getEmail())
+                .code(null)
                 .displayName(request.getDisplayName())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .password(encode)
                 .roles(roles)
                 .build());
     }
 
-//    @Transactional
-//    public void sendCodeToEmail(String to) {
-//        validateEmail(to);
-//        String title = "스택오버플로우 이메일 인증 번호";
-//        String code = createRandomCode();
-//
-//        // 일단 임시방편으로 이메일 인증 코드를 보내면 member 에 업데이트
-//        emailService.sendEmail(to, title, code);
-//        Member member = findMemberByEmail(to);
-//        member.setEmailCode(code);
-//    }
+    @Transactional
+    public void sendCodeToEmail(String email) {
+        validateEmail(email);
+
+        String title = "스택오버플로우 이메일 인증 번호";
+        String code = createRandomCode();
+
+        emailService.sendEmail(email, title, code);
+        // 임시로 email repository 에 저장.....
+        emailRepository.save(new Email(email, code));
+    }
+
+    public void verifiedCode(String email, String code) {
+        validateEmail(email);
+
+        Email emailEntity = emailRepository.findByEmail(email);
+        if (!emailEntity.getCode().equals(code)) {
+            throw new CustomException(INTERNAL_SERVER_ERROR);
+        } else {
+            emailRepository.delete(emailEntity);
+        }
+    }
 
     @Transactional(readOnly = true)
     public Member findMember(Long memberId) {
@@ -78,24 +100,19 @@ public class MemberService {
     }
 
     private void validateEmail(String email) {
-        memberRepository.existsByEmail(email)
-                .orElseThrow(() -> new CustomException(MEMBER_EMAIL_ALREADY_EXISTS));
+        Optional<Member> member = memberRepository.findByEmail(email);
+        if (member.isPresent()) throw new CustomException(MEMBER_EMAIL_ALREADY_EXISTS);
     }
 
     private Member validateUpdate(Long memberId, UpdateMemberDto request) {
         Member findMember = findMemberById(memberId);
-        memberRepository.findByDisplayName(request.getDisplayName()).ifPresent(alreadyExists -> {
-            throw new CustomException(MEMBER_DISPLAY_NAME_ALREADY_EXISTS);
-        });
+        Optional<Member> member = memberRepository.findByDisplayName(request.getDisplayName());
+        if (member.isPresent()) throw new CustomException(MEMBER_DISPLAY_NAME_ALREADY_EXISTS);
         return findMember;
     }
 
     public Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
-    }
-
-    public Member findMemberByEmail(String email) {
-        return memberRepository.findByEmail(email).orElseThrow(() -> new CustomException(MEMBER_NOT_FOUND));
     }
 
     private String createRandomCode() {

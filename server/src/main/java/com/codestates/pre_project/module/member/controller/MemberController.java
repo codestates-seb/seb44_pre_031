@@ -29,18 +29,22 @@ public class MemberController {
     @ResponseStatus(HttpStatus.CREATED)
     public Response signUp(@Valid @RequestBody SignUpDto request) {
         memberService.signUp(SignUpDto.toEntity(request));
+
         return Response.success();
     }
 
-    @PostMapping("/emails")
+    @GetMapping("/emails")
     public Response sendMessage(@RequestParam("email") @Valid @Email String email) {
-        return null;
+        memberService.sendCodeToEmail(email);
+
+        return Response.success();
     }
 
     @GetMapping("/{user-id}")
     @ResponseStatus(HttpStatus.OK)
     public Response findMember(@PathVariable("user-id") Long memberId) {
         Member member = memberService.findMember(memberId);
+
         return Response.success(MemberDto.of(member));
     }
 
@@ -48,6 +52,7 @@ public class MemberController {
     @ResponseStatus(HttpStatus.OK)
     public Response bookmarkQuestion(@PathVariable(name = "question-id") Long questionId) {
         bookmarkService.bookmarkQuestion(questionId);
+
         return Response.success();
     }
 
@@ -61,6 +66,7 @@ public class MemberController {
     public Response updateMemberInfo(@PathVariable("user-id") Long memberId,
                                      @Valid @RequestBody UpdateMemberDto request) {
         Member member = memberService.updateMemberInfo(memberId, request);
+
         return Response.success(toDto(member));
     }
 
@@ -68,6 +74,7 @@ public class MemberController {
     @ResponseStatus(HttpStatus.OK)
     public Response deleteMember(@PathVariable("user-id") Long memberId) {
         memberService.deleteMember(memberId);
+
         return Response.success();
     }
 }
