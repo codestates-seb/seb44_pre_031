@@ -297,7 +297,7 @@ const AnswerBottomNotice = () => {
       <p>Not the answer you are looking for? Browse other questions tagged</p>
       <div className="tags-container">
         {tags.map((tag) => (
-          <StyledTagLink key={tag.name}>{tag.name}</StyledTagLink>
+          <StyledTagLink key={tag}>{tag}</StyledTagLink>
         ))}
       </div>
       <p> or </p>

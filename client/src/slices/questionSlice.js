@@ -7,7 +7,7 @@ export const AWS_URL_PATH =
 // const MOCK_UP_API = 'http://localhost:3500';
 
 export const TEMP_ACCESS_TOKEN =
-  'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sIm1lbWJlcklkIjoxLCJ1c2VybmFtZSI6ImRsYXdqZGFsczAyMThAZ21haWwuY29tIiwic3ViIjoiZGxhd2pkYWxzMDIxOEBnbWFpbC5jb20iLCJpYXQiOjE2ODc1MTExMDksImV4cCI6MTY4NzUxMzUwOX0.DiRQMcKsQVmlV2padcERWa4FzYKkzeHoJDw64mo_pA4';
+  'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sIm1lbWJlcklkIjoxLCJ1c2VybmFtZSI6ImRsYXdqZGFsczAyMThAZ21haWwuY29tIiwic3ViIjoiZGxhd2pkYWxzMDIxOEBnbWFpbC5jb20iLCJpYXQiOjE2ODc1NDA0MDMsImV4cCI6MTY4NzU0MjgwM30.oqkfekdEtdLWDGMusNfKa2zrpLL1DOJIUI60QoXMKHc';
 
 const initialState = {
   status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
@@ -39,7 +39,6 @@ const initialState = {
   ],
   tags: ['java', 'react', 'javascript'],
 };
-// ,{ header: 'token' }
 
 // JSON-serve 용으로 만든거
 // export const fetchQuestionDetail = createAsyncThunk(
@@ -96,6 +95,24 @@ export const postDownVoteQeustion = createAsyncThunk(
   }
 );
 
+export const postSelectAnswer = createAsyncThunk(
+  'question/postSelectAnswer',
+  async ({ questionId, answerId }) => {
+    console.log(questionId, answerId);
+    const response = await axios.post(
+      `${AWS_URL_PATH}/answers/${questionId}/${answerId}/select`,
+      null,
+      {
+        headers: {
+          Authorization: TEMP_ACCESS_TOKEN,
+        },
+      }
+    );
+    console.log(response);
+    return { response, answerId };
+  }
+);
+
 export const questionSlice = createSlice({
   name: 'question',
   initialState,
@@ -135,6 +152,14 @@ export const questionSlice = createSlice({
         if (action.payload) {
           state.question.likeCount--;
         }
+      })
+      .addCase(postSelectAnswer.fulfilled, (state, action) => {
+        const selectedAnswer = state.answers.find(
+          (answer) => answer.answerId === action.payload.answerId
+        );
+
+        state.status = 'succeeded';
+        selectedAnswer.selected = !selectedAnswer.selected;
       });
   },
 });

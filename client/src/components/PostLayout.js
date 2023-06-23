@@ -4,7 +4,7 @@ import { BiUpArrow, BiDownArrow } from 'react-icons/bi';
 import { FcBookmark } from 'react-icons/fc';
 import { CiBookmark } from 'react-icons/ci';
 import { RxCountdownTimer } from 'react-icons/rx';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
 import { StyledTagLink } from '../styles/StyledButton';
 import UserProfile from './UserProfile';
@@ -13,6 +13,7 @@ import {
   AWS_URL_PATH,
   TEMP_ACCESS_TOKEN,
   postDownVoteQeustion,
+  postSelectAnswer,
   postUpVoteQeustion,
   selectAllTags,
   selectQuestion,
@@ -152,6 +153,7 @@ export const QuestionLayout = () => {
   const tags = useSelector(selectAllTags);
   const params = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // 북마크상태 임시로 로컬에 저장해놓음
   const [isQuestionBookmarked, setIsQuestionBookmarked] = useState(false);
@@ -177,13 +179,13 @@ export const QuestionLayout = () => {
   const handleQuestionDownVoteClick = () => {
     if (questionVoteStatus.downVote === false) {
       setQuestionVoteStatus({ ...questionVoteStatus, downVote: true });
-      dispatch(postUpVoteQeustion(params.questionId));
+      dispatch(postDownVoteQeustion(params.questionId));
     } else if (questionVoteStatus.downVote === true) {
       setQuestionVoteStatus({
         ...questionVoteStatus,
         downVote: false,
       });
-      dispatch(postDownVoteQeustion(params.questionId));
+      dispatch(postUpVoteQeustion(params.questionId));
     }
   };
 
@@ -202,6 +204,28 @@ export const QuestionLayout = () => {
       console.log(response);
     } catch (err) {
       console.log(err.message);
+    }
+  };
+
+  const handleQuestionDeleteButtonClick = async () => {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this question?'
+    );
+    if (confirmed) {
+      try {
+        const response = await axios.delete(
+          `${AWS_URL_PATH}/questions/${question.questionId}`,
+          {
+            headers: {
+              Authorization: TEMP_ACCESS_TOKEN,
+            },
+          }
+        );
+        console.log(response);
+        navigate('/');
+      } catch (err) {
+        console.log(err.message);
+      }
     }
   };
 
@@ -256,7 +280,7 @@ export const QuestionLayout = () => {
             <Link to={`../${question.questionId}/edit`}>Edit</Link>
             {/* 본인이면 Delete 아니면 Follow */}
             <button>Follow</button>
-            <button>Delete</button>
+            <button onClick={handleQuestionDeleteButtonClick}>Delete</button>
           </FooterFeatContainer>
           <div className="user-profile-container">
             {/* edited 기록이 있으면 edit 렌더 아니면 asked 작성자만 렌더 */}
@@ -282,6 +306,44 @@ export const QuestionLayout = () => {
 };
 
 export const AnswerLayout = ({ answer }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  // 상태 로컬로 관리할 수 없을듯, 전체답변중 하나만 채택될수 있어야해서 복잡해짐
+  // const [isSelected, setIsSelected] = useState(answer.isSelected);
+  // console.log(isSelected);
+
+  const handleSelectIconClick = () => {
+    // setIsSelected(!isSelected);
+    dispatch(
+      postSelectAnswer({
+        questionId: answer.questionId,
+        answerId: answer.answerId,
+      })
+    );
+  };
+
+  const handleAnswerDeleteButtonClick = async () => {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this answer?'
+    );
+    if (confirmed) {
+      try {
+        const response = await axios.delete(
+          `${AWS_URL_PATH}/answers/${answer.questionId}/${answer.answerId}`,
+          {
+            headers: {
+              Authorization: TEMP_ACCESS_TOKEN,
+            },
+          }
+        );
+        console.log(response);
+        navigate(0);
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+  };
+
   return (
     <PostLayoutContainer>
       <VoteCellContainer>
@@ -301,13 +363,13 @@ export const AnswerLayout = ({ answer }) => {
           <FcBookmark className="bookmarked-icon" />
         </div> */}
         {/* 채택된 답변이면 green 체크마크 렌더 */}
-        {answer.selected === true ? (
+        {answer.selected ? (
           <div className="checkmark">
-            <FaCheck fill="rgb(46,112,68)" />
+            <FaCheck fill="rgb(46,112,68)" onClick={handleSelectIconClick} />
           </div>
         ) : (
           <div className="checkmark">
-            <FaCheck fill="rgb(186,191,196)" />
+            <FaCheck fill="rgb(186,191,196)" onClick={handleSelectIconClick} />
           </div>
         )}
         <div>
@@ -324,7 +386,7 @@ export const AnswerLayout = ({ answer }) => {
             </Link>
             {/* 본인이면 Delete 아니면 Follow */}
             <button>Follow</button>
-            <button>Delete</button>
+            <button onClick={handleAnswerDeleteButtonClick}>Delete</button>
           </FooterFeatContainer>
           <div className="user-profile-container">
             {/* edited 기록이 있으면 edit 렌더 아니면 asked 작성자만 렌더 */}
