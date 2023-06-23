@@ -29,8 +29,8 @@ public class TagRepositoryImpl implements TagRepositoryCustom {
         return queryFactory
                 .select(question.id)
                 .from(question)
-                .leftJoin(question).on(question.eq(questionTag.question))
-                .leftJoin(questionTag).on(questionTag.tag.id.eq(tagId))
+                .leftJoin(questionTag).on(question.eq(questionTag.question))
+                .leftJoin(tag).on(questionTag.tag.id.eq(tagId))
                 .fetch();
     }
 

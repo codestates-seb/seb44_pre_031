@@ -2,7 +2,8 @@ package com.codestates.pre_project.module.question.controller;
 
 import com.codestates.pre_project.global.auth.utils.MemberIdExtractor;
 import com.codestates.pre_project.module.question.dto.request.QuestionRequest;
-import com.codestates.pre_project.module.question.dto.response.GetQuestionResponse;
+import com.codestates.pre_project.module.question.dto.response.GetQuestionDetailResponse;
+import com.codestates.pre_project.module.question.dto.response.GetQuestionsResponse;
 import com.codestates.pre_project.module.question.dto.response.QuestionResponse;
 import com.codestates.pre_project.module.question.service.QuestionLikeService;
 import com.codestates.pre_project.module.question.service.QuestionService;
@@ -46,7 +47,7 @@ public class QuestionController {
     @ResponseStatus(HttpStatus.OK)
     public Response getQuestion(@PathVariable("question-id") Long questionId,
                                 @PageableDefault(size = 30) Pageable pageable) {
-        GetQuestionResponse response = questionService.getQuestion(questionId, pageable);
+        GetQuestionDetailResponse response = questionService.getQuestion(questionId, pageable);
 
         return Response.success(response);
     }
@@ -54,7 +55,7 @@ public class QuestionController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Response getQuestions(@PageableDefault(size = 30) Pageable pageable) {
-        Page<QuestionResponse> questions = questionService.getQuestions(pageable);
+        Page<GetQuestionsResponse> questions = questionService.getQuestions(pageable);
 
         return Response.success(questions);
     }
@@ -63,7 +64,7 @@ public class QuestionController {
     @ResponseStatus(HttpStatus.OK)
     public Response getQuestionsWithKeyword(@PathVariable("keyword") String keyword,
                                             @PageableDefault(size = 30) Pageable pageable) {
-        Page<QuestionResponse> questions = questionService.getQuestionsWithKeyword(keyword, pageable);
+        Page<GetQuestionsResponse> questions = questionService.getQuestionsWithKeyword(keyword, pageable);
 
         return Response.success(questions);
     }
@@ -72,7 +73,7 @@ public class QuestionController {
     @ResponseStatus(HttpStatus.OK)
     public Response getQuestionsWithAuthor(@PathVariable("author") String author,
                                            @PageableDefault(size = 30) Pageable pageable) {
-        Page<QuestionResponse> questions = questionService.getQuestionsWithAuthor(author, pageable);
+        Page<GetQuestionsResponse> questions = questionService.getQuestionsWithAuthor(author, pageable);
 
         return Response.success(questions);
     }
@@ -80,7 +81,7 @@ public class QuestionController {
     @GetMapping("/search-unanswered")
     @ResponseStatus(HttpStatus.OK)
     public Response getUnansweredQuestion(@PageableDefault(size = 30) Pageable pageable) {
-        Page<QuestionResponse> questions = questionService.getUnansweredQuestions(pageable);
+        Page<GetQuestionsResponse> questions = questionService.getUnansweredQuestions(pageable);
 
         return Response.success(questions);
     }
@@ -90,7 +91,7 @@ public class QuestionController {
     @ResponseStatus(HttpStatus.OK)
     public Response getQuestionsWithTag(@PathVariable("tag") String tag,
                                        @PageableDefault(size = 30) Pageable pageable) {
-        Page<QuestionResponse> questions = questionService.getQuestionsWithTag(tag, pageable);
+        Page<GetQuestionsResponse> questions = questionService.getQuestionsWithTag(tag, pageable);
 
         return Response.success(questions);
     }
