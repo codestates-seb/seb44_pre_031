@@ -20,6 +20,4 @@ public class TagResponse {
         this.questionCount = questionCount;
         this.tagCreatedAt = tagCreatedAt;
     }
-
-
 }

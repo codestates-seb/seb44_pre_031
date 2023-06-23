@@ -1,6 +1,7 @@
 package com.codestates.pre_project.module.tag.service;
 
 import com.codestates.pre_project.global.exception.CustomException;
+import com.codestates.pre_project.module.question.service.QuestionTagService;
 import com.codestates.pre_project.module.tag.dto.response.TagResponse;
 import com.codestates.pre_project.module.tag.entity.Tag;
 import com.codestates.pre_project.module.tag.repository.TagRepository;
@@ -12,13 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.codestates.pre_project.global.exception.ErrorCode.*;
+import static com.codestates.pre_project.global.exception.ErrorCode.TAG_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class TagService {
     private final TagRepository tagRepository;
+    private final QuestionTagService questionTagService;
 
     public List<Tag> addTags(String[] tagList) {
         List<Tag> tags = new ArrayList<>();
@@ -57,6 +59,6 @@ public class TagService {
         Long tagId = tagRepository.findByName(tag)
                 .orElseThrow(() -> new CustomException(TAG_NOT_FOUND)).getId();
 
-        return tagRepository.getQuestionIds(tagId);
+        return questionTagService.findQuestionIds(tagId);
     }
 }
