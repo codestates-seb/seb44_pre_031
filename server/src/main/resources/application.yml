@@ -1,4 +1,20 @@
 spring:
+  mail:
+    host: smtp.gmail.com # gmail SMTP 서버
+    port: 587 # gmail SMTP 서버
+    username: dlawjdals02182@gmail.com
+    password: inpvdunmyhdyzubr
+    properties: # 추가 속성
+      mail:
+        smtp:
+          auth: true # SMTP 서버에 인증
+          starttls: # TLS 를 사용하여 안전한 연결 설정
+            enable: true
+            required: true
+          connectiontimeout: 5000 # SMTP 연결을 설정하는데 대기해야 하는 시간
+          timeout: 5000 # SMTP 로부터 응답을 대기해야 하는 시간
+          writetimeout: 5000 # 클라이언트가 작업을 완료하는데 대기해야 하는 시간
+    auth-code-expiration-millis: 1800000 # 이메일 인증 코드의 만료 시간
 #  h2:
 #    console:
 #      enabled: true
@@ -10,6 +26,7 @@ spring:
 #    username: sa
 #    password:
 #    driver-class-name: org.h2.Driver
+
   datasource:
     url: jdbc:mysql://database-1.cb1tmltkopsz.ap-northeast-2.rds.amazonaws.com/test?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
     username: admin
@@ -22,6 +39,7 @@ spring:
         mode: always
         continue-on-error: false
         data-locations: classpath:data.sql
+
 #    database-platform: org.hibernate.dialect.H2Dialect
 #    hibernate:
 #      ddl-auto: create-drop
@@ -29,6 +47,7 @@ spring:
 #    properties:
 #      hibernate:
 #        format_sql: true
+
     hibernate:
       ddl-auto: create-drop
       naming:

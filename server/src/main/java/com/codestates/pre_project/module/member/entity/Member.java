@@ -37,6 +37,8 @@ public class Member extends BaseEntity {
     private String email;
     @Column(name = "email_code")
     private String emailCode;
+    @Column(name = "code")
+    private String code;
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -64,7 +66,7 @@ public class Member extends BaseEntity {
     private boolean isDeleted = false;
 
     public void setEmailCode(String code) {
-        this.emailCode = code;
+        this.code = code;
     }
 
     public static Member updateMemberInfo(Member findMember, UpdateMemberDto dto) {
