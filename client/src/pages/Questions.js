@@ -6,6 +6,11 @@ import Header from '../components/Header';
 import Nav from '../components/Nav';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setTotalposts } from '../slices/paginationSlice';
+import PaginationLeft from '../components/PaginationLeft';
+import PaginationRight from '../components/PaginationRight';
+import { Link } from 'react-router-dom';
 const WrapContainer = styled.div`
   .wrap {
     margin: 0 auto;
@@ -86,7 +91,8 @@ const QuestionsContent = styled.div``;
 
 export default function Questions() {
   const [allquestions, setAllQuestions] = useState([]);
-
+  const pages = useSelector((state) => state.pages);
+  const dispatch = useDispatch();
   const fetchQuestions = async () => {
     try {
       const response = await axios.get(
@@ -101,8 +107,11 @@ export default function Questions() {
 
   useEffect(() => {
     fetchQuestions();
+    dispatch(setTotalposts(allquestions.length));
   }, []);
-
+  const start = pages.currentpage - 1;
+  const end = start + pages.pagesize;
+  const onepage = allquestions.slice(start, end);
   return (
     <>
       <Header />
@@ -112,7 +121,11 @@ export default function Questions() {
           <PageHeader>
             <h1>All Questions</h1>
             <div className="bluebutton">
-              <BasicBlueButton>Ask Question</BasicBlueButton>
+              <BasicBlueButton>
+                <Link to="/questions/ask" style={{ color: 'white' }}>
+                  Ask Question
+                </Link>
+              </BasicBlueButton>
             </div>
           </PageHeader>
 
@@ -138,13 +151,15 @@ export default function Questions() {
           </div>
 
           <QuestionsContent>
-            {allquestions.map((el) => (
+            {onepage.map((el) => (
               <QuestionList key={el.questionId} question={el} />
             ))}
           </QuestionsContent>
         </QuestionContainer>
         <Aside />
       </WrapContainer>
+      <PaginationLeft />
+      <PaginationRight />
     </>
   );
 }

@@ -1,5 +1,6 @@
 import { styled } from 'styled-components';
-import { gotoNext, gotoPrev } from '../slices/paginationSlice';
+
+import { gotoNext, gotoPrev, selectPage } from '../slices/paginationSlice';
 import { useSelector, useDispatch } from 'react-redux';
 
 const Pager = styled.div`
@@ -38,6 +39,9 @@ function PaginationLeft() {
       dispatch(gotoNext());
     }
   };
+  const gotoPageHandler = (num) => {
+    dispatch(selectPage(num));
+  };
   const pageNums = new Array(5).fill(pages.currentpage).map((ele, idx) => {
     if (pages.currentpage <= 4) {
       return idx + 1;
@@ -55,13 +59,17 @@ function PaginationLeft() {
       )}
       {pages.currentpage > 4 && (
         <>
-          <PageBtn>1</PageBtn>
+          <PageBtn onClick={() => gotoPageHandler(1)}>1</PageBtn>
           <PageBtn clear={1}>...</PageBtn>
         </>
       )}
       {pageNums.map((ele, idx) => {
         return (
-          <PageBtn key={`page${idx}`} selected={pages.currentpage === ele}>
+          <PageBtn
+            key={`page${idx}`}
+            selected={pages.currentpage === ele}
+            onClick={() => gotoPageHandler(ele)}
+          >
             {ele}
           </PageBtn>
         );
@@ -69,7 +77,12 @@ function PaginationLeft() {
       {pages.currentpage < pages.totalpage - 4 && (
         <>
           <PageBtn clear={1}>...</PageBtn>
-          <PageBtn className="last">{pages.totalpage}</PageBtn>
+          <PageBtn
+            className="last"
+            onClick={() => gotoPageHandler(pages.totalpage)}
+          >
+            {pages.totalpage}
+          </PageBtn>
         </>
       )}
       {pages.currentpage !== pages.totalpage && (

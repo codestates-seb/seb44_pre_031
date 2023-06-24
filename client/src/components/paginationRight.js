@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { PageBtn } from './paginationLeft';
+import { PageBtn } from './PaginationLeft';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectPagesize } from '../slices/paginationSlice';
 
@@ -20,28 +20,28 @@ function PaginationRight() {
   return (
     <PageSizer>
       <PageBtn
+        selected={pages.pagesize === 5}
+        onClick={() => {
+          changePagesizeHandler(5);
+        }}
+      >
+        5
+      </PageBtn>
+      <PageBtn
+        selected={pages.pagesize === 10}
+        onClick={() => {
+          changePagesizeHandler(10);
+        }}
+      >
+        10
+      </PageBtn>
+      <PageBtn
         selected={pages.pagesize === 15}
         onClick={() => {
           changePagesizeHandler(15);
         }}
       >
         15
-      </PageBtn>
-      <PageBtn
-        selected={pages.pagesize === 30}
-        onClick={() => {
-          changePagesizeHandler(30);
-        }}
-      >
-        30
-      </PageBtn>
-      <PageBtn
-        selected={pages.pagesize === 50}
-        onClick={() => {
-          changePagesizeHandler(50);
-        }}
-      >
-        50
       </PageBtn>
       <PageBtn clear={1}>per page</PageBtn>
     </PageSizer>
