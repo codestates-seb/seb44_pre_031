@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTotalposts } from '../slices/paginationSlice';
+// eslint-disable-next-line import/no-unresolved
 import PaginationLeft from '../components/PaginationLeft';
 import PaginationRight from '../components/PaginationRight';
 import { Link } from 'react-router-dom';

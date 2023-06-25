@@ -1,6 +1,7 @@
 import { styled } from 'styled-components';
 import { AnswerLayout } from './PostLayout';
 import { useState } from 'react';
+// eslint-disable-next-line import/no-named-as-default
 import StyledButton, { StyledTagLink } from '../styles/StyledButton';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
