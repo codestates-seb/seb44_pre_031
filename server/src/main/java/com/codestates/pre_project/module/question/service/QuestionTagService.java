@@ -33,11 +33,4 @@ public class QuestionTagService {
                 .map(questionTag -> questionTag.getQuestion().getId())
                 .collect(Collectors.toList());
     }
-
-    public List<Long> findTagIds(Long questionId) {
-
-        return questionTagRepository.findByQuestionId(questionId).stream()
-                .map(questionTag -> questionTag.getTag().getId())
-                .collect(Collectors.toList());
-    }
 }
