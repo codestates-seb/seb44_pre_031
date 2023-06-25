@@ -8,8 +8,15 @@ export const actionS = createAsyncThunk('user/join', async (data, thunkAPI) => {
     {
       displayName: data.displayName,
       email: data.email,
+      code: data.emailAuth,
       password: data.password,
     }
   );
-  return result;
+
+  if (result.data.success === true) {
+    console.log('박지훈');
+    const success = result.data.success;
+    return { success };
+  }
+  console.log(result);
 });

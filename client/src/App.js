@@ -8,6 +8,7 @@ import UpdateAnswer from './pages/UpdateAnswer';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Users from './pages/Users';
+import SearchUsers from './pages/SearchUsers';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="sign-up" element={<SignUp />} />
           <Route path="sign-in" element={<Login />} />
           <Route path="mypage" element={<Users />} />
+          <Route path="anotherUser" element={<SearchUsers />} />
         </Route>
         <Route path="questions">
           <Route path="ask" element={<AskQuestion />} />

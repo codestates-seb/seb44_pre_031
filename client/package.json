@@ -10,7 +10,12 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
     "json-server": "^0.17.3",
+<<<<<<< HEAD
+    "jsonwebtoken": "^9.0.0",
+    "jwt-decode": "^3.1.2",
+=======
     "prop-types": "^15.8.1",
+>>>>>>> 481120393fa32bbb53631f470bb2ae5cb0236169
     "react": "^18.2.0",
     "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
