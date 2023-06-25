@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 import { Link } from 'react-router-dom';
 
-export const StyledButton = styled.button`
+const StyledButton = styled.button`
   font-size: ${(props) => props.fontSize};
   color: ${(props) => (props.isCancel ? 'hsl(358,62%,47%)' : 'white')};
   background-color: ${(props) =>
