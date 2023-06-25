@@ -4,6 +4,10 @@ import { IoIosSearch } from 'react-icons/io';
 import { BasicBlueButton } from '../styles/Buttons';
 import { useState } from 'react';
 import SearchGuide from './SearchGuide';
+import { searchBarfilter } from '../slices/filterquestionSlice';
+import { selectPage } from '../slices/paginationSlice';
+import { useDispatch } from 'react-redux';
+
 const Headercontainer = styled.div`
   position: sticky;
   display: flex;
@@ -80,14 +84,30 @@ const SearchInput = styled.input`
 export default function Header() {
   const [isFocus, setIsFocus] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState('');
+  const dispatch = useDispatch();
   const focusHandler = () => {
     setIsFocus(!isFocus);
+    console.log(!isFocus);
+  };
+  const isFollowGuide = (text) => {
+    text.slice(0, 5) === '[tag]' &&
+      dispatch(searchBarfilter({ tags: text.slice(5, text.length) }));
+    text.slice(0, 5) === 'displayName:' &&
+      dispatch(searchBarfilter({ displayName: text.slice(5, text.length) }));
+    text.slice(0, 7) === 'answer:' &&
+      dispatch(searchBarfilter({ answerCount: text.slice(7, text.length) }));
+  };
+
+  const searchbarInputHandler = () => {
+    isFollowGuide(searchInputValue);
+    dispatch(selectPage(1));
+    setSearchInputValue('');
   };
   return (
     <>
       <Headercontainer>
         <Headerlogo>
-          <Link to="/questions">
+          <Link to="/">
             <img src="/images/logo-stackoverflow.png" alt="logo" />
           </Link>
         </Headerlogo>
@@ -104,6 +124,11 @@ export default function Header() {
             placeholder="Search..."
             onChange={(e) => {
               setSearchInputValue(e.target.value);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                searchbarInputHandler(e);
+              }
             }}
             onFocus={focusHandler}
           />

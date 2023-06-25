@@ -200,13 +200,8 @@ const Login = () => {
           localStorage.setItem('MemberId', userMemberId);
           //userMemberId = 벡에서 원하는 유저 아이디(숫자)
 
-          //   // 사용자 정보 업데이트
-          //   dispatch(userInfo({ userId, accessToken }));
-          // console.log(localStorage);
           navigate('/');
           console.log('성공');
-          // const accessTok = localStorage.getItem('Token');
-          // console.log(accessTok);
           // })
         })
         // eslint-disable-next-line no-unused-vars

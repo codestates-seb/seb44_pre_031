@@ -5,7 +5,9 @@ import AskQuestionInput from '../components/AskQuestionInput';
 import { useNavigate } from 'react-router-dom';
 import StyledButton from '../styles/StyledButton';
 import axios from 'axios';
-import { AWS_URL_PATH } from '../slices/questionSlice';
+import { AWS_URL_PATH, TEMP_ACCESS_TOKEN } from '../slices/questionSlice';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const AskContainer = styled.div`
   background-color: rgb(248, 249, 249);
@@ -24,6 +26,18 @@ const WriteQuestionNotice = styled.div`
   justify-content: center;
   gap: 3em;
   width: 100%;
+
+  .title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    #robot-image {
+      display: inline-block;
+      height: '150px';
+      /* width: '20px'; */
+    }
+  }
 `;
 
 const WriteGoodQuestionNotice = styled.div`
@@ -292,14 +306,16 @@ const AskQuestion = () => {
         const data = {
           title: inputText.title.trim(),
           content: inputText.body.trim(),
-          // tags: inputText.tags.trim(),
+          tags: inputText.tags.trim().split(' '),
         };
         console.log(data);
 
-        const response = await axios.post(
-          `${AWS_URL_PATH}/api/questions`,
-          data
-        );
+        const response = await axios.post(`${AWS_URL_PATH}/questions`, data, {
+          headers: {
+            Authorization: TEMP_ACCESS_TOKEN,
+            // 'Content-Type': 'application/json',
+          },
+        });
         // const response = await axios('https://swapi.dev/api/');
         console.log(response);
 
@@ -311,124 +327,150 @@ const AskQuestion = () => {
     }
   };
 
+  // const handleTestButtonClick = () => {
+  //   // navigate 잘되는지 테스트용
+  //   navigate(`/questions/1`);
+  // };
+
   return (
-    <AskContainer>
-      <WriteQuestionNotice>
-        <h1>Ask a public question</h1>
-        <WriteGoodQuestionNotice>
-          <h2>Wrting a good question</h2>
-          <p>
-            You are ready to ask a programming-related question and this form
-            will help guide you through the process. Looking to ask a
-            non-programming question? See the topics here to find a relevant
-            site.
-          </p>
-          <h5>Steps</h5>
-          <ul>
-            <li>Summarize your problem in a one-line title.</li>
-            <li>Describe your problem in more detail.</li>
-            <li>Describe what you tried and what you expected to happen.</li>
-            <li>
-              Add “tags” which help surface your question to members of the
-              community.
-            </li>
-            <li>Review your question and post it to the site.</li>
-          </ul>
-        </WriteGoodQuestionNotice>
-      </WriteQuestionNotice>
-      <QuestionPostForm onSubmit={handleSubmit}>
-        <WriteGoodTitleNotice>
-          <h5 className="title-notice-title">Wrting a good title</h5>
-          <div className="title-notice-body">
-            <div className="title-notice-icon">
-              <TfiPencil />
-            </div>
-            <div className="title-notice-description">
-              <p>Your title should summarize the problem.</p>
-              <p>
-                You might find that you have a better idea of your title after
-                writing out the rest of the question.
-              </p>
-            </div>
+    <div>
+      <Header />
+      <AskContainer>
+        <WriteQuestionNotice>
+          <div className="title-container">
+            <h1>Ask a public question</h1>
+            <img
+              src="/images/ask-question-background.png"
+              alt=""
+              id="robot-image"
+              height="150px"
+            />
           </div>
-        </WriteGoodTitleNotice>
-        <AskQuestionInput
-          title="Title"
-          name="title"
-          content=" Be specific and imagine you’re asking a question to another
+          <WriteGoodQuestionNotice>
+            <h2>Wrting a good question</h2>
+            <p>
+              You are ready to ask a programming-related question and this form
+              will help guide you through the process. Looking to ask a
+              non-programming question? See the topics here to find a relevant
+              site.
+            </p>
+            <h5>Steps</h5>
+            <ul>
+              <li>Summarize your problem in a one-line title.</li>
+              <li>Describe your problem in more detail.</li>
+              <li>Describe what you tried and what you expected to happen.</li>
+              <li>
+                Add “tags” which help surface your question to members of the
+                community.
+              </li>
+              <li>Review your question and post it to the site.</li>
+            </ul>
+          </WriteGoodQuestionNotice>
+        </WriteQuestionNotice>
+        <QuestionPostForm onSubmit={handleSubmit}>
+          <WriteGoodTitleNotice>
+            <h5 className="title-notice-title">Wrting a good title</h5>
+            <div className="title-notice-body">
+              <div className="title-notice-icon">
+                <TfiPencil />
+              </div>
+              <div className="title-notice-description">
+                <p>Your title should summarize the problem.</p>
+                <p>
+                  You might find that you have a better idea of your title after
+                  writing out the rest of the question.
+                </p>
+              </div>
+            </div>
+          </WriteGoodTitleNotice>
+          <AskQuestionInput
+            title="Title"
+            name="title"
+            content="Be specific and imagine you’re asking a question to another
           person."
-          placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
-          inputLabel="title"
-          inputValue={inputText.title}
-          isButtonVisible={isButtonVisible.title}
-          buttonTitle="Next"
-          handleButtonClick={handleTitleButtonClick}
-          handleInputChange={handleInputChange}
-          minlength="15"
-          // maxlength="150"
-          validationNotice={validationNotice.title}
-          isValid={isValid.title}
-          handleBlur={handleTitleInputBlur}
-          isDisabled={false}
-        />
-        <AskQuestionInput
-          title="Body"
-          name="body"
-          content="The body of your question contains your problem details and results. Minimum 220 characters."
-          placeholder=""
-          inputLabel="body"
-          inputValue={inputText.body}
-          isButtonVisible={isButtonVisible.body}
-          buttonTitle="Next"
-          handleButtonClick={handleBodyButtonClick}
-          handleInputChange={handleInputChange}
-          // height="10em"
-          minlength="220"
-          // maxlength="250"
-          validationNotice={validationNotice.body}
-          isValid={isValid.body}
-          handleBlur={handleBodyInputBlur}
-          isDisabled={isDisabled.body}
-        />
-        <AskQuestionInput
-          title="Tags"
-          name="tags"
-          content="Add up to 5 tags to describe what your question is about. Start typing to see suggestions."
-          placeholder="e.g. (jquery windows pandas)"
-          inputLabel="tags"
-          inputValue={inputText.tags}
-          isButtonVisible={isButtonVisible.tags}
-          buttonTitle="Next"
-          handleInputChange={handleInputChange}
-          validationNotice={validationNotice.tags}
-          isValid={isValid.tags}
-          handleBlur={handleTagsInputBlur}
-          isDisabled={isDisabled.tags}
-        />
-        <div className="main-buttons">
-          <StyledButton
-            type="submit"
-            width="10em"
-            fontSize="1.2em"
-            disabled={isPostDisabled}
-          >
-            Post your question
-          </StyledButton>
-          {isButtonVisible.discard ? (
+            placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
+            inputLabel="title"
+            inputValue={inputText.title}
+            isButtonVisible={isButtonVisible.title}
+            buttonTitle="Next"
+            handleButtonClick={handleTitleButtonClick}
+            handleInputChange={handleInputChange}
+            minlength="15"
+            // maxlength="150"
+            validationNotice={validationNotice.title}
+            isValid={isValid.title}
+            handleBlur={handleTitleInputBlur}
+            isDisabled={false}
+          />
+          <AskQuestionInput
+            title="Body"
+            name="body"
+            content="The body of your question contains your problem details and results. Minimum 220 characters."
+            placeholder=""
+            inputLabel="body"
+            inputValue={inputText.body}
+            isButtonVisible={isButtonVisible.body}
+            buttonTitle="Next"
+            handleButtonClick={handleBodyButtonClick}
+            handleInputChange={handleInputChange}
+            // height="10em"
+            minlength="220"
+            // maxlength="250"
+            validationNotice={validationNotice.body}
+            isValid={isValid.body}
+            handleBlur={handleBodyInputBlur}
+            isDisabled={isDisabled.body}
+          />
+          <AskQuestionInput
+            title="Tags"
+            name="tags"
+            content="Add up to 5 tags to describe what your question is about. Start typing to see suggestions."
+            placeholder="e.g. (jquery windows pandas)"
+            inputLabel="tags"
+            inputValue={inputText.tags}
+            isButtonVisible={isButtonVisible.tags}
+            buttonTitle="Next"
+            handleInputChange={handleInputChange}
+            validationNotice={validationNotice.tags}
+            isValid={isValid.tags}
+            handleBlur={handleTagsInputBlur}
+            isDisabled={isDisabled.tags}
+          />
+          <div className="main-buttons">
             <StyledButton
+              type="submit"
+              width="10em"
+              fontSize="1.2em"
+              disabled={isPostDisabled}
+            >
+              Post your question
+            </StyledButton>
+            {isButtonVisible.discard ? (
+              <StyledButton
+                type="button"
+                width="8em"
+                fontSize="1.2em"
+                disabled={false}
+                isCancel={true}
+                onClick={handleDiscardButtonClick}
+              >
+                Discard draft
+              </StyledButton>
+            ) : null}
+            {/* <StyledButton
               type="button"
-              width="8em"
+              width="10em"
               fontSize="1.2em"
               disabled={false}
-              isCancel={true}
-              onClick={handleDiscardButtonClick}
+              onClick={handleTestButtonClick}
             >
-              Discard draft
-            </StyledButton>
-          ) : null}
-        </div>
-      </QuestionPostForm>
-    </AskContainer>
+              Test Button
+            </StyledButton> */}
+          </div>
+        </QuestionPostForm>
+      </AskContainer>
+      <Footer />
+    </div>
   );
 };
 

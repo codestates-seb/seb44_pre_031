@@ -6,6 +6,8 @@ import userReduser from '../slices/userSlice';
 import serchUsersReducer from '../slices/searchUsersSlice';
 // import tokenSlice from '../slices/tokenSlice';
 
+import paginationReducer from '../slices/paginationSlice';
+import filterquestionReducer from '../slices/filterquestionSlice';
 const store = configureStore({
   reducer: {
     question: questionReducer,
@@ -14,6 +16,8 @@ const store = configureStore({
     mypage: userReduser,
     searchUsers: serchUsersReducer,
     // userId: tokenSlice,
+    pages: paginationReducer,
+    filter: filterquestionReducer,
   },
 });
 

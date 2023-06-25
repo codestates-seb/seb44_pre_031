@@ -2,8 +2,14 @@ import { styled } from 'styled-components';
 import { AnswerLayout } from './PostLayout';
 import { useState } from 'react';
 import StyledButton, { StyledTagLink } from '../styles/StyledButton';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
+import {
+  AWS_URL_PATH,
+  TEMP_ACCESS_TOKEN,
+  selectAllTags,
+} from '../slices/questionSlice';
 
 const AnswersContainer = styled.div`
   display: flex;
@@ -143,6 +149,8 @@ const AnswerForm = () => {
   const [inputText, setInputText] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [validationNotice, setValidationNotice] = useState('');
+  const params = useParams();
+  const navigate = useNavigate();
 
   const handleInputText = (e) => {
     setInputText(e.target.value);
@@ -166,16 +174,36 @@ const AnswerForm = () => {
     }
   };
 
-  const handleSumbitClick = (e) => {
+  const handleSumbitClick = async (e) => {
     e.preventDefault();
     validateInput();
 
     // POST 요청 보내야됨
-    console.log(isValid);
+    // console.log(isValid);
     if (isValid) {
-      console.log('submit success');
+      // console.log('submit success');
+      try {
+        const response = await axios.post(
+          `${AWS_URL_PATH}/answers/${params.questionId}`,
+          { content: inputText.trim() },
+          {
+            headers: {
+              Authorization: TEMP_ACCESS_TOKEN,
+              // 'Content-Type': 'application/json',
+            },
+          }
+        );
+        // const response = await axios('https://swapi.dev/api/');
+        console.log(response);
+
+        // 성공하면 해당 질문 상세페이지로 다시 redirect
+        // navigate(`/questions/${params.questionId}`);
+        navigate(0);
+      } catch (error) {
+        console.log(error);
+      }
     } else if (!isValid) {
-      console.log('submit failed');
+      // console.log('submit failed');
     }
   };
 
@@ -262,15 +290,20 @@ const AnswerBottomNoticeContainer = styled.h2`
 `;
 
 const AnswerBottomNotice = () => {
+  const tags = useSelector(selectAllTags);
+
   return (
     <AnswerBottomNoticeContainer>
       <p>Not the answer you are looking for? Browse other questions tagged</p>
       <div className="tags-container">
-        <StyledTagLink>react</StyledTagLink>
-        <StyledTagLink>react-router-dom</StyledTagLink>
+        {tags.map((tag) => (
+          <StyledTagLink key={tag}>{tag}</StyledTagLink>
+        ))}
       </div>
       <p> or </p>
-      <Link className="ask-your-own-questipn">ask your own question</Link>
+      <Link className="ask-your-own-questipn" to="../ask">
+        ask your own question
+      </Link>
     </AnswerBottomNoticeContainer>
   );
 };

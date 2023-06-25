@@ -1,16 +1,25 @@
 /* eslint-disable react/prop-types */
 import { styled } from 'styled-components';
 import { BiUpArrow, BiDownArrow } from 'react-icons/bi';
-// import { FcBookmark } from 'react-icons/fc';
+import { FcBookmark } from 'react-icons/fc';
 import { CiBookmark } from 'react-icons/ci';
 import { RxCountdownTimer } from 'react-icons/rx';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
 import { StyledTagLink } from '../styles/StyledButton';
 import UserProfile from './UserProfile';
-import { useSelector } from 'react-redux';
-// import { useState } from 'react';
-// import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  AWS_URL_PATH,
+  TEMP_ACCESS_TOKEN,
+  postDownVoteQeustion,
+  postSelectAnswer,
+  postUpVoteQeustion,
+  selectAllTags,
+  selectQuestion,
+} from '../slices/questionSlice';
+import axios from 'axios';
+import { useState } from 'react';
 
 const PostLayoutContainer = styled.div`
   display: flex;
@@ -50,7 +59,7 @@ const VoteCellContainer = styled.div`
   }
   .bookmarked-icon {
     width: 1.5em;
-    height: 1.2em;
+    height: 1.3em;
   }
 
   .checkmark {
@@ -69,7 +78,9 @@ const VoteCellContainer = styled.div`
 const StyledVoteButton = styled.button`
   width: 40px;
   height: 40px;
-  background-color: white;
+  /* background-color: white; */
+  background-color: ${(props) =>
+    props.isVoted ? 'hsl(27, 95%, 55%);' : 'white'};
   border-radius: 30px;
   border: solid lightgray 0.1em;
   cursor: pointer;
@@ -102,10 +113,16 @@ const TagsContainer = styled.div`
 
 const PostFooterContainer = styled.div`
   display: flex;
+  justify-content: space-between;
+  width: 100%;
 
   .user-profile-container {
     flex-grow: 1;
     display: flex;
+    gap: 1em;
+    /* max-width: 450px; */
+    justify-content: flex-end;
+    /* margin-right: 0px; */
   }
 `;
 
@@ -132,37 +149,130 @@ const FooterFeatContainer = styled.div`
 `;
 
 export const QuestionLayout = () => {
-  const question = useSelector((state) => state.question.question);
+  const question = useSelector(selectQuestion);
+  const tags = useSelector(selectAllTags);
+  const params = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // 북마크상태 임시로 로컬에 저장해놓음
+  const [isQuestionBookmarked, setIsQuestionBookmarked] = useState(false);
+
+  // 투표수 true인지 false 인지 상태 저장
+  const [questionVoteStatus, setQuestionVoteStatus] = useState({
+    upVote: false,
+    downVote: false,
+  });
+
+  const handleQuestionUpVoteClick = () => {
+    if (questionVoteStatus.upVote === false) {
+      setQuestionVoteStatus({ ...questionVoteStatus, upVote: true });
+      dispatch(postUpVoteQeustion(params.questionId));
+    } else if (questionVoteStatus.upVote === true) {
+      setQuestionVoteStatus({
+        ...questionVoteStatus,
+        upVote: false,
+      });
+      dispatch(postDownVoteQeustion(params.questionId));
+    }
+  };
+  const handleQuestionDownVoteClick = () => {
+    if (questionVoteStatus.downVote === false) {
+      setQuestionVoteStatus({ ...questionVoteStatus, downVote: true });
+      dispatch(postDownVoteQeustion(params.questionId));
+    } else if (questionVoteStatus.downVote === true) {
+      setQuestionVoteStatus({
+        ...questionVoteStatus,
+        downVote: false,
+      });
+      dispatch(postUpVoteQeustion(params.questionId));
+    }
+  };
+
+  const handleBookmarkClick = async () => {
+    setIsQuestionBookmarked(!isQuestionBookmarked);
+    try {
+      const response = await axios.post(
+        `${AWS_URL_PATH}/users/${params.questionId}`,
+        null,
+        {
+          headers: {
+            Authorization: TEMP_ACCESS_TOKEN,
+          },
+        }
+      );
+      console.log(response);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  const handleQuestionDeleteButtonClick = async () => {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this question?'
+    );
+    if (confirmed) {
+      try {
+        const response = await axios.delete(
+          `${AWS_URL_PATH}/questions/${question.questionId}`,
+          {
+            headers: {
+              Authorization: TEMP_ACCESS_TOKEN,
+            },
+          }
+        );
+        console.log(response);
+        navigate('/');
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+  };
 
   return (
     <PostLayoutContainer>
       <VoteCellContainer>
-        <StyledVoteButton>
+        <StyledVoteButton
+          onClick={handleQuestionUpVoteClick}
+          isVoted={questionVoteStatus.upVote}
+        >
           <BiUpArrow className="upvote-icon" />
         </StyledVoteButton>
         <p className="votes-count">{question.likeCount}</p>
-        <StyledVoteButton>
+        <StyledVoteButton
+          onClick={handleQuestionDownVoteClick}
+          isVoted={questionVoteStatus.downVote}
+        >
           <BiDownArrow className="downvote-icon" />
         </StyledVoteButton>
         {/* 북마크 안돼있으면 첫번째꺼, 돼있으면 두번째꺼 렌더 */}
-        <div>
-          <CiBookmark className="bookmark-icon" />
-        </div>
-        {/* <div>
-          <FcBookmark className="bookmarked-icon" />
-        </div> */}
+        {isQuestionBookmarked ? (
+          <div>
+            <FcBookmark
+              className="bookmarked-icon"
+              onClick={handleBookmarkClick}
+            />
+          </div>
+        ) : (
+          <div>
+            <CiBookmark
+              className="bookmark-icon"
+              onClick={handleBookmarkClick}
+            />
+          </div>
+        )}
+
         <div>
           <RxCountdownTimer />
         </div>
       </VoteCellContainer>
       <PostCellContainer>
         <PostContent>{question.content}</PostContent>
-        {/* 나중에 태그 구현되면 추가해야됨 */}
         <TagsContainer>
-          <StyledTagLink>javascript</StyledTagLink>
-          <StyledTagLink>react</StyledTagLink>
-          <StyledTagLink>springboot</StyledTagLink>
-          <StyledTagLink>aws</StyledTagLink>
+          {/* 태그링크에 to 속성 추가해야함 */}
+          {tags.map((tag) => (
+            <StyledTagLink key={tag}>{tag}</StyledTagLink>
+          ))}
         </TagsContainer>
         <PostFooterContainer>
           <FooterFeatContainer>
@@ -170,7 +280,7 @@ export const QuestionLayout = () => {
             <Link to={`../${question.questionId}/edit`}>Edit</Link>
             {/* 본인이면 Delete 아니면 Follow */}
             <button>Follow</button>
-            <button>Delete</button>
+            <button onClick={handleQuestionDeleteButtonClick}>Delete</button>
           </FooterFeatContainer>
           <div className="user-profile-container">
             {/* edited 기록이 있으면 edit 렌더 아니면 asked 작성자만 렌더 */}
@@ -196,6 +306,44 @@ export const QuestionLayout = () => {
 };
 
 export const AnswerLayout = ({ answer }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  // 상태 로컬로 관리할 수 없을듯, 전체답변중 하나만 채택될수 있어야해서 복잡해짐
+  // const [isSelected, setIsSelected] = useState(answer.isSelected);
+  // console.log(isSelected);
+
+  const handleSelectIconClick = () => {
+    // setIsSelected(!isSelected);
+    dispatch(
+      postSelectAnswer({
+        questionId: answer.questionId,
+        answerId: answer.answerId,
+      })
+    );
+  };
+
+  const handleAnswerDeleteButtonClick = async () => {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this answer?'
+    );
+    if (confirmed) {
+      try {
+        const response = await axios.delete(
+          `${AWS_URL_PATH}/answers/${answer.questionId}/${answer.answerId}`,
+          {
+            headers: {
+              Authorization: TEMP_ACCESS_TOKEN,
+            },
+          }
+        );
+        console.log(response);
+        navigate(0);
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+  };
+
   return (
     <PostLayoutContainer>
       <VoteCellContainer>
@@ -215,13 +363,13 @@ export const AnswerLayout = ({ answer }) => {
           <FcBookmark className="bookmarked-icon" />
         </div> */}
         {/* 채택된 답변이면 green 체크마크 렌더 */}
-        {answer.selected === true ? (
+        {answer.selected ? (
           <div className="checkmark">
-            <FaCheck fill="rgb(46,112,68)" />
+            <FaCheck fill="rgb(46,112,68)" onClick={handleSelectIconClick} />
           </div>
         ) : (
           <div className="checkmark">
-            <FaCheck fill="rgb(186,191,196)" />
+            <FaCheck fill="rgb(186,191,196)" onClick={handleSelectIconClick} />
           </div>
         )}
         <div>
@@ -230,13 +378,6 @@ export const AnswerLayout = ({ answer }) => {
       </VoteCellContainer>
       <PostCellContainer>
         <PostContent>{answer.content}</PostContent>
-        {/* 나중에 태그 구현되면 추가해야됨 */}
-        <TagsContainer>
-          <StyledTagLink>javascript</StyledTagLink>
-          <StyledTagLink>react</StyledTagLink>
-          <StyledTagLink>springboot</StyledTagLink>
-          <StyledTagLink>aws</StyledTagLink>
-        </TagsContainer>
         <PostFooterContainer>
           <FooterFeatContainer>
             <Link>Share</Link>
@@ -245,7 +386,7 @@ export const AnswerLayout = ({ answer }) => {
             </Link>
             {/* 본인이면 Delete 아니면 Follow */}
             <button>Follow</button>
-            <button>Delete</button>
+            <button onClick={handleAnswerDeleteButtonClick}>Delete</button>
           </FooterFeatContainer>
           <div className="user-profile-container">
             {/* edited 기록이 있으면 edit 렌더 아니면 asked 작성자만 렌더 */}

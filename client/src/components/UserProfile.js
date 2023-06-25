@@ -10,7 +10,7 @@ const UserProfileContainer = styled.div`
   border-radius: 0.3em;
   background-color: ${(props) =>
     props.type === 'asked' ? 'hsl(205,53%,88%)' : 'white'};
-  width: 100%;
+  /* width: 100%; */
 
   .date {
     font-size: 0.8em;
