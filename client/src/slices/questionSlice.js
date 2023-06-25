@@ -6,8 +6,7 @@ export const AWS_URL_PATH =
 
 // const MOCK_UP_API = 'http://localhost:3500';
 
-export const TEMP_ACCESS_TOKEN =
-  'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sIm1lbWJlcklkIjoxLCJ1c2VybmFtZSI6ImRsYXdqZGFsczAyMThAZ21haWwuY29tIiwic3ViIjoiZGxhd2pkYWxzMDIxOEBnbWFpbC5jb20iLCJpYXQiOjE2ODc1NDA0MDMsImV4cCI6MTY4NzU0MjgwM30.oqkfekdEtdLWDGMusNfKa2zrpLL1DOJIUI60QoXMKHc';
+export const TEMP_ACCESS_TOKEN = localStorage.getItem('Token');
 
 const initialState = {
   status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
