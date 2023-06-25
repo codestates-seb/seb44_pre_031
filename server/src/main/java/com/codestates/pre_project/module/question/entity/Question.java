@@ -4,6 +4,8 @@ import com.codestates.pre_project.module.answer.entity.Answer;
 import com.codestates.pre_project.module.base.BaseEntity;
 import com.codestates.pre_project.module.member.entity.Member;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ public class Question extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+    @OnDelete(action= OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
     private List<Answer> answers = new ArrayList<>();
 

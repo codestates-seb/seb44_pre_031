@@ -2,6 +2,8 @@ package com.codestates.pre_project.module.question.entity;
 
 import com.codestates.pre_project.module.tag.entity.Tag;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -16,6 +18,7 @@ public class QuestionTag {
     @Column(name = "question_tag_id", nullable = false, updatable = false)
     private Long id;
 
+    @OnDelete(action= OnDeleteAction.CASCADE)
     @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
