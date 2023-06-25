@@ -72,26 +72,6 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                 .orderBy(question.createdAt.desc());
     }
 
-    // 태그 전체 response
-//    private List<TagResponse> getTagResponses(Long questionId) {
-//        return questionTagRepository.findTagIdsByQuestionId(questionId).stream()
-//                .map(this::fetchTagResponse)
-//                .collect(Collectors.toList());
-//    }
-
-    // 개별 태그 response
-//    private TagResponse fetchTagResponse(Long tagId) {
-//        return queryFactory
-//                .select(new QTagResponse(
-//                        tag.name,
-//                        question.count(),
-//                        tag.createdAt))
-//                .from(tag)
-//                .leftJoin(questionTag).on(questionTag.tag.id.eq(tagId))
-//                .leftJoin(question).on(question.eq(questionTag.question))
-//                .fetchOne();
-//    }
-
     // 작성자 검색
     @Override
     public Page<GetQuestionsResponse> getQuestionsByAuthor(String author, Pageable pageable) {
@@ -158,6 +138,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         question.answers.size(),
                         question.createdAt,
                         question.updatedAt,
+                        member.id,
                         member.displayName,
                         member.reputation))
                 .from(question)
@@ -179,6 +160,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         question.viewCount,
                         question.createdAt,
                         question.updatedAt,
+                        member.id,
                         member.displayName))
                 .from(question)
                 .innerJoin(question.member, member)
@@ -209,6 +191,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         answer.selected,
                         answer.createdAt,
                         answer.updatedAt,
+                        member.id,
                         member.displayName,
                         member.reputation))
                 .from(answer)

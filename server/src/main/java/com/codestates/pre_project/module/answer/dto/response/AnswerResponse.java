@@ -16,17 +16,19 @@ public class AnswerResponse {
     private boolean selected;
     private LocalDateTime answerCreatedAt;
     private LocalDateTime answerUpdatedAt;
+    private Long memberId;
     private String displayName;
     private int reputation;
 
     @QueryProjection
-    public AnswerResponse(Long questionId, Long answerId, String content, boolean selected, LocalDateTime answerCreatedAt, LocalDateTime answerUpdatedAt, String displayName, int reputation) {
+    public AnswerResponse(Long questionId, Long answerId, String content, boolean selected, LocalDateTime answerCreatedAt, LocalDateTime answerUpdatedAt, Long memberId, String displayName, int reputation) {
         this.questionId = questionId;
         this.answerId = answerId;
         this.content = content;
         this.selected = selected;
         this.answerCreatedAt = answerCreatedAt;
         this.answerUpdatedAt = answerUpdatedAt;
+        this.memberId = memberId;
         this.displayName = displayName;
         this.reputation = reputation;
     }
