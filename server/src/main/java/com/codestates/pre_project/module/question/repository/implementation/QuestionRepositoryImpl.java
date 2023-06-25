@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,6 +58,8 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     @Override
     public Page<GetQuestionsResponse> getQuestions(Pageable pageable) {
         List<Long> questionIds = fetchAllQuestionIds().fetch();
+        questionIds.sort(Comparator.reverseOrder());
+
         List<GetQuestionsResponse> result = questionIds.stream()
                 .map(this::getQuestionAndTags)
                 .collect(Collectors.toList());
@@ -171,6 +174,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     // 전체 답변 response
     private Page<AnswerResponse> fetchAnswerResponses(Long questionId, Pageable pageable) {
         List<AnswerResponse> result = fetchAnswerIds(questionId, pageable).stream()
+                .sorted(Comparator.reverseOrder())
                 .map(this::fetchAnswerResponse)
                 .collect(Collectors.toList());
 
