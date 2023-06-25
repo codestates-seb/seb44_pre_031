@@ -11,6 +11,7 @@ import { setTotalposts } from '../slices/paginationSlice';
 import PaginationLeft from '../components/PaginationLeft';
 import PaginationRight from '../components/PaginationRight';
 import { Link } from 'react-router-dom';
+import Footer from '../components/Footer';
 const WrapContainer = styled.div`
   .wrap {
     margin: 0 auto;
@@ -89,6 +90,12 @@ const SortNavBtn = styled.a`
 `;
 const QuestionsContent = styled.div``;
 
+const PageContainer = styled.div`
+  margin-left: 200px;
+  margin-right: 200px;
+  margin-bottom: 100px;
+`;
+
 export default function Questions() {
   const [allquestions, setAllQuestions] = useState([]);
   const pages = useSelector((state) => state.pages);
@@ -158,8 +165,11 @@ export default function Questions() {
         </QuestionContainer>
         <Aside />
       </WrapContainer>
-      <PaginationLeft />
-      <PaginationRight />
+      <PageContainer>
+        <PaginationLeft />
+        <PaginationRight />
+      </PageContainer>
+      <Footer />
     </>
   );
 }

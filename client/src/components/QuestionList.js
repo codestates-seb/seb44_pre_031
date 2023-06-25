@@ -114,7 +114,6 @@ const UserCardContainer = styled.div`
   }
 `;
 export default function QuestionList({ question }) {
-  console.log(question);
   return (
     <QLiContainer>
       <PostSummaryStats>

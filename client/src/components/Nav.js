@@ -1,5 +1,6 @@
 import { styled } from 'styled-components';
 import { IoEarth } from 'react-icons/io5';
+import { Link } from 'react-router-dom';
 const NavContainer = styled.div`
   display: block;
   position: sticky;
@@ -92,10 +93,10 @@ export default function Nav() {
               </a>
             </li>
             <li>
-              <a href="/">Tags</a>
+              <Link to="">Tags</Link>
             </li>
             <li>
-              <a href="/">Users</a>
+              <Link to="">Users</Link>
             </li>
             <img src="/images/nav-img.png" alt="nav-img" />
           </MainMenu>

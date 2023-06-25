@@ -12,13 +12,11 @@ const Pager = styled.div`
 `;
 export const PageBtn = styled.a`
   background-color: ${(props) =>
-    props.selected
-      ? 'hsl(var(--theme-primary-color-h), var(--theme-primary-color-s), var(--theme-primary-color-l))'
-      : 'transparent'};
+    props.selected ? 'hsl(27, 90%, 55%)' : 'transparent'};
   border: 1px solid;
   border-color: ${(props) =>
-    props.clear ? 'transparent' : 'var(--black-100)'};
-  color: ${(props) => (props.selected ? 'var(--white)' : 'var(--fc-medium)')};
+    props.clear ? 'transparent' : 'hsl(210,8%,85%);'};
+  color: ${(props) => (props.selected ? 'hsl(0,0%,100%)' : 'hsl(210,8%,25%)')};
   border-radius: 3px;
   line-height: calc(25 / 13);
   padding: 0 8px;
