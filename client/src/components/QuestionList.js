@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { styled } from 'styled-components';
 
 const QLiContainer = styled.div`
@@ -112,71 +113,45 @@ const UserCardContainer = styled.div`
     color: hsl(205, 47%, 42%);
   }
 `;
-
-export default function QuestionList({
-  // eslint-disable-next-line react/prop-types
-  title,
-  // eslint-disable-next-line react/prop-types
-  content,
-  // eslint-disable-next-line react/prop-types
-  voteCount,
-  // eslint-disable-next-line react/prop-types
-  answerCount,
-  // eslint-disable-next-line react/prop-types
-  countView,
-  // eslint-disable-next-line react/prop-types
-  displayName,
-  // eslint-disable-next-line react/prop-types
-  reputation,
-  // eslint-disable-next-line react/prop-types
-  questionCreatedAt,
-}) {
-  let tag = [
-    {
-      title: 'javascript',
-    },
-    {
-      title: '코딩방범대',
-    },
-    {
-      title: 'python',
-    },
-  ];
-
+export default function QuestionList({ question }) {
   return (
     <QLiContainer>
       <PostSummaryStats>
         <div>
-          <span>{voteCount} votes</span>
+          <span>{question.question.likeCount} vote</span>
         </div>
-        <div className={answerCount !== '0' ? 'has-answer' : 'null'}>
-          <span>{answerCount} answers</span>
+        <div
+          className={
+            question.question.answerCount !== '0' ? 'has-answer' : 'null'
+          }
+        >
+          <span>{question.question.answerCount} answers</span>
         </div>
         <div>
-          <span>{countView} views</span>
+          <span>{question.question.viewCount} views</span>
         </div>
       </PostSummaryStats>
       <PostSummaryContent>
         <h3 className="Post-summary-title">
-          <a href="/">{title}</a>
+          <a href={`/questions/${question.question.questionId}`}>
+            {question.question.title}
+          </a>
         </h3>
-        <div className="Post-summary-content">{content}</div>
+        <div className="Post-summary-content">{question.question.content}</div>
         <div className="Post-summary-meta">
           <div>
             <ul>
-              {tag.map((el) => {
-                return (
-                  <li key={el.id}>
-                    <Tag>{el.title}</Tag>
-                  </li>
-                );
-              })}
+              {question.tags.map((tag) => (
+                <li key={tag.id}>
+                  <Tag>{tag}</Tag>
+                </li>
+              ))}
             </ul>
           </div>
           <UserCardContainer>
-            <div className="namecolor">{displayName}</div>
-            <div>{reputation}</div>
-            <div>{questionCreatedAt}</div>
+            <div className="namecolor">{question.question.displayName}</div>
+            <div>{question.question.reputation}</div>
+            <div>{question.question.questionCreatedAt}</div>
           </UserCardContainer>
         </div>
       </PostSummaryContent>

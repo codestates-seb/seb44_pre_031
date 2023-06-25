@@ -6,6 +6,12 @@ import Header from '../components/Header';
 import Nav from '../components/Nav';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setTotalposts } from '../slices/paginationSlice';
+import PaginationLeft from '../components/PaginationLeft';
+import PaginationRight from '../components/PaginationRight';
+import { Link } from 'react-router-dom';
+import Footer from '../components/Footer';
 const WrapContainer = styled.div`
   .wrap {
     margin: 0 auto;
@@ -83,44 +89,36 @@ const SortNavBtn = styled.a`
   text-decoration: none;
 `;
 const QuestionsContent = styled.div``;
+
+const PageContainer = styled.div`
+  margin-left: 200px;
+  margin-right: 200px;
+  margin-bottom: 100px;
+`;
+
 export default function Questions() {
-  const [allquestions, setallquesitons] = useState([
-    {
-      questionId: 1,
-      title: 'How can I count repeating intervals in a graph?',
-      content:
-        'enter image description here Through the image, you can see five repetitive sections. I want to write an algorithm that counts this number, but I cant think of it. I tried to draw a regression curve ...',
-      voteCount: 0,
-      answerCount: 2,
-      countView: 0,
-      selectedAnswer: false,
-      questionCreatedAt: '2023-06-17T17:06:03',
-      displayName: 'Yeahhun Jeon',
-      reputation: 0,
-    },
-  ]);
-
-  const authHandler = () => {
-    axios
-      .get(
+  const [allquestions, setAllQuestions] = useState([]);
+  const pages = useSelector((state) => state.pages);
+  const dispatch = useDispatch();
+  const fetchQuestions = async () => {
+    try {
+      const response = await axios.get(
         'http://ec2-52-79-240-48.ap-northeast-2.compute.amazonaws.com:8080/api/questions'
-      )
-      .then((res) => {
-        const data = res.data.result.data.content;
-        if (Array.isArray(data)) {
-          setallquesitons(data);
-        } else {
-          console.error('Data is not an array:', data);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      );
+      const questions = response.data.result.data.content;
+      setAllQuestions(questions);
+    } catch (error) {
+      console.error('Error fetching questions:', error);
+    }
   };
-  useEffect(() => {
-    authHandler();
-  }, []);
 
+  useEffect(() => {
+    fetchQuestions();
+    dispatch(setTotalposts(allquestions.length));
+  }, []);
+  const start = pages.currentpage - 1;
+  const end = start + pages.pagesize;
+  const onepage = allquestions.slice(start, end);
   return (
     <>
       <Header />
@@ -130,13 +128,17 @@ export default function Questions() {
           <PageHeader>
             <h1>All Questions</h1>
             <div className="bluebutton">
-              <BasicBlueButton>Ask Question</BasicBlueButton>
+              <BasicBlueButton>
+                <Link to="/questions/ask" style={{ color: 'white' }}>
+                  Ask Question
+                </Link>
+              </BasicBlueButton>
             </div>
           </PageHeader>
 
           <div>
             <QuestionsH2 className="data">
-              <div>23,752,022 questions</div>
+              <div>{allquestions.length} questions</div>
               <div>
                 <SortNavBox>
                   <SortNav>
@@ -147,7 +149,7 @@ export default function Questions() {
                       <div>Vote</div>
                     </SortNavBtn>
                     <SortNavBtn end>
-                      <div>Score</div>
+                      <div>Answer</div>
                     </SortNavBtn>
                   </SortNav>
                 </SortNavBox>
@@ -156,25 +158,18 @@ export default function Questions() {
           </div>
 
           <QuestionsContent>
-            {allquestions.map((el) => {
-              return (
-                <QuestionList
-                  key={el.id}
-                  title={el.title}
-                  content={el.content}
-                  questionCreatedAt={el.questionCreatedAt}
-                  voteCount={el.voteCount}
-                  countView={el.countView}
-                  answerCount={el.answerCount}
-                  displayName={el.displayName}
-                  reputation={el.reputation}
-                />
-              );
-            })}
+            {onepage.map((el) => (
+              <QuestionList key={el.questionId} question={el} />
+            ))}
           </QuestionsContent>
         </QuestionContainer>
         <Aside />
       </WrapContainer>
+      <PageContainer>
+        <PaginationLeft />
+        <PaginationRight />
+      </PageContainer>
+      <Footer />
     </>
   );
 }
