@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import GlobalStyle from './styles/GlobalStyle';
 import Questions from './pages/Questions';
 import AskQuestion from './pages/AskQuestion';
@@ -10,9 +10,6 @@ import Login from './pages/Login';
 import Users from './pages/Users';
 
 function App() {
-  let location = useLocation();
-  console.log(location);
-
   return (
     <div>
       <GlobalStyle />

@@ -6,6 +6,9 @@ export const AWS_URL_PATH =
 
 // const MOCK_UP_API = 'http://localhost:3500';
 
+export const TEMP_ACCESS_TOKEN =
+  'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sIm1lbWJlcklkIjoxLCJ1c2VybmFtZSI6ImRsYXdqZGFsczAyMThAZ21haWwuY29tIiwic3ViIjoiZGxhd2pkYWxzMDIxOEBnbWFpbC5jb20iLCJpYXQiOjE2ODc1NDA0MDMsImV4cCI6MTY4NzU0MjgwM30.oqkfekdEtdLWDGMusNfKa2zrpLL1DOJIUI60QoXMKHc';
+
 const initialState = {
   status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
   error: null,
@@ -24,6 +27,7 @@ const initialState = {
   },
   answers: [
     {
+      questionId: 33,
       answerId: 1,
       content: 'locatafsdfasdfdasfasdfasdfasdfsdon',
       selected: false,
@@ -33,17 +37,8 @@ const initialState = {
       reputation: 0,
     },
   ],
+  tags: ['java', 'react', 'javascript'],
 };
-// ,{ header: 'token' }
-
-export const fetchQuestionDetail = createAsyncThunk(
-  'question/fetchQuestionDetail',
-  async (questionId) => {
-    const response = await axios.get(`${AWS_URL_PATH}/questions/${questionId}`);
-    console.log(response);
-    return response.data.result.data;
-  }
-);
 
 // JSON-serve 용으로 만든거
 // export const fetchQuestionDetail = createAsyncThunk(
@@ -57,6 +52,66 @@ export const fetchQuestionDetail = createAsyncThunk(
 //     return response.data.result.data;
 //   }
 // );
+
+export const fetchQuestionDetail = createAsyncThunk(
+  'question/fetchQuestionDetail',
+  async (questionId) => {
+    const response = await axios.get(`${AWS_URL_PATH}/questions/${questionId}`);
+    console.log(response);
+    return response.data.result.data;
+  }
+);
+
+export const postUpVoteQeustion = createAsyncThunk(
+  'question/postUpVoteQeustion',
+  async (questionId) => {
+    const response = await axios.post(
+      `${AWS_URL_PATH}/questions/${questionId}/1/like`,
+      null,
+      {
+        headers: {
+          Authorization: TEMP_ACCESS_TOKEN,
+        },
+      }
+    );
+    console.log(response);
+    return response.data.success;
+  }
+);
+export const postDownVoteQeustion = createAsyncThunk(
+  'question/postDownVoteQeustion',
+  async (questionId) => {
+    const response = await axios.post(
+      `${AWS_URL_PATH}/questions/${questionId}/2/like`,
+      null,
+      {
+        headers: {
+          Authorization: TEMP_ACCESS_TOKEN,
+        },
+      }
+    );
+    console.log(response);
+    return response.data.success;
+  }
+);
+
+export const postSelectAnswer = createAsyncThunk(
+  'question/postSelectAnswer',
+  async ({ questionId, answerId }) => {
+    console.log(questionId, answerId);
+    const response = await axios.post(
+      `${AWS_URL_PATH}/answers/${questionId}/${answerId}/select`,
+      null,
+      {
+        headers: {
+          Authorization: TEMP_ACCESS_TOKEN,
+        },
+      }
+    );
+    console.log(response);
+    return { response, answerId };
+  }
+);
 
 export const questionSlice = createSlice({
   name: 'question',
@@ -76,19 +131,42 @@ export const questionSlice = createSlice({
       })
       .addCase(fetchQuestionDetail.fulfilled, (state, action) => {
         // const actionPayload = action.payload;
-        // console.log(action.payload);
+        console.log(action.payload);
+        state.status = 'succeeded';
         state.question = action.payload.question;
         state.answers = action.payload.answers.content;
+        state.tags = action.payload.tags;
       })
       .addCase(fetchQuestionDetail.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
+      })
+      .addCase(postUpVoteQeustion.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        if (action.payload) {
+          state.question.likeCount++;
+        }
+      })
+      .addCase(postDownVoteQeustion.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        if (action.payload) {
+          state.question.likeCount--;
+        }
+      })
+      .addCase(postSelectAnswer.fulfilled, (state, action) => {
+        const selectedAnswer = state.answers.find(
+          (answer) => answer.answerId === action.payload.answerId
+        );
+
+        state.status = 'succeeded';
+        selectedAnswer.selected = !selectedAnswer.selected;
       });
   },
 });
 
 export const selectQuestion = (state) => state.question.question;
-export const selectAllAnswers = (state) => state.quetions.answers.content;
+export const selectAllAnswers = (state) => state.question.answers;
+export const selectAllTags = (state) => state.question.tags;
 
 // Action creators are generated for each case reducer function
 export const { increment, incrementByAmount } = questionSlice.actions;
