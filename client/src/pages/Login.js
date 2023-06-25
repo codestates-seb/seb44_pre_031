@@ -1,12 +1,10 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
-// import googleLogo from '/';
-// import githubLogo from '../images/github.png';
-// import facebookLogo from '../images/facebook.png';
+import { StyledButton } from '../styles/StyledButton';
 import { useCallback, useState } from 'react';
 import { actionL } from '../components/actionL';
 import { useDispatch } from 'react-redux';
-
+// import { userInfo } from '../slices/tokenSlice';
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -184,15 +182,43 @@ const Login = () => {
     setPassword(e.target.value);
     console.log('비번 입력중');
   });
-
+  const navigate = useNavigate();
   const onSubmitJoin = useCallback(
     (e) => {
       e.preventDefault();
       console.log('전송');
       console.log([email, password]);
-      dispatch(actionL({ email, password }));
+      dispatch(actionL({ email, password }))
+        .then((resultAction) => {
+          const { accessToken, userId, userMemberId } = resultAction.payload;
+
+          // 토큰과 사용자 ID를 저장
+          localStorage.setItem('Id', userId);
+          //디스 플레이네임
+          localStorage.setItem('Token', accessToken);
+          //토큰
+          localStorage.setItem('MemberId', userMemberId);
+          //userMemberId = 벡에서 원하는 유저 아이디(숫자)
+
+          //   // 사용자 정보 업데이트
+          //   dispatch(userInfo({ userId, accessToken }));
+          // console.log(localStorage);
+          navigate('/');
+          console.log('성공');
+          // const accessTok = localStorage.getItem('Token');
+          // console.log(accessTok);
+          // })
+        })
+        // eslint-disable-next-line no-unused-vars
+
+        .catch((error) => {
+          console.log('로그인 에러:', error);
+          console.log(
+            '로그인에 실패했습니다. 이메일과 비밀번호를 다시 확인해주세요.'
+          );
+        });
     },
-    [email, password]
+    [dispatch, email, password]
   );
 
   return (
@@ -244,7 +270,7 @@ const Login = () => {
               ></input>
             </InputPW>
             <div>
-              <button>로그인</button>
+              <StyledButton>로그인</StyledButton>
             </div>
           </LoginForm>
         </form>

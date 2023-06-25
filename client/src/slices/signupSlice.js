@@ -8,27 +8,6 @@ const initialState = {
   joinRejectReason: '',
 };
 
-// export const userSlice = createSlice({
-//   name: 'user',
-//   initialState: {
-//     email: '',
-//     password: '',
-//   },
-//   reducers: {
-//     login: (state, action) => {
-//       state.email = action.payload;
-//       state.password = action.payload;
-//     },
-//     logout: (state) => {
-//       state.user = null;
-//     },
-//     userSearch: (state, action) => {
-//       state.name = action.payload;
-//       state.number = action.payload;
-//     },
-//   },
-// });
-
 export const signupSlice = createSlice({
   name: 'signupUser',
   initialState,
@@ -42,14 +21,14 @@ export const signupSlice = createSlice({
       .addCase(actionS.fulfilled, (state, action) => {
         state.isJoined = true;
         state.isJoining = false;
-        state.joinUser = action.payload.config.data;
+        state.joinUser = action.payload.data;
         state.joinRejectReason = '';
       })
       .addCase(actionS.rejected, (state, action) => {
         state.isJoining = false;
         console.log('실패');
-
         state.joinErrorReasion = action.error;
+        console.log(state.joinErrorReasion);
       });
   },
 });

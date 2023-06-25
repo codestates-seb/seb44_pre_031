@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 /* eslint-disable no-undef */
 import { styled } from 'styled-components';
 import Header from '../components/Header';
@@ -11,7 +12,7 @@ import { Link } from 'react-router-dom';
 
 // useSelector,
 import Footer from '../components/Footer';
-import { fetchUsers } from '../slices/userSlice';
+import { fetchUsers } from '../slices/searchUsersSlice';
 
 import { useEffect } from 'react';
 
@@ -90,15 +91,15 @@ const Fakemypage = styled.div`
   background-image: url('/images/fakemypage.png');
   background-repeat: no-repeat;
 `;
-
+const params = new URLSearchParams(window.location.search);
+const userId = params.get('userId');
 const Users = () => {
-  // let { questionId } = useParams();
   const dispatch = useDispatch();
   console.log(`93`);
   useEffect(() => {
-    dispatch(fetchUsers(localStorage.getItem('MemberId')));
+    dispatch(fetchUsers(userId));
   }, []);
-  const profile = useSelector((state) => state.mypage.profile);
+  const profile = useSelector((state) => state.searchUsers.profile);
 
   // eslint-disable-next-line no-unused-vars
   return (
