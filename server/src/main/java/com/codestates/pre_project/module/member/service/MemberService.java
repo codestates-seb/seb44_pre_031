@@ -102,18 +102,17 @@ public class MemberService {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent()) throw new CustomException(MEMBER_EMAIL_ALREADY_EXISTS);
     }
-    
+
     private Member validateUpdate(Long memberId, UpdateMemberDto request) {
         Member findMember = findMemberById(memberId);
-        Optional<Member> member = memberRepository.findByDisplayName(request.getDisplayName());
 
-        if (findMember.getDisplayName().equals(request.getDisplayName())) {
+        if (findMember.getDisplayName().equals(request.getDisplayName())
+                || memberRepository.findByDisplayName(request.getDisplayName()).isEmpty()
+        ) {
             return findMember;
-        }
-        if (member.isPresent()) {
+        } else {
             throw new CustomException(MEMBER_DISPLAY_NAME_ALREADY_EXISTS);
         }
-        return findMember;
     }
 
     public Member findMemberById(Long memberId) {
