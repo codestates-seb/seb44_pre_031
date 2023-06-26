@@ -55,7 +55,6 @@ const initialState = {
 //       `${MOCK_UP_API}/questions:${questionId}`
 //       // ,{ header: 'token' }
 //     );
-//     // console.log(response.data.result.data);
 //     return response.data.result.data;
 //   }
 // );
@@ -64,7 +63,6 @@ export const fetchQuestionDetail = createAsyncThunk(
   'question/fetchQuestionDetail',
   async (questionId) => {
     const response = await axios.get(`${AWS_URL_PATH}/questions/${questionId}`);
-    console.log(response);
     return response.data.result.data;
   }
 );
@@ -81,7 +79,6 @@ export const postUpVoteQeustion = createAsyncThunk(
         },
       }
     );
-    console.log(response);
     return response.data.success;
   }
 );
@@ -97,7 +94,6 @@ export const postDownVoteQeustion = createAsyncThunk(
         },
       }
     );
-    console.log(response);
     return response.data.success;
   }
 );
@@ -114,8 +110,6 @@ export const postUpVoteAnswer = createAsyncThunk(
         },
       }
     );
-    console.log(response.data);
-    console.log(answerId);
     return { voteCount: response.data.result.data, answerId };
   }
 );
@@ -131,8 +125,6 @@ export const postDownVoteAnswer = createAsyncThunk(
         },
       }
     );
-    console.log(response.data);
-    console.log(answerId);
     return { voteCount: response.data.result.data, answerId };
   }
 );
@@ -140,7 +132,6 @@ export const postDownVoteAnswer = createAsyncThunk(
 export const postSelectAnswer = createAsyncThunk(
   'question/postSelectAnswer',
   async ({ questionId, answerId, token }) => {
-    console.log(questionId, answerId);
     const response = await axios.post(
       `${AWS_URL_PATH}/answers/${questionId}/${answerId}/select`,
       null,
@@ -150,7 +141,6 @@ export const postSelectAnswer = createAsyncThunk(
         },
       }
     );
-    console.log(response);
     return { response: response.data, answerId };
   }
 );
@@ -163,21 +153,18 @@ export const questionSlice = createSlice({
       const sortedAnswers = state.answers.sort(
         (a, b) => b.voteCount - a.voteCount
       );
-      console.log(sortedAnswers);
       state.answers = sortedAnswers;
     },
     sortByModifiedNewest: (state) => {
       const sortedAnswers = state.answers.sort(
         (a, b) => Date.parse(b.answerUpdatedAt) - Date.parse(a.answerUpdatedAt)
       );
-      // console.log(sortedAnswers);
       state.answers = sortedAnswers;
     },
     sortByCreatedOldest: (state) => {
       const sortedAnswers = state.answers.sort(
         (a, b) => Date.parse(a.answerCreatedAt) - Date.parse(b.answerCreatedAt)
       );
-      // console.log(sortedAnswers);
       state.answers = sortedAnswers;
     },
     increment: (state) => {
@@ -194,7 +181,6 @@ export const questionSlice = createSlice({
       })
       .addCase(fetchQuestionDetail.fulfilled, (state, action) => {
         // const actionPayload = action.payload;
-        console.log(action.payload);
         state.status = 'succeeded';
         state.question = action.payload.question;
         state.answers = action.payload.answers.content;

@@ -21,8 +21,6 @@ export const loginSlice = createSlice({
         state.id = action.payload.id;
         state.userId = action.payload.userId;
         state.loginRejectReason = action.payload.loginRejectReason;
-        // state = action.payload;
-        console.log(action.payload);
       },
       prepare: () => {
         // 로그인된 유저인지 어떻게 알지?

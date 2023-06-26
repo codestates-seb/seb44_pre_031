@@ -99,7 +99,6 @@ export default function Header({ setAllQuestions }) {
             `http://ec2-52-79-240-48.ap-northeast-2.compute.amazonaws.com:8080/api/questions/search-tag/${tag}`
           );
           const questions = response.data.result.data.content;
-          console.log(questions);
           setAllQuestions(questions);
           dispatch(
             setTotalposts({
@@ -114,12 +113,10 @@ export default function Header({ setAllQuestions }) {
         try {
           // 'user:'  => 유저이름으로 검색한다는뜻  => username을 요청 http를 보낸다
           const username = searchInputValue.trim().slice(5);
-          console.log(username);
           const response = await axios.get(
             `http://ec2-52-79-240-48.ap-northeast-2.compute.amazonaws.com:8080/api/questions/search-author/${username}`
           );
           const questions = response.data.result.data.content;
-          console.log(questions);
           setAllQuestions(questions);
           dispatch(
             setTotalposts({
@@ -133,13 +130,10 @@ export default function Header({ setAllQuestions }) {
       } else if (searchInputValue.trim() === 'answers:0') {
         try {
           // 'user:'  => 유저이름으로 검색한다는뜻  => username을 요청 http를 보낸다
-          const unanswered = searchInputValue.trim().slice(5);
-          console.log(unanswered);
           const response = await axios.get(
             `http://ec2-52-79-240-48.ap-northeast-2.compute.amazonaws.com:8080/api/questions/search-unanswered`
           );
           const questions = response.data.result.data.content;
-          console.log(questions);
           setAllQuestions(questions);
           dispatch(
             setTotalposts({
@@ -154,12 +148,10 @@ export default function Header({ setAllQuestions }) {
         try {
           // 위에 아무것도 안걸린 디폴트값  => 타이틀 키워드 검색 요청 http를 보낸다
           const keyword = searchInputValue.trim();
-          console.log(keyword);
           const response = await axios.get(
             `http://ec2-52-79-240-48.ap-northeast-2.compute.amazonaws.com:8080/api/questions/search-keyword/${keyword}`
           );
           const questions = response.data.result.data.content;
-          console.log(questions);
           setAllQuestions(questions);
           dispatch(
             setTotalposts({
