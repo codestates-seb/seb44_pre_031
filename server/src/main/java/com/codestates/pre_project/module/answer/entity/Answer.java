@@ -3,10 +3,7 @@ package com.codestates.pre_project.module.answer.entity;
 import com.codestates.pre_project.module.base.BaseEntity;
 import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.question.entity.Question;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -25,6 +22,10 @@ public class Answer extends BaseEntity {
     private String content;
     @Column(name = "selected")
     private boolean selected;
+    @Setter
+    @Column(name = "vote_count")
+    private Long voteCount;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
@@ -37,6 +38,7 @@ public class Answer extends BaseEntity {
         this.content = content;
         this.member = member;
         this.question = question;
+        this.voteCount = 0L;
     }
 
     public static Answer of(String content, Member member, Question question) {

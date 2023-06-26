@@ -1,17 +1,20 @@
 package com.codestates.pre_project.module.answer.service;
 
 import com.codestates.pre_project.global.exception.CustomException;
-import com.codestates.pre_project.module.member.entity.Member;
-import com.codestates.pre_project.module.member.service.MemberService;
 import com.codestates.pre_project.module.answer.entity.Answer;
 import com.codestates.pre_project.module.answer.repository.AnswerRepository;
+import com.codestates.pre_project.module.member.entity.Member;
+import com.codestates.pre_project.module.member.service.MemberService;
 import com.codestates.pre_project.module.question.entity.Question;
 import com.codestates.pre_project.module.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.codestates.pre_project.global.exception.ErrorCode.*;
+import java.util.List;
+
+import static com.codestates.pre_project.global.exception.ErrorCode.ANSWER_NOT_FOUND;
+import static com.codestates.pre_project.global.exception.ErrorCode.NONE_AUTHORIZATION_TOKEN;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ public class AnswerService {
     private final AnswerRepository answerRepository;
     private final MemberService memberService;
     private final QuestionService questionService;
+    private final AnswerLikeService answerLikeService;
 
     @Transactional
     public void createAnswer(Long memberId, Long questionId, Answer request) {
@@ -53,7 +57,7 @@ public class AnswerService {
         answerRepository.delete(answer);
     }
 
-    private Answer findAnswerById(Long answerId) {
+    public Answer findAnswerById(Long answerId) {
         return answerRepository.findById(answerId)
                 .orElseThrow(() -> new CustomException(ANSWER_NOT_FOUND));
     }
@@ -61,6 +65,12 @@ public class AnswerService {
     private void validateMemberMatch(Long authorId, Long memberId) {
         if (!authorId.equals(memberId)) {
             throw new CustomException(NONE_AUTHORIZATION_TOKEN);
+        }
+    }
+
+    public void setVoteCount(List<Answer> answers) {
+        for (Answer answer : answers) {
+            answer.setVoteCount(answerLikeService.calculateTotalVoted(answer.getId()));
         }
     }
 }
