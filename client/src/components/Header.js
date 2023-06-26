@@ -89,21 +89,23 @@ export default function Header() {
 
   const focusHandler = () => {
     setIsFocus(!isFocus);
-    console.log(!isFocus);
   };
   const isFollowGuide = (text) => {
-    text.slice(0, 5) === '[tag]' &&
+    if (text.slice(0, 5) === '[tag]') {
       dispatch(searchBarfilter({ tags: text.slice(5, text.length) }));
-    text.slice(0, 5) === 'displayName:' &&
-      dispatch(searchBarfilter({ displayName: text.slice(5, text.length) }));
-    text.slice(0, 7) === 'answer:' &&
-      dispatch(searchBarfilter({ answerCount: text.slice(7, text.length) }));
+    } else if (text.slice(0, 12) === 'displayName:') {
+      dispatch(searchBarfilter({ user: text.slice(12, text.length) }));
+    } else if (text.slice(0, 7) === 'answer:') {
+      dispatch(
+        searchBarfilter({ answerCount: parseInt(text.slice(7, text.length)) })
+      );
+    }
   };
 
   const searchbarInputHandler = () => {
     isFollowGuide(searchInputValue);
-    dispatch(selectPage(1));
     setSearchInputValue('');
+    dispatch(selectPage(1));
   };
   return (
     <>

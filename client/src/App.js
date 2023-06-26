@@ -12,6 +12,7 @@ import SearchUsers from './pages/SearchUsers';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateLoginState } from './slices/loginSlice';
+import UpdateUserInfo from './pages/UpdateUserInfo';
 
 function App() {
   const dispatch = useDispatch();
@@ -30,6 +31,7 @@ function App() {
           <Route path="sign-up" element={<SignUp />} />
           <Route path="sign-in" element={<Login />} />
           <Route path="mypage" element={<Users />} />
+          <Route path="mypage/patch" element={<UpdateUserInfo />} />
           <Route path="anotherUser" element={<SearchUsers />} />
         </Route>
         <Route path="questions">

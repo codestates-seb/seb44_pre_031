@@ -23,8 +23,8 @@ const initialState = {
 
 export const fetchUsers = createAsyncThunk(
   'users/anotherUser',
-  async (displayName) => {
-    const response = await axios.get(`${AWS_URL_PATH}/users/${displayName}`);
+  async (userId) => {
+    const response = await axios.get(`${AWS_URL_PATH}/users/${userId}`);
     console.log(response);
     return response.data.result.data;
   }

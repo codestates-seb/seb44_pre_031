@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
-
 const QLiContainer = styled.div`
   border-top: 1px solid hsl(210, 8%, 90%);
   border-bottom: 1px solid hsl(210, 8%, 90%);
@@ -152,8 +151,14 @@ export default function QuestionList({ question }) {
               ))}
             </ul>
           </div>
+
           <UserCardContainer>
-            <div className="namecolor">{question.question.displayName}</div>
+            <Link
+              to={`/users/anotherUser?userId=${question.question.memberId}`}
+              className="username"
+            >
+              <div className="namecolor">{question.question.displayName}</div>
+            </Link>
             <div>{question.question.reputation}</div>
             <div>{question.question.questionCreatedAt}</div>
           </UserCardContainer>
