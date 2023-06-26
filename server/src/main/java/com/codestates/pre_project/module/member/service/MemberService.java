@@ -3,7 +3,7 @@ package com.codestates.pre_project.module.member.service;
 import com.codestates.pre_project.global.auth.utils.CustomAuthorityUtils;
 import com.codestates.pre_project.global.exception.CustomException;
 import com.codestates.pre_project.module.bookmark.repository.BookmarkRepository;
-import com.codestates.pre_project.module.member.dto.request.UpdateMemberDto;
+import com.codestates.pre_project.module.member.dto.UpdateMemberDto;
 import com.codestates.pre_project.module.member.entity.Email;
 import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.member.repository.EmailRepository;
