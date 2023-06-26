@@ -19,15 +19,17 @@ public class AnswerLikeController {
     public Response likeAnswer(@PathVariable("answer-id") Long answerId) {
         Long memberId = MemberIdExtractor.extractMemberId();
         answerLikeService.likeAnswer(answerId, memberId);
+        Long voteCount = answerLikeService.calculateTotalVoted(answerId);
 
-        return Response.success();
+        return Response.success(voteCount);
     }
 
     @PostMapping("/{answer-id}/dislike")
     public Response dislikeAnswer(@PathVariable("answer-id") Long answerId) {
         Long memberId = MemberIdExtractor.extractMemberId();
         answerLikeService.dislikeAnswer(answerId, memberId);
+        Long voteCount = answerLikeService.calculateTotalVoted(answerId);
 
-        return Response.success();
+        return Response.success(voteCount);
     }
 }
