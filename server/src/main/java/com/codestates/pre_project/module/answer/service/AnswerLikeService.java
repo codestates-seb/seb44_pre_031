@@ -23,6 +23,7 @@ public class AnswerLikeService {
     private final MemberRepository memberRepository;
 
     public void likeAnswer(Long answerId, Long memberId) {
+        validateAnswerId(answerId);
         AnswerLike answerLike = findAnswerLike(answerId, memberId);
         if (answerLike.getVoteStatus().equals(LIKE)) {
             answerLike.setVoteStatus(NONE);
@@ -32,12 +33,18 @@ public class AnswerLikeService {
     }
 
     public void dislikeAnswer(Long answerId, Long memberId) {
+        validateAnswerId(answerId);
         AnswerLike answerLike = findAnswerLike(answerId, memberId);
         if (answerLike.getVoteStatus().equals(DISLIKE)) {
             answerLike.setVoteStatus(NONE);
         } else {
             answerLike.setVoteStatus(DISLIKE);
         }
+    }
+
+    private void validateAnswerId(Long answerId) {
+        answerRepository.findById(answerId)
+                .orElseThrow(() -> new CustomException(ANSWER_NOT_FOUND));
     }
 
     public Long calculateTotalVoted(Long answerId) {
