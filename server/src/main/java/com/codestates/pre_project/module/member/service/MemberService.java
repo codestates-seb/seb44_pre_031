@@ -2,9 +2,8 @@ package com.codestates.pre_project.module.member.service;
 
 import com.codestates.pre_project.global.auth.utils.CustomAuthorityUtils;
 import com.codestates.pre_project.global.exception.CustomException;
-import com.codestates.pre_project.global.exception.ErrorCode;
 import com.codestates.pre_project.module.bookmark.repository.BookmarkRepository;
-import com.codestates.pre_project.module.member.dto.UpdateMemberDto;
+import com.codestates.pre_project.module.member.dto.request.UpdateMemberDto;
 import com.codestates.pre_project.module.member.entity.Email;
 import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.member.repository.EmailRepository;
@@ -103,11 +102,17 @@ public class MemberService {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent()) throw new CustomException(MEMBER_EMAIL_ALREADY_EXISTS);
     }
-
+    
     private Member validateUpdate(Long memberId, UpdateMemberDto request) {
         Member findMember = findMemberById(memberId);
         Optional<Member> member = memberRepository.findByDisplayName(request.getDisplayName());
-        if (member.isPresent()) throw new CustomException(MEMBER_DISPLAY_NAME_ALREADY_EXISTS);
+
+        if (findMember.getDisplayName().equals(request.getDisplayName())) {
+            return findMember;
+        }
+        if (member.isPresent()) {
+            throw new CustomException(MEMBER_DISPLAY_NAME_ALREADY_EXISTS);
+        }
         return findMember;
     }
 
