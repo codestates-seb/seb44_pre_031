@@ -163,6 +163,7 @@ export default function Header({ setAllQuestions }) {
           console.log('Error fetching questions:', error);
         }
       }
+      setIsFocus(false);
     }
   };
 
