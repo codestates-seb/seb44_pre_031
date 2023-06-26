@@ -8,17 +8,18 @@ import StyledButton, {
 import { useSelector, useDispatch } from 'react-redux';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import Aside from '../components/Aside';
-import { useState, useEffect } from 'react';
-import { fetchUsers, fetchUpdateUsers } from '../slices/userSlice';
+import { useState } from 'react';
+// useEffect
+import { fetchUpdateUsers } from '../slices/userSlice';
+// fetchUsers
+import Nav from '../components/Nav';
+import { useNavigate } from 'react-router-dom';
 
 const UpdateQuestionPageContainer = styled.div`
   .nav-main-container {
     display: flex;
+    justify-content: center;
     width: 100%;
-  }
-  .aside {
-    margin: 10px;
   }
 `;
 
@@ -47,127 +48,154 @@ const UpdateQuestionContainer = styled.form`
   .button-container {
     margin-top: 1em;
   }
+  .sns {
+    display: flex;
+    padding: 10px;
+    div {
+      margin: 10px;
+    }
+  }
 `;
 
 const UpdateUserInfo = () => {
   const dispatch = useDispatch();
-
+  const navigator = useNavigate();
   const userId = localStorage.getItem('MemberId');
-  useEffect(() => {
-    dispatch(fetchUsers(userId));
-  }, []);
-  const [inputText, setInputText] = useState({});
+
   const profile = useSelector((state) => state.mypage.profile);
 
-  // const [inputText, setInputText] = useState(
-  //   {
-  //     displayName: profile.displayName,
-  //     location: profile.location,
-  //     title: profile.title,
-  //     aboutMe: profile.aboutMe,
-  //     webLink: profile.webLink,
-  //     twitterLink: profile.twitterLink,
-  //     githubLink: profile.githubLink,
-  //     fullName: profile.fullName,
-  //   },
-  //   [profile]
-  // );
-  useEffect(() => {
-    setInputText({
-      displayName: profile.displayName,
-      location: profile.location,
-      title: profile.title,
-      aboutMe: profile.aboutMe,
-      webLink: profile.webLink,
-      twitterLink: profile.twitterLink,
-      githubLink: profile.githubLink,
-      fullName: profile.fullName,
-    });
-  }, [profile]);
+  const [inputText, setInputText] = useState({
+    displayName: profile.displayName,
+    location: profile.location,
+    title: profile.title,
+    aboutMe: profile.aboutMe,
+    webLink: profile.webLink,
+    twitterLink: profile.twitterLink,
+    githubLink: profile.githubLink,
+    fullName: profile.fullName,
+  });
+
   const handleInputChange = (e) => {
     if (e.target.id === 'displayName') {
-      setInputText({ ...inputText, title: e.target.value });
+      setInputText({ ...inputText, displayName: e.target.value });
     } else if (e.target.id === 'location') {
-      setInputText({ ...inputText, body: e.target.value });
+      setInputText({ ...inputText, location: e.target.value });
     } else if (e.target.id === 'title') {
-      setInputText({ ...inputText, tags: e.target.value });
+      setInputText({ ...inputText, title: e.target.value });
     } else if (e.target.id === 'aboutMe') {
-      setInputText({ ...inputText, summary: e.target.value });
+      setInputText({ ...inputText, aboutMe: e.target.value });
     } else if (e.target.id === 'webLink') {
-      setInputText({ ...inputText, summary: e.target.value });
+      setInputText({ ...inputText, webLink: e.target.value });
     } else if (e.target.id === 'twitterLink') {
-      setInputText({ ...inputText, summary: e.target.value });
+      setInputText({ ...inputText, twitterLink: e.target.value });
     } else if (e.target.id === 'githubLink') {
-      setInputText({ ...inputText, summary: e.target.value });
+      setInputText({ ...inputText, githubLink: e.target.value });
     } else if (e.target.id === 'fullName') {
-      setInputText({ ...inputText, summary: e.target.value });
+      setInputText({ ...inputText, fullName: e.target.value });
     }
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // http POST 요청 보내야함
-    dispatch(fetchUpdateUsers({ ...inputText, userId }));
+    dispatch(fetchUpdateUsers({ inputText, userId })).then(() => {
+      navigator('/users/mypage');
+    });
   };
 
   return (
     <UpdateQuestionPageContainer>
       <Header />
       <div className="nav-main-container">
+        <Nav />
+
         <UpdateQuestionContainer onSubmit={handleSubmit}>
           <div>
+            <label htmlFor="displayName">Display name</label>
+
+            <StyledInputText
+              id="displayName"
+              type="text"
+              placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
+              value={inputText.displayName}
+              required
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="location">Location</label>
+
+            <StyledInputText
+              id="location"
+              type="text"
+              placeholder="e.g. (django mongodb javascript)"
+              value={inputText.location}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div>
             <label htmlFor="title">Title</label>
-            <p>
-              Be specific and imagine you’re asking a question to another
-              person. Minimum 15 characters.
-            </p>
+
             <StyledInputText
               id="title"
               type="text"
               placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
-              value={profile.title}
-              minLength="15"
-              maxLength="150"
-              required
+              value={inputText.title}
               onChange={handleInputChange}
             />
           </div>
           <div>
-            <label htmlFor="body">Body</label>
-            <p>
-              The body of your question contains your problem details and
-              results. Minimum 220 characters.
-            </p>
+            <label htmlFor="aboutMe">About Me</label>
+
             <StyledTextarea
-              id="body"
+              id="aboutMe"
               height="12em"
-              value={profile.body}
-              onChange={handleInputChange}
-              minLength="220"
-              maxLength="500"
-            />
-          </div>
-          <div>
-            <label htmlFor="tags">Tags</label>
-            <p>
-              Add up to 5 tags to describe what your question is about. Start
-              typing to see suggestions.
-            </p>
-            <StyledInputText
-              id="tags"
-              type="text"
-              placeholder="e.g. (django mongodb javascript)"
-              value={profile.tags}
-              required
+              value={inputText.aboutMe}
               onChange={handleInputChange}
             />
           </div>
+          <div className="sns">
+            <div>
+              <label htmlFor="title">webLink</label>
+
+              <StyledInputText
+                id="webLink"
+                type="text"
+                placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
+                value={inputText.webLink}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="title">twitterLink</label>
+
+              <StyledInputText
+                id="twitterLink"
+                type="text"
+                placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
+                value={inputText.twitterLink}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="title">githubLink</label>
+
+              <StyledInputText
+                id="githubLink"
+                type="text"
+                placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
+                value={inputText.githubLink}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
           <div>
-            <label htmlFor="summary">Edit Summary</label>
+            <label htmlFor="fullName">Full Name</label>
+
             <StyledInputText
-              id="summary"
+              id="fullName"
               type="text"
-              placeholder="briefly explain your changes (corrected spelling, fixed grammar, improved formatting)"
-              value={profile.summary}
+              placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
+              value={inputText.fullName}
               onChange={handleInputChange}
             />
           </div>
@@ -180,7 +208,6 @@ const UpdateUserInfo = () => {
             </StyledButtonLink>
           </div>
         </UpdateQuestionContainer>
-        <Aside className="aside" />
       </div>
       <Footer />
     </UpdateQuestionPageContainer>

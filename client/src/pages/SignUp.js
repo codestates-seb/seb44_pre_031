@@ -211,25 +211,21 @@ const SignUp = () => {
   const navigate = useNavigate();
   const onChangeEamil = useCallback((e) => {
     setEmail(e.target.value);
-    console.log('이메일 입력중');
   });
   const onChangeEamilAuth = useCallback((e) => {
     setEmailAuth(e.target.value);
-    console.log('인증번호 입력중');
   });
   const onChangePassword = useCallback((e) => {
     setPassword(e.target.value);
-    console.log('비번 입력중');
   });
   const onChangeDisplay = useCallback((e) => {
     setdisplayName(e.target.value);
-    console.log('이름 입력중');
   });
   // const goEmail =
   const onSubmitJoin = useCallback(
     (e) => {
       e.preventDefault();
-      console.log('전송');
+
       console.log([displayName, email, emailAuth, password]);
       dispatch(actionS({ displayName, email, emailAuth, password })).then(
         (resultAction) => {
@@ -238,7 +234,6 @@ const SignUp = () => {
             alert('회원가입 성공');
             navigate('/users/sign-in');
           } else {
-            console.log('실패');
             alert('비밀번호 아이디 이메일 인증을 모두 수행하쇼');
           }
         }

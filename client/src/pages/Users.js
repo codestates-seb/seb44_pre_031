@@ -2,6 +2,7 @@
 import { styled } from 'styled-components';
 import Header from '../components/Header';
 import Nav from '../components/Nav';
+import { StyledButtonLink } from '../styles/StyledButton';
 import { AiFillGithub, AiFillTwitterCircle } from 'react-icons/ai';
 import { FiClock } from 'react-icons/fi';
 import { FaLink } from 'react-icons/fa';
@@ -46,6 +47,12 @@ const ProfileInfo = styled.div`
   justify-content: space-evenly;
   align-items: baseline;
   font-size: 1.4em;
+  .edit {
+    display: flex;
+    h2 {
+      margin-right: 20em;
+    }
+  }
 `;
 const StatAbout = styled.div`
   display: flex;
@@ -94,7 +101,6 @@ const Fakemypage = styled.div`
 const Users = () => {
   // let { questionId } = useParams();
   const dispatch = useDispatch();
-  console.log(`93`);
   useEffect(() => {
     dispatch(fetchUsers(localStorage.getItem('MemberId')));
   }, []);
@@ -112,7 +118,16 @@ const Users = () => {
               <img src="/profile.png" alt="userImage"></img>
             </div>
             <ProfileInfo>
-              <h2>{profile.displayName}</h2>
+              <div className="edit">
+                <h2>{profile.displayName}</h2>{' '}
+                <StyledButtonLink
+                  to={'http://localhost:3000/users/mypage/patch'}
+                  fontSize="1em"
+                >
+                  edit profile
+                </StyledButtonLink>
+              </div>
+
               {/* <h4>coding window</h4> */}
               <h4>{profile.title}</h4>
               <div>

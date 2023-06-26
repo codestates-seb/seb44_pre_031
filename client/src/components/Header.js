@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { IoIosSearch } from 'react-icons/io';
 import { BasicBlueButton } from '../styles/Buttons';
@@ -22,6 +22,10 @@ const Headercontainer = styled.div`
   box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.05),
     0 2px 8px hsla(0, 0%, 0%, 0.05);
   margin: 0 auto;
+  .buttons {
+    display: flex;
+    margin: 10px;
+  }
 `;
 const Headerlogo = styled.div`
   img {
@@ -86,7 +90,7 @@ export default function Header() {
   const [searchInputValue, setSearchInputValue] = useState('');
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
-
+  const navigator = useNavigate();
   const focusHandler = () => {
     setIsFocus(!isFocus);
   };
@@ -107,6 +111,12 @@ export default function Header() {
     setSearchInputValue('');
     dispatch(selectPage(1));
   };
+  const logoutHandker = () => {
+    localStorage.clear();
+    navigator('/');
+    window.location.reload();
+  };
+
   return (
     <>
       <Headercontainer>
@@ -140,9 +150,14 @@ export default function Header() {
           {isFocus && <SearchGuide />}
         </SearchBox>
         {isLoggedIn ? (
-          <BasicBlueButton skyblue>
-            <Link to="/users/mypage">My Page</Link>
-          </BasicBlueButton>
+          <div className="buttons">
+            <BasicBlueButton skyblue>
+              <Link to="/users/mypage">My Page</Link>
+            </BasicBlueButton>
+            <BasicBlueButton skyblue onClick={logoutHandker}>
+              <Link to="/users/mypage">Log out</Link>
+            </BasicBlueButton>
+          </div>
         ) : (
           <>
             <BasicBlueButton skyblue>
