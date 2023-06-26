@@ -9,7 +9,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
   AWS_URL_PATH,
-  TEMP_ACCESS_TOKEN,
   selectAllTags,
   selectQuestion,
 } from '../slices/questionSlice';
@@ -58,11 +57,11 @@ const UpdateQuestionContainer = styled.form`
 
 const UpdateQuestion = () => {
   const params = useParams();
-  console.log(params);
   const navigate = useNavigate();
 
   const question = useSelector(selectQuestion);
   const tags = useSelector(selectAllTags);
+  const token = useSelector((state) => state.login.token);
 
   const [inputText, setInputText] = useState({
     title: question.title,
@@ -100,7 +99,7 @@ const UpdateQuestion = () => {
         data,
         {
           headers: {
-            Authorization: TEMP_ACCESS_TOKEN,
+            Authorization: token,
           },
         }
       );

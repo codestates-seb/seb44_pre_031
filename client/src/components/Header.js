@@ -6,7 +6,7 @@ import { useState } from 'react';
 import SearchGuide from './SearchGuide';
 import { searchBarfilter } from '../slices/filterquestionSlice';
 import { selectPage } from '../slices/paginationSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Headercontainer = styled.div`
   position: sticky;
@@ -85,6 +85,8 @@ export default function Header() {
   const [isFocus, setIsFocus] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState('');
   const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
+
   const focusHandler = () => {
     setIsFocus(!isFocus);
   };
@@ -137,12 +139,20 @@ export default function Header() {
           <StyledIoIosSearch />
           {isFocus && <SearchGuide />}
         </SearchBox>
-        <BasicBlueButton skyblue>
-          <Link to="/users/sign-in">Log in</Link>
-        </BasicBlueButton>
-        <BasicBlueButton>
-          <Link to="/users/sign-up">Sign up</Link>
-        </BasicBlueButton>
+        {isLoggedIn ? (
+          <BasicBlueButton skyblue>
+            <Link to="/users/mypage">My Page</Link>
+          </BasicBlueButton>
+        ) : (
+          <>
+            <BasicBlueButton skyblue>
+              <Link to="/users/sign-in">Log in</Link>
+            </BasicBlueButton>
+            <BasicBlueButton>
+              <Link to="/users/sign-up">Sign up</Link>
+            </BasicBlueButton>
+          </>
+        )}
       </Headercontainer>
     </>
   );

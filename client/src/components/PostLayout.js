@@ -11,7 +11,6 @@ import UserProfile from './UserProfile';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   AWS_URL_PATH,
-  TEMP_ACCESS_TOKEN,
   postDownVoteQeustion,
   postSelectAnswer,
   postUpVoteQeustion,
@@ -151,6 +150,7 @@ const FooterFeatContainer = styled.div`
 export const QuestionLayout = () => {
   const question = useSelector(selectQuestion);
   const tags = useSelector(selectAllTags);
+  const login = useSelector((state) => state.login);
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -166,26 +166,46 @@ export const QuestionLayout = () => {
 
   const handleQuestionUpVoteClick = () => {
     if (questionVoteStatus.upVote === false) {
-      setQuestionVoteStatus({ ...questionVoteStatus, upVote: true });
-      dispatch(postUpVoteQeustion(params.questionId));
+      setQuestionVoteStatus({ downVote: false, upVote: true });
+      dispatch(
+        postUpVoteQeustion({
+          questionId: params.questionId,
+          token: login.token,
+        })
+      );
     } else if (questionVoteStatus.upVote === true) {
       setQuestionVoteStatus({
         ...questionVoteStatus,
         upVote: false,
       });
-      dispatch(postDownVoteQeustion(params.questionId));
+      dispatch(
+        postDownVoteQeustion({
+          questionId: params.questionId,
+          token: login.token,
+        })
+      );
     }
   };
   const handleQuestionDownVoteClick = () => {
     if (questionVoteStatus.downVote === false) {
-      setQuestionVoteStatus({ ...questionVoteStatus, downVote: true });
-      dispatch(postDownVoteQeustion(params.questionId));
+      setQuestionVoteStatus({ upVote: false, downVote: true });
+      dispatch(
+        postDownVoteQeustion({
+          questionId: params.questionId,
+          token: login.token,
+        })
+      );
     } else if (questionVoteStatus.downVote === true) {
       setQuestionVoteStatus({
         ...questionVoteStatus,
         downVote: false,
       });
-      dispatch(postUpVoteQeustion(params.questionId));
+      dispatch(
+        postUpVoteQeustion({
+          questionId: params.questionId,
+          token: login.token,
+        })
+      );
     }
   };
 
@@ -197,7 +217,7 @@ export const QuestionLayout = () => {
         null,
         {
           headers: {
-            Authorization: TEMP_ACCESS_TOKEN,
+            Authorization: login.token,
           },
         }
       );
@@ -217,7 +237,7 @@ export const QuestionLayout = () => {
           `${AWS_URL_PATH}/questions/${question.questionId}`,
           {
             headers: {
-              Authorization: TEMP_ACCESS_TOKEN,
+              Authorization: login.token,
             },
           }
         );
@@ -277,10 +297,17 @@ export const QuestionLayout = () => {
         <PostFooterContainer>
           <FooterFeatContainer>
             <Link>Share</Link>
-            <Link to={`../${question.questionId}/edit`}>Edit</Link>
+            {login.isLoggedIn ? (
+              <Link to={`../${question.questionId}/edit`}>Edit</Link>
+            ) : (
+              <Link>Improve this question</Link>
+            )}
             {/* 본인이면 Delete 아니면 Follow */}
             <button>Follow</button>
-            <button onClick={handleQuestionDeleteButtonClick}>Delete</button>
+            {question.memberId === Number(login.userId) ? (
+              <button onClick={handleQuestionDeleteButtonClick}>Delete</button>
+            ) : null}
+            {/* <button onClick={handleQuestionDeleteButtonClick}>Delete</button> */}
           </FooterFeatContainer>
           <div className="user-profile-container">
             {/* edited 기록이 있으면 edit 렌더 아니면 asked 작성자만 렌더 */}
@@ -290,6 +317,7 @@ export const QuestionLayout = () => {
                 updatedDate={question.questionUpdatedAt}
                 username={question.displayName}
                 reputation={question.reputation}
+                userId={question.memberId}
               />
             )}
             <UserProfile
@@ -297,6 +325,7 @@ export const QuestionLayout = () => {
               createdDate={question.questionCreatedAt}
               username={question.displayName}
               reputation={question.reputation}
+              userId={question.memberId}
             />
           </div>
         </PostFooterContainer>
@@ -308,16 +337,17 @@ export const QuestionLayout = () => {
 export const AnswerLayout = ({ answer }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // 상태 로컬로 관리할 수 없을듯, 전체답변중 하나만 채택될수 있어야해서 복잡해짐
-  // const [isSelected, setIsSelected] = useState(answer.isSelected);
-  // console.log(isSelected);
+  const login = useSelector((state) => state.login);
+  const questionMemberId = useSelector(
+    (state) => state.question.question.memberId
+  );
 
   const handleSelectIconClick = () => {
-    // setIsSelected(!isSelected);
     dispatch(
       postSelectAnswer({
         questionId: answer.questionId,
         answerId: answer.answerId,
+        token: login.token,
       })
     );
   };
@@ -332,7 +362,7 @@ export const AnswerLayout = ({ answer }) => {
           `${AWS_URL_PATH}/answers/${answer.questionId}/${answer.answerId}`,
           {
             headers: {
-              Authorization: TEMP_ACCESS_TOKEN,
+              Authorization: login.token,
             },
           }
         );
@@ -363,11 +393,12 @@ export const AnswerLayout = ({ answer }) => {
           <FcBookmark className="bookmarked-icon" />
         </div> */}
         {/* 채택된 답변이면 green 체크마크 렌더 */}
-        {answer.selected ? (
+        {answer.selected && (
           <div className="checkmark">
             <FaCheck fill="rgb(46,112,68)" onClick={handleSelectIconClick} />
           </div>
-        ) : (
+        )}
+        {Number(login.userId) === questionMemberId && !answer.selected && (
           <div className="checkmark">
             <FaCheck fill="rgb(186,191,196)" onClick={handleSelectIconClick} />
           </div>
@@ -381,12 +412,19 @@ export const AnswerLayout = ({ answer }) => {
         <PostFooterContainer>
           <FooterFeatContainer>
             <Link>Share</Link>
-            <Link to={`../${answer.questionId}/${answer.answerId}/edit`}>
-              Edit
-            </Link>
+            {login.isLoggedIn ? (
+              <Link to={`../${answer.questionId}/${answer.answerId}/edit`}>
+                Edit
+              </Link>
+            ) : (
+              <Link>Improve this answer</Link>
+            )}
+
             {/* 본인이면 Delete 아니면 Follow */}
             <button>Follow</button>
-            <button onClick={handleAnswerDeleteButtonClick}>Delete</button>
+            {answer.memberId === Number(login.userId) ? (
+              <button onClick={handleAnswerDeleteButtonClick}>Delete</button>
+            ) : null}
           </FooterFeatContainer>
           <div className="user-profile-container">
             {/* edited 기록이 있으면 edit 렌더 아니면 asked 작성자만 렌더 */}
@@ -396,6 +434,7 @@ export const AnswerLayout = ({ answer }) => {
                 updatedDate={answer.answerUpdatedAt}
                 username={answer.displayName}
                 reputation={answer.reputation}
+                userId={answer.memberId}
               />
             )}
             <UserProfile
@@ -403,6 +442,7 @@ export const AnswerLayout = ({ answer }) => {
               createdDate={answer.answerCreatedAt}
               username={answer.displayName}
               reputation={answer.reputation}
+              userId={answer.memberId}
             />
           </div>
         </PostFooterContainer>

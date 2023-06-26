@@ -1,3 +1,4 @@
+/* eslint-disable import/namespace */
 import { createSlice } from '@reduxjs/toolkit';
 import { actionL } from '../components/actionL';
 
@@ -12,7 +13,30 @@ const initialState = {
 export const loginSlice = createSlice({
   name: 'login',
   initialState,
-  reducers: {},
+  reducers: {
+    updateLoginState: {
+      reducer: (state, action) => {
+        state.isLoggedIn = action.payload.isLoggedIn;
+        state.token = action.payload.token;
+        state.id = action.payload.id;
+        state.userId = action.payload.userId;
+        state.loginRejectReason = action.payload.loginRejectReason;
+        // state = action.payload;
+        console.log(action.payload);
+      },
+      prepare: () => {
+        // 로그인된 유저인지 어떻게 알지?
+        const isLoggedIn = localStorage.getItem('Token') ? true : false;
+        const token = localStorage.getItem('Token');
+        const id = localStorage.getItem('Id');
+        const userId = localStorage.getItem('MemberId');
+        const loginRejectReason = '';
+        return {
+          payload: { isLoggedIn, token, id, userId, loginRejectReason },
+        };
+      },
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(actionL.pending, (state) => {
@@ -41,3 +65,5 @@ export const loginSlice = createSlice({
 });
 
 export default loginSlice.reducer;
+
+export const { updateLoginState } = loginSlice.actions;

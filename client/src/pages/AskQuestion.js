@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 // eslint-disable-next-line
 import StyledButton from '../styles/StyledButton';
 import axios from 'axios';
-import { AWS_URL_PATH, TEMP_ACCESS_TOKEN } from '../slices/questionSlice';
+import { AWS_URL_PATH } from '../slices/questionSlice';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -313,8 +313,8 @@ const AskQuestion = () => {
 
         const response = await axios.post(`${AWS_URL_PATH}/questions`, data, {
           headers: {
-            Authorization: TEMP_ACCESS_TOKEN,
-            // 'Content-Type': 'application/json',
+            // Authorization: TEMP_ACCESS_TOKEN,
+            Authorization: localStorage.getItem('Token'),
           },
         });
         // const response = await axios('https://swapi.dev/api/');

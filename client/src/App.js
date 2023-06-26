@@ -9,9 +9,18 @@ import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Users from './pages/Users';
 import SearchUsers from './pages/SearchUsers';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { updateLoginState } from './slices/loginSlice';
 import UpdateUserInfo from './pages/UpdateUserInfo';
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(updateLoginState());
+  }, []);
+
   return (
     <div>
       <GlobalStyle />

@@ -6,13 +6,18 @@ export const AWS_URL_PATH =
 
 // const MOCK_UP_API = 'http://localhost:3500';
 
-export const TEMP_ACCESS_TOKEN =
-  'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sIm1lbWJlcklkIjoxLCJ1c2VybmFtZSI6ImRsYXdqZGFsczAyMThAZ21haWwuY29tIiwic3ViIjoiZGxhd2pkYWxzMDIxOEBnbWFpbC5jb20iLCJpYXQiOjE2ODc1NDA0MDMsImV4cCI6MTY4NzU0MjgwM30.oqkfekdEtdLWDGMusNfKa2zrpLL1DOJIUI60QoXMKHc';
+// export const TEMP_ACCESS_TOKEN = store.getState().login.token;
+
+// export const TEMP_ACCESS_TOKEN =
+//   'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sIm1lbWJlcklkIjoxLCJzdWIiOiIyMHRha2tpQGdtYWlsLmNvbSIsImlhdCI6MTY4Nzc0MjYyNCwiZXhwIjoxNjg3NzQ1MDI0fQ.49dG9d17C9z0IsPnv4i4jde0al883TBWVPWYeP3H24Q';
+
+export const TEMP_ACCESS_TOKEN = localStorage.getItem('Token');
 
 const initialState = {
   status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
   error: null,
   question: {
+    memberId: 2,
     questionId: 1,
     title: 'dlawjdad02fasdfasdfasdfasdf1ddd',
     content: 'locationlocatiasdfasdfasdfasdfasdfsdon',
@@ -27,6 +32,7 @@ const initialState = {
   },
   answers: [
     {
+      memberId: 3,
       questionId: 33,
       answerId: 1,
       content: 'locatafsdfasdfdasfasdfasdfasdfsdon',
@@ -64,13 +70,13 @@ export const fetchQuestionDetail = createAsyncThunk(
 
 export const postUpVoteQeustion = createAsyncThunk(
   'question/postUpVoteQeustion',
-  async (questionId) => {
+  async ({ questionId, token }) => {
     const response = await axios.post(
       `${AWS_URL_PATH}/questions/${questionId}/1/like`,
       null,
       {
         headers: {
-          Authorization: TEMP_ACCESS_TOKEN,
+          Authorization: token,
         },
       }
     );
@@ -80,13 +86,13 @@ export const postUpVoteQeustion = createAsyncThunk(
 );
 export const postDownVoteQeustion = createAsyncThunk(
   'question/postDownVoteQeustion',
-  async (questionId) => {
+  async ({ questionId, token }) => {
     const response = await axios.post(
       `${AWS_URL_PATH}/questions/${questionId}/2/like`,
       null,
       {
         headers: {
-          Authorization: TEMP_ACCESS_TOKEN,
+          Authorization: token,
         },
       }
     );
@@ -97,14 +103,14 @@ export const postDownVoteQeustion = createAsyncThunk(
 
 export const postSelectAnswer = createAsyncThunk(
   'question/postSelectAnswer',
-  async ({ questionId, answerId }) => {
+  async ({ questionId, answerId, token }) => {
     console.log(questionId, answerId);
     const response = await axios.post(
       `${AWS_URL_PATH}/answers/${questionId}/${answerId}/select`,
       null,
       {
         headers: {
-          Authorization: TEMP_ACCESS_TOKEN,
+          Authorization: token,
         },
       }
     );
