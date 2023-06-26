@@ -11,14 +11,14 @@ const initialState = {
   error: null,
   profile: {
     id: 1,
-    displayName: '지훈',
-    location: 'locationlocatiasdfasdfasdfasdfasdfsdon',
-    title: 'hello',
-    aboutMe: 'hello evreyone my name is jihoon',
+    displayName: '',
+    location: '',
+    title: '',
+    aboutMe: '',
     webLink: '',
-    twitterLink: '2023-06-21T15:48:13',
-    githubLink: '2023-06-21T15:48:13',
-    fullName: '2023-06-21T15:48:13',
+    twitterLink: '',
+    githubLink: '',
+    fullName: '',
   },
 };
 
@@ -26,26 +26,23 @@ export const fetchUsers = createAsyncThunk(
   'users/mypage/get',
   async (userId) => {
     const response = await axios.get(`${AWS_URL_PATH}/users/${userId}`);
-    console.log(response);
     return response.data.result.data;
   }
 );
 export const fetchUpdateUsers = createAsyncThunk(
   'users/mypage/patch',
-  async (params) => {
-    const { data, userId } = params;
-
+  async ({ inputText, userId }) => {
     const response = await axios.patch(
       `${AWS_URL_PATH}/users/${userId}`,
       {
-        displayName: data.displayName,
-        location: data.location,
-        title: data.title,
-        aboutMe: data.aboutMe,
-        webLink: data.webLink,
-        twitterLink: data.twitterLink,
-        githubLink: data.githubLink,
-        fullName: data.fullName,
+        displayName: inputText.displayName,
+        location: inputText.location,
+        title: inputText.title,
+        aboutMe: inputText.aboutMe,
+        webLink: inputText.webLink,
+        twitterLink: inputText.twitterLink,
+        githubLink: inputText.githubLink,
+        fullName: inputText.fullName,
       },
       {
         headers: {
@@ -53,7 +50,6 @@ export const fetchUpdateUsers = createAsyncThunk(
         },
       }
     );
-    console.log(response);
     return response.data.result.data;
   }
 );
