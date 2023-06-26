@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,6 +58,8 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     @Override
     public Page<GetQuestionsResponse> getQuestions(Pageable pageable) {
         List<Long> questionIds = fetchAllQuestionIds().fetch();
+        questionIds.sort(Comparator.reverseOrder());
+
         List<GetQuestionsResponse> result = questionIds.stream()
                 .map(this::getQuestionAndTags)
                 .collect(Collectors.toList());
@@ -71,26 +74,6 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                 .from(question)
                 .orderBy(question.createdAt.desc());
     }
-
-    // 태그 전체 response
-//    private List<TagResponse> getTagResponses(Long questionId) {
-//        return questionTagRepository.findTagIdsByQuestionId(questionId).stream()
-//                .map(this::fetchTagResponse)
-//                .collect(Collectors.toList());
-//    }
-
-    // 개별 태그 response
-//    private TagResponse fetchTagResponse(Long tagId) {
-//        return queryFactory
-//                .select(new QTagResponse(
-//                        tag.name,
-//                        question.count(),
-//                        tag.createdAt))
-//                .from(tag)
-//                .leftJoin(questionTag).on(questionTag.tag.id.eq(tagId))
-//                .leftJoin(question).on(question.eq(questionTag.question))
-//                .fetchOne();
-//    }
 
     // 작성자 검색
     @Override
@@ -158,6 +141,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         question.answers.size(),
                         question.createdAt,
                         question.updatedAt,
+                        member.id,
                         member.displayName,
                         member.reputation))
                 .from(question)
@@ -179,6 +163,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         question.viewCount,
                         question.createdAt,
                         question.updatedAt,
+                        member.id,
                         member.displayName))
                 .from(question)
                 .innerJoin(question.member, member)
@@ -189,6 +174,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     // 전체 답변 response
     private Page<AnswerResponse> fetchAnswerResponses(Long questionId, Pageable pageable) {
         List<AnswerResponse> result = fetchAnswerIds(questionId, pageable).stream()
+                .sorted(Comparator.reverseOrder())
                 .map(this::fetchAnswerResponse)
                 .collect(Collectors.toList());
 
@@ -209,6 +195,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         answer.selected,
                         answer.createdAt,
                         answer.updatedAt,
+                        member.id,
                         member.displayName,
                         member.reputation))
                 .from(answer)

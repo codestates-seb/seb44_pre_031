@@ -38,7 +38,7 @@ public class TagRepositoryImpl implements TagRepositoryCustom {
         return queryFactory
                 .select(new QTagResponse(
                         tag.name,
-                        question.count(),
+                        tag.count(),
                         tag.createdAt))
                 .from(tag)
                 .leftJoin(questionTag).on(questionTag.tag.eq(tag))
