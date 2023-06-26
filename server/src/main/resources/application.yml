@@ -15,6 +15,7 @@ spring:
           timeout: 5000 # SMTP 로부터 응답을 대기해야 하는 시간
           writetimeout: 5000 # 클라이언트가 작업을 완료하는데 대기해야 하는 시간
     auth-code-expiration-millis: 1800000 # 이메일 인증 코드의 만료 시간
+
 #  h2:
 #    console:
 #      enabled: true
@@ -33,13 +34,6 @@ spring:
     password: zheldqkdqjaeo1!
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    defer-datasource-initialization: true
-    sql:
-      init:
-        mode: always
-        continue-on-error: false
-        data-locations: classpath:data.sql
-
 #    database-platform: org.hibernate.dialect.H2Dialect
 #    hibernate:
 #      ddl-auto: create-drop
