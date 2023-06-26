@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 let initialState = {
   currentpage: 1,
-  pagesize: 10,
+  pagesize: 5,
   totalpage: 30,
   totalposts: 1,
 };

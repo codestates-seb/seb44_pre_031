@@ -12,14 +12,15 @@ import PaginationLeft from '../components/PaginationLeft';
 import PaginationRight from '../components/PaginationRight';
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer';
+
 const WrapContainer = styled.div`
   .wrap {
     margin: 0 auto;
     display: flex;
-
     justify-content: center;
   }
 `;
+
 const QuestionContainer = styled.div`
   width: 720px;
 `;
@@ -31,43 +32,47 @@ const PageHeader = styled.div`
   margin-left: 20px;
   margin-top: 34px;
   flex-wrap: wrap;
+
   .bluebutton {
     margin-right: 14px;
   }
+
   h1 {
     font-size: 2rem;
     margin-right: 12px;
   }
 `;
+
 const QuestionsH2 = styled.div`
   display: flex;
-
   margin-bottom: 12px;
   margin-left: 20px;
   align-items: center;
   justify-content: space-between;
+
   .data {
     font-size: 1.30769231rem;
     margin-right: 12px;
     flex: 1 auto;
   }
 `;
+
 const SortNavBox = styled.div`
   display: flex;
-
   align-items: center;
   justify-content: space-between;
 `;
+
 const SortNav = styled.div`
   display: flex;
   font-size: 100%;
   flex-flow: row no;
   margin-bottom: 1px;
   margin-right: 16px;
-
   flex-flow: row nowrap;
 `;
-const SortNavBtn = styled.a`
+
+const SortNavBtn = styled.button`
   font-size: 15px;
   border: 1px solid black;
   border-radius: ${(props) => (props.middle ? '0' : '3px')};
@@ -88,6 +93,7 @@ const SortNavBtn = styled.a`
   text-align: center;
   text-decoration: none;
 `;
+
 const QuestionsContent = styled.div``;
 
 const PageContainer = styled.div`
@@ -100,6 +106,7 @@ export default function Questions() {
   const [allquestions, setAllQuestions] = useState([]);
   const pages = useSelector((state) => state.pages);
   const dispatch = useDispatch();
+
   const fetchQuestions = async () => {
     try {
       const response = await axios.get(
@@ -107,6 +114,7 @@ export default function Questions() {
       );
       const questions = response.data.result.data.content;
       setAllQuestions(questions);
+      dispatch(setTotalposts(questions.length));
     } catch (error) {
       console.error('Error fetching questions:', error);
     }
@@ -114,11 +122,20 @@ export default function Questions() {
 
   useEffect(() => {
     fetchQuestions();
-    dispatch(setTotalposts(allquestions.length));
   }, []);
-  const start = pages.currentpage - 1;
+
+  const start = (pages.currentpage - 1) * pages.pagesize;
   const end = start + pages.pagesize;
   const onepage = allquestions.slice(start, end);
+
+  const handleViewFilterBtnClick = () => {
+    const sortedResult = [...allquestions].sort(
+      (a, b) => parseInt(b.viewCount) - parseInt(a.viewCount)
+    );
+    console.log(sortedResult);
+    setAllQuestions(sortedResult);
+  };
+
   return (
     <>
       <Header />
@@ -135,14 +152,17 @@ export default function Questions() {
               </BasicBlueButton>
             </div>
           </PageHeader>
-
           <div>
             <QuestionsH2 className="data">
               <div>{allquestions.length} questions</div>
               <div>
                 <SortNavBox>
                   <SortNav>
-                    <SortNavBtn start selected>
+                    <SortNavBtn
+                      start
+                      selected
+                      onClick={handleViewFilterBtnClick}
+                    >
                       <div>View</div>
                     </SortNavBtn>
                     <SortNavBtn middle>
@@ -156,7 +176,6 @@ export default function Questions() {
               </div>
             </QuestionsH2>
           </div>
-
           <QuestionsContent>
             {onepage.map((el) => (
               <QuestionList key={el.questionId} question={el} />

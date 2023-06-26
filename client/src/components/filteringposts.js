@@ -1,4 +1,4 @@
-export function filteringposts(posts, filter) {
+export function Filteringposts(posts, filter) {
   const filteredposts = posts.filter((post) => {
     let filtering = true;
     if (filter.unanswered) {
