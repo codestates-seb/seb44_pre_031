@@ -120,6 +120,8 @@ export default function Questions() {
   const start = pages.currentpage - 1;
   const end = start + pages.pagesize;
   const onepage = allquestions.slice(start, end);
+  const login = useSelector((state) => state.login);
+  console.log(login);
 
   return (
     <>

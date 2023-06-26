@@ -85,12 +85,19 @@ const QuestionInfoContainer = styled.div`
 
 const QuestionHeader = () => {
   const question = useSelector((state) => state.question.question);
+  const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
 
   return (
     <QuestionHeaderContainer>
       <div className="question-header">
         <Link className="question-title">{question.title}</Link>
-        <AskQuestionLink to="/questions/ask">Ask Question</AskQuestionLink>
+        {isLoggedIn ? (
+          <AskQuestionLink to="/questions/ask">Ask Question</AskQuestionLink>
+        ) : (
+          <AskQuestionLink to="../../users/sign-in">
+            Ask Question
+          </AskQuestionLink>
+        )}
       </div>
       <QuestionInfoContainer>
         <div className="question-info">

@@ -89,6 +89,7 @@ const UserProfile = ({
   updatedDate,
   username,
   reputation,
+  userId,
 }) => {
   const randomNumber1 = Math.floor(Math.random() * 200) + 1;
   const randomNumber2 = Math.floor(Math.random() * 200) + 1;
@@ -104,7 +105,12 @@ const UserProfile = ({
         <img src="/images/test-image.png" alt="" />
         <div className="user-name-reputation-contaienr">
           <div>
-            <Link className="username">{username}</Link>
+            <Link
+              to={`../../users/anotherUser?userId=${userId}`}
+              className="username"
+            >
+              {username}
+            </Link>
           </div>
           <div className="user-reputation-container">
             <span className="reputation">{reputation}</span>

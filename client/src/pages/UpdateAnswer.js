@@ -14,11 +14,7 @@ import Aside from '../components/Aside';
 import Nav from '../components/Nav';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  AWS_URL_PATH,
-  TEMP_ACCESS_TOKEN,
-  selectAllAnswers,
-} from '../slices/questionSlice';
+import { AWS_URL_PATH, selectAllAnswers } from '../slices/questionSlice';
 import axios from 'axios';
 
 const UpdateAnswerPageContainer = styled.div`
@@ -67,16 +63,11 @@ const UpdateAnswerContainer = styled.form`
 const UpdateQuestion = () => {
   const navigate = useNavigate();
   const params = useParams();
-  // console.log(params);
-  // const answer = useSelector(
-  //   (state) => state.question.answers[params.answersId - 1]
-  // );
   const answers = useSelector(selectAllAnswers);
-  // console.log(answers);
   const selectedAnswer = answers.find(
     (answer) => Number(params.answerId) === answer.answerId
   );
-  // console.log(selectedAnswer);
+  const token = useSelector((state) => state.login.token);
 
   const [inputText, setInputText] = useState({
     body: selectedAnswer.content,
@@ -99,7 +90,7 @@ const UpdateQuestion = () => {
         { content: inputText.body },
         {
           headers: {
-            Authorization: TEMP_ACCESS_TOKEN,
+            Authorization: token,
           },
         }
       );
@@ -107,6 +98,7 @@ const UpdateQuestion = () => {
       navigate(`/questions/${params.questionId}`);
     } catch (err) {
       console.log(err.message);
+      confirm(err.message);
     }
   };
 

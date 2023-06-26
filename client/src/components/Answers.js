@@ -7,11 +7,7 @@ import StyledButton, { StyledTagLink } from '../styles/StyledButton';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import {
-  AWS_URL_PATH,
-  TEMP_ACCESS_TOKEN,
-  selectAllTags,
-} from '../slices/questionSlice';
+import { AWS_URL_PATH, selectAllTags } from '../slices/questionSlice';
 
 const AnswersContainer = styled.div`
   display: flex;
@@ -153,6 +149,7 @@ const AnswerForm = () => {
   const [validationNotice, setValidationNotice] = useState('');
   const params = useParams();
   const navigate = useNavigate();
+  const token = useSelector((state) => state.login.token);
 
   const handleInputText = (e) => {
     setInputText(e.target.value);
@@ -181,21 +178,17 @@ const AnswerForm = () => {
     validateInput();
 
     // POST 요청 보내야됨
-    // console.log(isValid);
     if (isValid) {
-      // console.log('submit success');
       try {
         const response = await axios.post(
           `${AWS_URL_PATH}/answers/${params.questionId}`,
           { content: inputText.trim() },
           {
             headers: {
-              Authorization: TEMP_ACCESS_TOKEN,
-              // 'Content-Type': 'application/json',
+              Authorization: token,
             },
           }
         );
-        // const response = await axios('https://swapi.dev/api/');
         console.log(response);
 
         // 성공하면 해당 질문 상세페이지로 다시 redirect
@@ -204,8 +197,6 @@ const AnswerForm = () => {
       } catch (error) {
         console.log(error);
       }
-    } else if (!isValid) {
-      // console.log('submit failed');
     }
   };
 
@@ -311,11 +302,17 @@ const AnswerBottomNotice = () => {
 };
 
 const Answers = () => {
+  // const loginMemberId = useSelector((state) => state.login.userId);
+  const login = useSelector((state) => state.login);
+  const questionMemberId = useSelector(
+    (state) => state.question.question.memberId
+  );
+
   return (
     <AnswersContainer>
       <AnswersHeader />
       <AnswerList />
-      <AnswerForm />
+      {Number(login.userId) !== questionMemberId ? <AnswerForm /> : null}
       <AnswerBottomNotice />
     </AnswersContainer>
   );

@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
 
 const QLiContainer = styled.div`
@@ -133,9 +134,12 @@ export default function QuestionList({ question }) {
       </PostSummaryStats>
       <PostSummaryContent>
         <h3 className="Post-summary-title">
-          <a href={`/questions/${question.question.questionId}`}>
+          {/* <a href={`/questions/${question.question.questionId}`}>
             {question.question.title}
-          </a>
+          </a> */}
+          <Link to={`/questions/${question.question.questionId}`}>
+            {question.question.title}
+          </Link>
         </h3>
         <div className="Post-summary-content">{question.question.content}</div>
         <div className="Post-summary-meta">
