@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { StyledButton } from '../styles/StyledButton';
+import StyledButton from '../styles/StyledButton';
 
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';

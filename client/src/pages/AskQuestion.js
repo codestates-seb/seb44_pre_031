@@ -3,6 +3,7 @@ import { styled } from 'styled-components';
 import { TfiPencil } from 'react-icons/tfi';
 import AskQuestionInput from '../components/AskQuestionInput';
 import { useNavigate } from 'react-router-dom';
+// eslint-disable-next-line
 import StyledButton from '../styles/StyledButton';
 import axios from 'axios';
 import { AWS_URL_PATH, TEMP_ACCESS_TOKEN } from '../slices/questionSlice';
