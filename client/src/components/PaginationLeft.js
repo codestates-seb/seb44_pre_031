@@ -26,6 +26,7 @@ export const PageBtn = styled.a`
 
 function PaginationLeft() {
   const pages = useSelector((state) => state.pages);
+  const totalpage = useSelector((state) => state.pages.totalpage);
   const dispatch = useDispatch();
   const gotoPrevHandler = () => {
     if (pages.currentpage !== 1) {
@@ -40,13 +41,16 @@ function PaginationLeft() {
   const gotoPageHandler = (num) => {
     dispatch(selectPage(num));
   };
-  const pageNums = new Array(5).fill(pages.currentpage).map((ele, idx) => {
-    if (pages.currentpage <= 4) {
-      return idx + 1;
-    } else if (pages.currentpage >= pages.totalpage - 4) {
-      return pages.totalpage - (4 - idx);
-    } else return ele - (2 - idx);
-  });
+
+  const pageNums = new Array(totalpage)
+    .fill(pages.currentpage)
+    .map((ele, idx) => {
+      if (pages.currentpage <= 4) {
+        return idx + 1;
+      } else if (pages.currentpage >= pages.totalpage - 4) {
+        return pages.totalpage - (4 - idx);
+      } else return ele - (2 - idx);
+    });
 
   return (
     <Pager>

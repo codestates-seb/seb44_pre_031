@@ -117,7 +117,12 @@ export default function Questions() {
       );
       const questions = response.data.result.data.content;
       setAllQuestions(questions);
-      dispatch(setTotalposts(questions.length));
+      dispatch(
+        setTotalposts({
+          questionsLength: questions.length,
+          questionsTitle: 'All Questions',
+        })
+      );
     } catch (error) {
       console.error('Error fetching questions:', error);
     }
@@ -141,12 +146,12 @@ export default function Questions() {
 
   return (
     <>
-      <Header />
+      <Header setAllQuestions={setAllQuestions} />
       <WrapContainer className="wrap">
         <Nav />
         <QuestionContainer>
           <PageHeader>
-            <h1>All Questions</h1>
+            <h1>{pages.questionsTitle}</h1>
             <div className="bluebutton">
               <BasicBlueButton>
                 <Link to="/questions/ask" style={{ color: 'white' }}>

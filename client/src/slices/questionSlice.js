@@ -35,6 +35,7 @@ const initialState = {
       memberId: 3,
       questionId: 33,
       answerId: 1,
+      voteCount: 1,
       content: 'locatafsdfasdfdasfasdfasdfasdfsdon',
       selected: false,
       answerCreatedAt: '2023-06-21T15:48:13',
@@ -101,6 +102,41 @@ export const postDownVoteQeustion = createAsyncThunk(
   }
 );
 
+export const postUpVoteAnswer = createAsyncThunk(
+  'question/postUpVoteAnswer',
+  async ({ answerId, token }) => {
+    const response = await axios.post(
+      `${AWS_URL_PATH}/answers/${answerId}/like`,
+      null,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    console.log(response.data);
+    console.log(answerId);
+    return { voteCount: response.data.result.data, answerId };
+  }
+);
+export const postDownVoteAnswer = createAsyncThunk(
+  'question/postDownVoteAnswer',
+  async ({ answerId, token }) => {
+    const response = await axios.post(
+      `${AWS_URL_PATH}/answers/${answerId}/dislike`,
+      null,
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+    console.log(response.data);
+    console.log(answerId);
+    return { voteCount: response.data.result.data, answerId };
+  }
+);
+
 export const postSelectAnswer = createAsyncThunk(
   'question/postSelectAnswer',
   async ({ questionId, answerId, token }) => {
@@ -115,7 +151,7 @@ export const postSelectAnswer = createAsyncThunk(
       }
     );
     console.log(response);
-    return { response, answerId };
+    return { response: response.data, answerId };
   }
 );
 
@@ -123,6 +159,27 @@ export const questionSlice = createSlice({
   name: 'question',
   initialState,
   reducers: {
+    sortByHighestScore: (state) => {
+      const sortedAnswers = state.answers.sort(
+        (a, b) => b.voteCount - a.voteCount
+      );
+      console.log(sortedAnswers);
+      state.answers = sortedAnswers;
+    },
+    sortByModifiedNewest: (state) => {
+      const sortedAnswers = state.answers.sort(
+        (a, b) => Date.parse(b.answerUpdatedAt) - Date.parse(a.answerUpdatedAt)
+      );
+      // console.log(sortedAnswers);
+      state.answers = sortedAnswers;
+    },
+    sortByCreatedOldest: (state) => {
+      const sortedAnswers = state.answers.sort(
+        (a, b) => Date.parse(a.answerCreatedAt) - Date.parse(b.answerCreatedAt)
+      );
+      // console.log(sortedAnswers);
+      state.answers = sortedAnswers;
+    },
     increment: (state) => {
       state.value += 1;
     },
@@ -159,6 +216,24 @@ export const questionSlice = createSlice({
           state.question.likeCount--;
         }
       })
+      .addCase(postUpVoteAnswer.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        const selectedAnswer = state.answers.find(
+          (answer) => answer.answerId === action.payload.answerId
+        );
+        if (action.payload) {
+          selectedAnswer.voteCount = action.payload.voteCount;
+        }
+      })
+      .addCase(postDownVoteAnswer.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        const selectedAnswer = state.answers.find(
+          (answer) => answer.answerId === action.payload.answerId
+        );
+        if (action.payload) {
+          selectedAnswer.voteCount = action.payload.voteCount;
+        }
+      })
       .addCase(postSelectAnswer.fulfilled, (state, action) => {
         const selectedAnswer = state.answers.find(
           (answer) => answer.answerId === action.payload.answerId
@@ -175,6 +250,12 @@ export const selectAllAnswers = (state) => state.question.answers;
 export const selectAllTags = (state) => state.question.tags;
 
 // Action creators are generated for each case reducer function
-export const { increment, incrementByAmount } = questionSlice.actions;
+export const {
+  increment,
+  incrementByAmount,
+  sortByHighestScore,
+  sortByModifiedNewest,
+  sortByCreatedOldest,
+} = questionSlice.actions;
 
 export default questionSlice.reducer;

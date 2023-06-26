@@ -5,9 +5,15 @@ import { useState } from 'react';
 // eslint-disable-next-line import/no-named-as-default
 import StyledButton, { StyledTagLink } from '../styles/StyledButton';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { AWS_URL_PATH, selectAllTags } from '../slices/questionSlice';
+import {
+  AWS_URL_PATH,
+  selectAllTags,
+  sortByCreatedOldest,
+  sortByHighestScore,
+  sortByModifiedNewest,
+} from '../slices/questionSlice';
 
 const AnswersContainer = styled.div`
   display: flex;
@@ -57,12 +63,20 @@ const AnswersHeaderContainer = styled.div`
 `;
 
 const AnswersHeader = () => {
+  const dispatch = useDispatch();
   const answerCount = useSelector(
     (state) => state.question.question.answerCount
   );
 
   const handleSelectChange = (e) => {
-    console.log(e.target.value);
+    if (e.target.value === 'highest-score') {
+      dispatch(sortByHighestScore());
+    } else if (e.target.value === 'date-modified') {
+      dispatch(sortByModifiedNewest());
+    }
+    if (e.target.value === 'date-created') {
+      dispatch(sortByCreatedOldest());
+    }
   };
 
   return (

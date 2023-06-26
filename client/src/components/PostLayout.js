@@ -11,8 +11,10 @@ import UserProfile from './UserProfile';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   AWS_URL_PATH,
+  postDownVoteAnswer,
   postDownVoteQeustion,
   postSelectAnswer,
+  postUpVoteAnswer,
   postUpVoteQeustion,
   selectAllTags,
   selectQuestion,
@@ -342,6 +344,40 @@ export const AnswerLayout = ({ answer }) => {
     (state) => state.question.question.memberId
   );
 
+  const [answerVoteStatus, setAnswerVoteStatus] = useState({
+    upVote: false,
+    downVote: false,
+  });
+
+  // 답변투표는 백엔드에 로직이 다 짜여져있어서 좋아요 눌렀을때 좋아요, 싫어요 눌렀을때 싫어요 요청이 가게만 하면되
+  const handleAnswerUpVoteClick = () => {
+    if (answerVoteStatus.upVote === false) {
+      setAnswerVoteStatus({ downVote: false, upVote: true });
+    } else if (answerVoteStatus.upVote === true) {
+      setAnswerVoteStatus({ ...answerVoteStatus, upVote: false });
+    }
+    dispatch(
+      postUpVoteAnswer({ answerId: answer.answerId, token: login.token })
+    );
+  };
+
+  const handleAnswerDownVoteClick = () => {
+    if (answerVoteStatus.downVote === false) {
+      setAnswerVoteStatus({ upVote: false, downVote: true });
+    } else if (answerVoteStatus.downVote === true) {
+      setAnswerVoteStatus({
+        ...answerVoteStatus,
+        downVote: false,
+      });
+    }
+    dispatch(
+      postDownVoteAnswer({
+        answerId: answer.answerId,
+        token: login.token,
+      })
+    );
+  };
+
   const handleSelectIconClick = () => {
     dispatch(
       postSelectAnswer({
@@ -377,12 +413,18 @@ export const AnswerLayout = ({ answer }) => {
   return (
     <PostLayoutContainer>
       <VoteCellContainer>
-        <StyledVoteButton>
+        <StyledVoteButton
+          onClick={handleAnswerUpVoteClick}
+          isVoted={answerVoteStatus.upVote}
+        >
           <BiUpArrow className="upvote-icon" />
         </StyledVoteButton>
         {/* 나중에 투표수 추가되면 바꿔야함 */}
-        <p className="votes-count">{1}</p>
-        <StyledVoteButton>
+        <p className="votes-count">{answer.voteCount}</p>
+        <StyledVoteButton
+          onClick={handleAnswerDownVoteClick}
+          isVoted={answerVoteStatus.downVote}
+        >
           <BiDownArrow className="downvote-icon" />
         </StyledVoteButton>
         {/* 북마크 안돼있으면 첫번째꺼, 돼있으면 두번째꺼 렌더 */}
