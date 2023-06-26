@@ -5,7 +5,6 @@ import com.codestates.pre_project.module.answer.dto.response.QAnswerResponse;
 import com.codestates.pre_project.module.question.dto.response.*;
 import com.codestates.pre_project.module.question.repository.QuestionRepositoryCustom;
 import com.codestates.pre_project.module.question.repository.QuestionTagRepository;
-import com.codestates.pre_project.module.tag.repository.TagRepository;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,6 @@ import static com.querydsl.core.types.dsl.Expressions.asNumber;
 public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     private final QuestionTagRepository questionTagRepository;
-    private final TagRepository tagRepository;
 
     // 질문 상세 페이지 response
     @Override
@@ -193,6 +191,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
                         asNumber(answer.id),
                         answer.content,
                         answer.selected,
+                        answer.voteCount,
                         answer.createdAt,
                         answer.updatedAt,
                         member.id,

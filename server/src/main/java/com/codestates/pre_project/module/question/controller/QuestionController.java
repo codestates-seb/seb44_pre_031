@@ -1,6 +1,7 @@
 package com.codestates.pre_project.module.question.controller;
 
 import com.codestates.pre_project.global.auth.utils.MemberIdExtractor;
+import com.codestates.pre_project.module.answer.service.AnswerService;
 import com.codestates.pre_project.module.question.dto.request.QuestionRequest;
 import com.codestates.pre_project.module.question.dto.response.GetQuestionDetailResponse;
 import com.codestates.pre_project.module.question.dto.response.GetQuestionsResponse;
@@ -23,6 +24,7 @@ import javax.validation.Valid;
 public class QuestionController {
     private final QuestionService questionService;
     private final QuestionLikeService questionLikeService;
+    private final AnswerService answerService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -47,6 +49,7 @@ public class QuestionController {
     @ResponseStatus(HttpStatus.OK)
     public Response getQuestion(@PathVariable("question-id") Long questionId,
                                 @PageableDefault(size = 30) Pageable pageable) {
+        answerService.setVoteCount(questionService.findAnswers(questionId));
         GetQuestionDetailResponse response = questionService.getQuestion(questionId, pageable);
 
         return Response.success(response);
@@ -86,7 +89,6 @@ public class QuestionController {
         return Response.success(questions);
     }
 
-    // TODO : tag 검색 오류 수정
     @GetMapping("/search-tag/{tag}")
     @ResponseStatus(HttpStatus.OK)
     public Response getQuestionsWithTag(@PathVariable("tag") String tag,

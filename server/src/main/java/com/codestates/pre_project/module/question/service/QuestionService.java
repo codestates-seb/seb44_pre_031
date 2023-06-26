@@ -1,6 +1,7 @@
 package com.codestates.pre_project.module.question.service;
 
 import com.codestates.pre_project.global.exception.CustomException;
+import com.codestates.pre_project.module.answer.entity.Answer;
 import com.codestates.pre_project.module.member.entity.Member;
 import com.codestates.pre_project.module.member.service.MemberService;
 import com.codestates.pre_project.module.question.dto.response.GetQuestionDetailResponse;
@@ -106,5 +107,11 @@ public class QuestionService {
     public Question findQuestionById(Long questionId) {
         return questionRepository.findById(questionId)
                 .orElseThrow(() -> new CustomException(QUESTION_NOT_FOUND));
+    }
+
+    public List<Answer> findAnswers(Long questionId) {
+        Question question = findQuestionById(questionId);
+
+        return question.getAnswers();
     }
 }

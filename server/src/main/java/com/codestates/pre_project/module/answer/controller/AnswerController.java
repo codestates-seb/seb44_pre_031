@@ -2,6 +2,7 @@ package com.codestates.pre_project.module.answer.controller;
 
 import com.codestates.pre_project.global.auth.utils.MemberIdExtractor;
 import com.codestates.pre_project.module.answer.dto.request.AnswerRequest;
+import com.codestates.pre_project.module.answer.service.AnswerLikeService;
 import com.codestates.pre_project.module.answer.service.AnswerService;
 import com.codestates.pre_project.module.member.repository.MemberRepository;
 import com.codestates.pre_project.module.response.Response;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/answers")
 public class AnswerController {
     private final AnswerService answerService;
-    private final MemberRepository memberRepository;
 
     @PostMapping("/{question-id}")
     @ResponseStatus(HttpStatus.CREATED)
