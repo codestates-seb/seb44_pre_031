@@ -72,7 +72,7 @@
 
 <br/>
 ## :sloth: Git
-### :wood: Branch
+
 `main` : 배포 브랜치 <br/>
 `dev/FE` : 프론트엔드 개발 환경 브랜치 <br/>
 `dev/BE` : 백엔드 개발 환경 브랜치 <br/>
