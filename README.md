@@ -33,3 +33,24 @@
 
 
 <br/>
+
+|
+|:---:|:---:|
+|메인 페이지(검색, 페이지네이션)|질문 작성 유저 페이지|
+|<img width="360px" src=""/>|<img width="360px" src=""/>|
+|회원가입 페이지/이메일 인증|로그인|
+|<img width="360px" src=""/>|<img width="360px" src=""/>|||
+|질문 Create|질문 RUD|
+|<img width="360px" src=""/>|<img width="360px" src=""/>|
+|답변 Create|답변 RUD|
+|<img width="360px" src=""/>|<img width="360px" src=""/>|
+
+
+
+
+<br/>
+
+## :notebook: 사용자 요구사항 정의서
+[사용자 요구사항 정의서](https://www.notion.so/codestates/api-176893b49c674bc696ebd5efd0701abd)
+
+<br/>
