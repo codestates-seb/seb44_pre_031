@@ -176,17 +176,15 @@ const Login = () => {
   const dispatch = useDispatch();
   const onChangeEamil = useCallback((e) => {
     setEmail(e.target.value);
-    console.log('이메일 입력중');
   });
   const onChangePassword = useCallback((e) => {
     setPassword(e.target.value);
-    console.log('비번 입력중');
   });
   const navigate = useNavigate();
   const onSubmitJoin = useCallback(
     (e) => {
       e.preventDefault();
-      console.log('전송');
+
       console.log([email, password]);
       dispatch(actionL({ email, password }))
         .then((resultAction) => {
@@ -201,7 +199,7 @@ const Login = () => {
           //userMemberId = 벡에서 원하는 유저 아이디(숫자)
 
           navigate('/');
-          console.log('성공');
+
           // })
         })
         // eslint-disable-next-line no-unused-vars

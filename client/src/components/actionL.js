@@ -12,14 +12,8 @@ export const actionL = createAsyncThunk('user/join', async (data, thunkAPI) => {
       password: data.password,
     }
   );
-  // const result = response.data;
   const accessToken = response.headers.authorization.slice(); // jwt 토큰 추출
-  // const decodeAccessToken = jwt_decode.verify(
-  //   accessToken,
-  //   'kevin12312421512312431@!kfjiejwf'
-  // );
-  // console.log(decodeAccessToken);
-  // const userId = jwt_decode(accessToken).displayName;
+
   const userId = jwt_decode(accessToken).username;
   const userMemberId = jwt_decode(accessToken).memberId;
   // 추출한 토큰과 사용자 ID를 객체로 반환

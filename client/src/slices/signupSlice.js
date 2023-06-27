@@ -26,9 +26,7 @@ export const signupSlice = createSlice({
       })
       .addCase(actionS.rejected, (state, action) => {
         state.isJoining = false;
-        console.log('실패');
         state.joinErrorReasion = action.error;
-        console.log(state.joinErrorReasion);
       });
   },
 });
