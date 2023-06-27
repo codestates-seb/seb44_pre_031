@@ -70,3 +70,11 @@ mail:
     admin: admin@gmail.com
 #config:
 #  domain: http://pre-project-fe-bucket.s3-website.ap-northeast-2.amazonaws.com
+
+#AWS
+aws:
+  paramstore:
+    enabled: true
+    prefix: /spring-boot-aws
+    name: seb44-pre31 # 리소스 이름
+    profileSeparator: _
