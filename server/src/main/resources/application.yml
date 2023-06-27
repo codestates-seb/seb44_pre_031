@@ -6,7 +6,7 @@ spring:
     host: smtp.gmail.com # gmail SMTP 서버
     port: 587 # gmail SMTP 서버
     username: dlawjdals02182@gmail.com
-#    password: inpvdunmyhdyzubr
+    password: inpvdunmyhdyzubr
     properties: # 추가 속성
       mail:
         smtp:
@@ -32,9 +32,9 @@ spring:
 #    driver-class-name: org.h2.Driver
 
   datasource:
-#    url: jdbc:mysql://database-1.cb1tmltkopsz.ap-northeast-2.rds.amazonaws.com/test?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
-#    username: admin
-#    password: zheldqkdqjaeo1!
+    url: jdbc:mysql://database-1.cb1tmltkopsz.ap-northeast-2.rds.amazonaws.com/test?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    username: admin
+    password: zheldqkdqjaeo1!
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
 #    database-platform: org.hibernate.dialect.H2Dialect
@@ -61,20 +61,13 @@ logging.level:
   org.hibernate.SQL: debug
 # jwt 관련
 jwt:
-#  key: kevin12312421512312431@!kfjiejwf
+  key: kevin12312421512312431@!kfjiejwf
   access-token-expiration-minutes: 40
   refresh-token-expiration-minutes: 420
 # 관리자 이메일
 mail:
   address:
     admin: admin@gmail.com
-#config:
-#  domain: http://pre-project-fe-bucket.s3-website.ap-northeast-2.amazonaws.com
+config:
+  domain: http://pre-project-fe-bucket.s3-website.ap-northeast-2.amazonaws.com
 
-#AWS
-aws:
-  awsParameterStorePropertySource:
-    enabled: true
-    prefix: /spring-boot-aws
-    name: seb44-pre31 # 리소스 이름
-    profileSeparator: _
