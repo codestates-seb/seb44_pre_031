@@ -12,6 +12,8 @@
 - **`프로젝트 기간` :** 2023.06.13. - 2023.06.27.
 - **`팀원` :** 임정민(팀장), 조하얀, 김연우, 이영탁(부팀장), 박지훈, 전예훈
 - **`배포 링크` :** [🌎 pre-stackoverflow.site](http://pre-project-fe-bucket.s3-website.ap-northeast-2.amazonaws.com/)
+- **`테스트 ID` :** parkjihoon98@gmail.com
+- **`테스트 PW` :** qkrwlgns1!
 </br>
 <div align=center><h1>📚 STACKS</h1></div>
 
