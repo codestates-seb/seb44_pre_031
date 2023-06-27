@@ -121,10 +121,7 @@ const Users = () => {
             <ProfileInfo>
               <div className="edit">
                 <h2>{profile.displayName}</h2>{' '}
-                <StyledButtonLink
-                  to={'http://localhost:3000/users/mypage/patch'}
-                  fontSize="1em"
-                >
+                <StyledButtonLink to={'/users/mypage/patch'} fontSize="1em">
                   edit profile
                 </StyledButtonLink>
               </div>
