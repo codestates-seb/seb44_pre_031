@@ -67,4 +67,13 @@
 
 <br/>
 
+## :notebook: 사용자 요구사항 정의서
+[사용자 요구사항 정의서](https://www.notion.so/codestates/api-176893b49c674bc696ebd5efd0701abd)
+
+<br/>
+
+
+
+
+
 
