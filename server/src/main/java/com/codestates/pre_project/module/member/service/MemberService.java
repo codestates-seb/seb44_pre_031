@@ -68,7 +68,7 @@ public class MemberService {
 
         Email emailEntity = emailRepository.findByEmail(email);
         if (!emailEntity.getCode().equals(code)) {
-            throw new CustomException(INTERNAL_SERVER_ERROR);
+            throw new CustomException(EMAIL_CODE_NOT_VALUE);
         } else {
             emailRepository.delete(emailEntity);
         }
