@@ -89,7 +89,8 @@ const UpdateQuestion = () => {
       content: inputText.body.trim(),
       // tags 배열로 보내져야됨
       // "tags": ["java", "spring", "임정민"]
-      tags: inputText.tags.trim(),
+      // tags: inputText.tags.trim(),
+      tags: [inputText.tags.trim()],
       // summary: inputText.summary.trim(),
     };
     // http POST 요청 보내야함, 성공하면 해당 /quetions/:questionId 로 리다이렉트

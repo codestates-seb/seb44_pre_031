@@ -118,6 +118,8 @@ const UpdateUserInfo = () => {
               value={inputText.displayName}
               required
               onChange={handleInputChange}
+              minLength="3"
+              maxLength="15"
             />
           </div>
 

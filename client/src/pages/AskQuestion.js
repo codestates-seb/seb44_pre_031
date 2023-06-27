@@ -309,7 +309,6 @@ const AskQuestion = () => {
           content: inputText.body.trim(),
           tags: inputText.tags.trim().split(' '),
         };
-        console.log(data);
 
         const response = await axios.post(`${AWS_URL_PATH}/questions`, data, {
           headers: {

@@ -5,6 +5,7 @@ let initialState = {
   pagesize: 5,
   totalpage: 30,
   totalposts: 1,
+  questionsTitle: 'All Questions',
 };
 
 const pageSlice = createSlice({
@@ -26,8 +27,13 @@ const pageSlice = createSlice({
       state.currentpage -= 1;
     },
     setTotalposts: (state, action) => {
-      state.totalposts = action.payload;
-      state.totalpage = Math.ceil(action.payload / state.pagesize);
+      console.log(action.payload);
+      state.totalposts = action.payload.questionsLength;
+      state.totalpage = Math.ceil(
+        action.payload.questionsLength / state.pagesize
+      );
+      state.currentpage = 1;
+      state.questionsTitle = action.payload.questionsTitle;
     },
   },
 });

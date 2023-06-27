@@ -79,7 +79,7 @@ export default function SearchGuide() {
         </div>
         <div>
           <Hintele>
-            <span>answers: 0</span>
+            <span>answers:0</span>
             <span>unanswered questions</span>
           </Hintele>
           <Hintele>
