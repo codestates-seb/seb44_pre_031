@@ -1,11 +1,11 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
-// import googleLogo from '../assets/google.png';
-// import githubLogo from '../assets/github.png';
-// import facebookLogo from '../assets/facebook.png';
+import StyledButton from '../styles/StyledButton';
+
 import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { actionS } from '../components/actionS';
+import axios from 'axios';
 
 const Container = styled.div`
   display: flex;
@@ -198,33 +198,65 @@ const Message = styled.div`
     margin-top: 12px;
   }
 `;
-
+const EmailAuthForm = styled.div`
+  display: flex;
+`;
 const SignUp = () => {
   const [email, setEmail] = useState('');
+  const [emailAuth, setEmailAuth] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setdisplayName] = useState('');
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const onChangeEamil = useCallback((e) => {
     setEmail(e.target.value);
-    console.log('이메일 입력중');
+  });
+  const onChangeEamilAuth = useCallback((e) => {
+    setEmailAuth(e.target.value);
   });
   const onChangePassword = useCallback((e) => {
     setPassword(e.target.value);
-    console.log('비번 입력중');
   });
   const onChangeDisplay = useCallback((e) => {
     setdisplayName(e.target.value);
-    console.log('이름 입력중');
   });
-
+  // const goEmail =
   const onSubmitJoin = useCallback(
     (e) => {
       e.preventDefault();
-      console.log('전송');
-      console.log([displayName, email, password]);
-      dispatch(actionS({ displayName, email, password }));
+
+      console.log([displayName, email, emailAuth, password]);
+      dispatch(actionS({ displayName, email, emailAuth, password })).then(
+        (resultAction) => {
+          const { success } = resultAction.payload;
+          if (success === true) {
+            alert('회원가입 성공');
+            navigate('/users/sign-in');
+          } else {
+            alert('비밀번호 아이디 이메일 인증을 모두 수행하쇼');
+          }
+        }
+      );
     },
-    [displayName, email, password]
+    [displayName, email, emailAuth, password]
+  );
+  const goEmail = useCallback(
+    (event) => {
+      event.preventDefault();
+      axios
+        .get(
+          `http://ec2-52-79-240-48.ap-northeast-2.compute.amazonaws.com:8080/api/users/emails?email=${email}`
+        )
+        .then((response) => {
+          // 이메일 인증에 대한 로직을 추가해주세요
+          console.log(response);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    [email]
   );
   return (
     <Container>
@@ -257,7 +289,7 @@ const SignUp = () => {
               <input
                 type="name"
                 id="signupDisplayName"
-                placeholder="비밀번호"
+                placeholder="보여질 이름입력"
                 value={displayName}
                 onChange={onChangeDisplay}
               ></input>
@@ -271,6 +303,22 @@ const SignUp = () => {
                 value={email}
                 onChange={onChangeEamil}
               ></input>
+              {/* <div onClick={goEmail}>이메일 인증</div> */}
+            </InputEmail>
+            <InputEmail>
+              <div>Email 인증</div>
+              <EmailAuthForm>
+                <input
+                  type="text"
+                  id="emailAuth"
+                  placeholder="인증번호 입력"
+                  value={emailAuth}
+                  onChange={onChangeEamilAuth}
+                ></input>
+                <StyledButton onClick={goEmail}>인증번호 발급</StyledButton>
+              </EmailAuthForm>
+
+              {/* <div onClick={goEmail}>보내기</div> */}
             </InputEmail>
             <InputPW>
               <div>Password</div>
@@ -283,7 +331,7 @@ const SignUp = () => {
               ></input>
             </InputPW>
             <div>
-              <button>회원가입</button>
+              <StyledButton>회원가입</StyledButton>
             </div>
             <JustMarginTop>
               <hr></hr>

@@ -1,5 +1,6 @@
+/* eslint-disable react/prop-types */
+import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
-
 const QLiContainer = styled.div`
   border-top: 1px solid hsl(210, 8%, 90%);
   border-bottom: 1px solid hsl(210, 8%, 90%);
@@ -112,68 +113,54 @@ const UserCardContainer = styled.div`
     color: hsl(205, 47%, 42%);
   }
 `;
-
-export default function QuestionList() {
-  let question = {
-    questionId: 1,
-    title: 'How can I count repeating intervals in a graph?',
-    content:
-      'enter image description here Through the image, you can see five repetitive sections. I want to write an algorithm that counts this number, but I cant think of it. I tried to draw a regression curve ...',
-    voteCount: 0,
-    answerCount: 2,
-    viewCount: 0,
-    selectedAnswer: false,
-    questionCreatedAt: '2023-06-17T17:06:03',
-    displayName: 'Yeahhun Jeon',
-    reputation: 0,
-  };
-  let tag = [
-    {
-      title: 'javascript',
-    },
-    {
-      title: '코딩방범대',
-    },
-    {
-      title: 'python',
-    },
-  ];
+export default function QuestionList({ question }) {
   return (
     <QLiContainer>
       <PostSummaryStats>
         <div>
-          <span>{question.voteCount} votes</span>
+          <span>{question.question.likeCount} vote</span>
         </div>
         <div
-          className={`${question.answerCount}` !== '0' ? 'has-answer' : 'null'}
+          className={
+            question.question.answerCount !== '0' ? 'has-answer' : 'null'
+          }
         >
-          <span>{question.answerCount} answers</span>
+          <span>{question.question.answerCount} answers</span>
         </div>
         <div>
-          <span>{question.viewCount} views</span>
+          <span>{question.question.viewCount} views</span>
         </div>
       </PostSummaryStats>
       <PostSummaryContent>
         <h3 className="Post-summary-title">
-          <a href="/">{question.title}</a>
+          {/* <a href={`/questions/${question.question.questionId}`}>
+            {question.question.title}
+          </a> */}
+          <Link to={`/questions/${question.question.questionId}`}>
+            {question.question.title}
+          </Link>
         </h3>
-        <div className="Post-summary-content">{question.content}</div>
+        <div className="Post-summary-content">{question.question.content}</div>
         <div className="Post-summary-meta">
           <div>
             <ul>
-              {tag.map((el) => {
-                return (
-                  <li key={el.id}>
-                    <Tag>{el.title}</Tag>
-                  </li>
-                );
-              })}
+              {question.tags.map((tag) => (
+                <li key={tag.id}>
+                  <Tag>{tag}</Tag>
+                </li>
+              ))}
             </ul>
           </div>
+
           <UserCardContainer>
-            <div className="namecolor">{question.displayName}</div>
-            <div>{question.reputation}</div>
-            <div>{question.questionCreatedAt}</div>
+            <Link
+              to={`/users/anotherUser?userId=${question.question.memberId}`}
+              className="username"
+            >
+              <div className="namecolor">{question.question.displayName}</div>
+            </Link>
+            <div>{question.question.reputation}</div>
+            <div>{question.question.questionCreatedAt}</div>
           </UserCardContainer>
         </div>
       </PostSummaryContent>

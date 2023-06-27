@@ -1,8 +1,19 @@
+/* eslint-disable import/no-named-as-default */
 import { styled } from 'styled-components';
-import PostLayout from './PostLayout';
+import { AnswerLayout } from './PostLayout';
 import { useState } from 'react';
+// eslint-disable-next-line import/no-named-as-default
 import StyledButton, { StyledTagLink } from '../styles/StyledButton';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import {
+  AWS_URL_PATH,
+  selectAllTags,
+  sortByCreatedOldest,
+  sortByHighestScore,
+  sortByModifiedNewest,
+} from '../slices/questionSlice';
 
 const AnswersContainer = styled.div`
   display: flex;
@@ -52,14 +63,26 @@ const AnswersHeaderContainer = styled.div`
 `;
 
 const AnswersHeader = () => {
+  const dispatch = useDispatch();
+  const answerCount = useSelector(
+    (state) => state.question.question.answerCount
+  );
+
   const handleSelectChange = (e) => {
-    console.log(e.target.value);
+    if (e.target.value === 'highest-score') {
+      dispatch(sortByHighestScore());
+    } else if (e.target.value === 'date-modified') {
+      dispatch(sortByModifiedNewest());
+    }
+    if (e.target.value === 'date-created') {
+      dispatch(sortByCreatedOldest());
+    }
   };
 
   return (
     <AnswersHeaderContainer>
       <div className="answers-header">
-        <div className="number-of-answers">2 Answers</div>
+        <div className="number-of-answers">{`${answerCount} Answers`}</div>
         <div className="answers-filter-container">
           <div className="answers-filter-title">
             <p>Sorted by:</p>
@@ -83,13 +106,21 @@ const AnswersHeader = () => {
 };
 
 const AnswerList = () => {
+  const answers = useSelector((state) => state.question.answers);
+
   return (
     <div>
       {/* 데이터 받아서 answer map 돌려야함 */}
-      <PostLayout />
-      <hr />
-      <PostLayout />
-      <hr />
+      {answers.map((answer) => {
+        return (
+          <>
+            <AnswerLayout key={answer.answerId} answer={answer} />
+            <hr />
+          </>
+        );
+      })}
+      {/* <AnswerLayout /> */}
+      {/* <hr /> */}
     </div>
   );
 };
@@ -130,6 +161,9 @@ const AnswerForm = () => {
   const [inputText, setInputText] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [validationNotice, setValidationNotice] = useState('');
+  const params = useParams();
+  const navigate = useNavigate();
+  const token = useSelector((state) => state.login.token);
 
   const handleInputText = (e) => {
     setInputText(e.target.value);
@@ -153,16 +187,30 @@ const AnswerForm = () => {
     }
   };
 
-  const handleSumbitClick = (e) => {
+  const handleSumbitClick = async (e) => {
     e.preventDefault();
     validateInput();
 
     // POST 요청 보내야됨
-    console.log(isValid);
     if (isValid) {
-      console.log('submit success');
-    } else if (!isValid) {
-      console.log('submit failed');
+      try {
+        const response = await axios.post(
+          `${AWS_URL_PATH}/answers/${params.questionId}`,
+          { content: inputText.trim() },
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        console.log(response);
+
+        // 성공하면 해당 질문 상세페이지로 다시 redirect
+        // navigate(`/questions/${params.questionId}`);
+        navigate(0);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -249,25 +297,36 @@ const AnswerBottomNoticeContainer = styled.h2`
 `;
 
 const AnswerBottomNotice = () => {
+  const tags = useSelector(selectAllTags);
+
   return (
     <AnswerBottomNoticeContainer>
       <p>Not the answer you are looking for? Browse other questions tagged</p>
       <div className="tags-container">
-        <StyledTagLink>react</StyledTagLink>
-        <StyledTagLink>react-router-dom</StyledTagLink>
+        {tags.map((tag) => (
+          <StyledTagLink key={tag}>{tag}</StyledTagLink>
+        ))}
       </div>
       <p> or </p>
-      <Link className="ask-your-own-questipn">ask your own question</Link>
+      <Link className="ask-your-own-questipn" to="../ask">
+        ask your own question
+      </Link>
     </AnswerBottomNoticeContainer>
   );
 };
 
 const Answers = () => {
+  // const loginMemberId = useSelector((state) => state.login.userId);
+  const login = useSelector((state) => state.login);
+  const questionMemberId = useSelector(
+    (state) => state.question.question.memberId
+  );
+
   return (
     <AnswersContainer>
       <AnswersHeader />
       <AnswerList />
-      <AnswerForm />
+      {Number(login.userId) !== questionMemberId ? <AnswerForm /> : null}
       <AnswerBottomNotice />
     </AnswersContainer>
   );

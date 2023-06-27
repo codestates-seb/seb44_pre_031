@@ -91,7 +91,7 @@ function Footer() {
         <logobox className="logobox">
           <li className="foot-logo">
             <Link to="/">
-              <img src="/images/google.png" alt="logo"></img>
+              <img src="/images/logo-simple.png" alt="logo"></img>
               <span className="foot-logo-image hide"></span>
             </Link>
           </li>

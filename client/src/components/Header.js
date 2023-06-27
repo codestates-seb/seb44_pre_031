@@ -1,7 +1,14 @@
-import { Link } from 'react-router-dom';
+/* eslint-disable react/prop-types */
+import { Link, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { IoIosSearch } from 'react-icons/io';
 import { BasicBlueButton } from '../styles/Buttons';
+import { useState } from 'react';
+import SearchGuide from './SearchGuide';
+import { setTotalposts } from '../slices/paginationSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+
 const Headercontainer = styled.div`
   position: sticky;
   display: flex;
@@ -16,6 +23,10 @@ const Headercontainer = styled.div`
   box-shadow: 0 1px 2px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.05),
     0 2px 8px hsla(0, 0%, 0%, 0.05);
   margin: 0 auto;
+  .buttons {
+    display: flex;
+    margin: 10px;
+  }
 `;
 const Headerlogo = styled.div`
   img {
@@ -75,7 +86,104 @@ const SearchInput = styled.input`
   }
 `;
 
-export default function Header() {
+export default function Header({ setAllQuestions }) {
+  const [isFocus, setIsFocus] = useState(false);
+  const [searchInputValue, setSearchInputValue] = useState('');
+
+  const handleOnKeyDown = async (e) => {
+    if (e.key === 'Enter') {
+      if (
+        searchInputValue.trim().slice(0, 1) === '[' &&
+        searchInputValue.trim().slice(-1) === ']'
+      ) {
+        try {
+          // '['  => 태그검색한다는뜻  => tag 요청 http를 보낸다
+          const tag = searchInputValue.trim().slice(1, -1);
+          const response = await axios.get(
+            `http://ec2-52-79-240-48.ap-northeast-2.compute.amazonaws.com:8080/api/questions/search-tag/${tag}`
+          );
+          const questions = response.data.result.data.content;
+          setAllQuestions(questions);
+          dispatch(
+            setTotalposts({
+              questionsLength: questions.length,
+              questionsTitle: `Questions tagged [${tag}]`,
+            })
+          );
+        } catch (error) {
+          console.log('Error fetching questions:', error);
+        }
+      } else if (searchInputValue.trim().slice(0, 5) === 'user:') {
+        try {
+          // 'user:'  => 유저이름으로 검색한다는뜻  => username을 요청 http를 보낸다
+          const username = searchInputValue.trim().slice(5);
+          const response = await axios.get(
+            `http://ec2-52-79-240-48.ap-northeast-2.compute.amazonaws.com:8080/api/questions/search-author/${username}`
+          );
+          const questions = response.data.result.data.content;
+          setAllQuestions(questions);
+          dispatch(
+            setTotalposts({
+              questionsLength: questions.length,
+              questionsTitle: `Search by Author: ${username}`,
+            })
+          );
+        } catch (error) {
+          console.log('Error fetching questions:', error);
+        }
+      } else if (searchInputValue.trim() === 'answers:0') {
+        try {
+          // 'user:'  => 유저이름으로 검색한다는뜻  => username을 요청 http를 보낸다
+          const response = await axios.get(
+            `http://ec2-52-79-240-48.ap-northeast-2.compute.amazonaws.com:8080/api/questions/search-unanswered`
+          );
+          const questions = response.data.result.data.content;
+          setAllQuestions(questions);
+          dispatch(
+            setTotalposts({
+              questionsLength: questions.length,
+              questionsTitle: 'Unanswered Questions',
+            })
+          );
+        } catch (error) {
+          console.log('Error fetching questions:', error);
+        }
+      } else {
+        try {
+          // 위에 아무것도 안걸린 디폴트값  => 타이틀 키워드 검색 요청 http를 보낸다
+          const keyword = searchInputValue.trim();
+          const response = await axios.get(
+            `http://ec2-52-79-240-48.ap-northeast-2.compute.amazonaws.com:8080/api/questions/search-keyword/${keyword}`
+          );
+          const questions = response.data.result.data.content;
+          setAllQuestions(questions);
+          dispatch(
+            setTotalposts({
+              questionsLength: questions.length,
+              questionsTitle: `Search by Title Keyword: ${keyword}`,
+            })
+          );
+        } catch (error) {
+          console.log('Error fetching questions:', error);
+        }
+      }
+      setIsFocus(false);
+    }
+  };
+
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
+  const navigator = useNavigate();
+  const focusHandler = () => {
+    setIsFocus(!isFocus);
+  };
+
+  const logoutHandker = () => {
+    localStorage.clear();
+    navigator('/');
+    window.location.reload();
+  };
+
   return (
     <>
       <Headercontainer>
@@ -90,11 +198,39 @@ export default function Header() {
           <HeaderTextButton>For Teams</HeaderTextButton>
         </HeaderTextButtonContainer>
         <SearchBox>
-          <SearchInput type="text" maxLength={240} placeholder="Search..." />
+          <SearchInput
+            type="text"
+            maxLength={240}
+            value={searchInputValue}
+            placeholder="Search..."
+            onChange={(e) => {
+              setSearchInputValue(e.target.value);
+            }}
+            onKeyDown={handleOnKeyDown}
+            onFocus={focusHandler}
+          />
           <StyledIoIosSearch />
+          {isFocus && <SearchGuide />}
         </SearchBox>
-        <BasicBlueButton skyblue>Log in</BasicBlueButton>
-        <BasicBlueButton>Sign up</BasicBlueButton>
+        {isLoggedIn ? (
+          <div className="buttons">
+            <BasicBlueButton skyblue>
+              <Link to="/users/mypage">My Page</Link>
+            </BasicBlueButton>
+            <BasicBlueButton skyblue onClick={logoutHandker}>
+              <Link to="/users/mypage">Log out</Link>
+            </BasicBlueButton>
+          </div>
+        ) : (
+          <>
+            <BasicBlueButton skyblue>
+              <Link to="/users/sign-in">Log in</Link>
+            </BasicBlueButton>
+            <BasicBlueButton>
+              <Link to="/users/sign-up">Sign up</Link>
+            </BasicBlueButton>
+          </>
+        )}
       </Headercontainer>
     </>
   );

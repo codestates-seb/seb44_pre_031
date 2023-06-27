@@ -10,6 +10,7 @@ export const BasicBlueButton = styled(Link)`
   font-size: 14px;
   text-decoration: none;
   white-space: nowrap;
+  pointer-events: auto;
   color: ${(props) => (props.skyblue ? 'hsl(205,47%,42%)' : 'white')};
   background-color: ${(props) =>
     props.skyblue ? 'hsl(205,46%,92%)' : 'hsl(206,100%,52%)'};
@@ -20,5 +21,10 @@ export const BasicBlueButton = styled(Link)`
   &:focus {
     border-color: hsl(206, 90%, 69.5%);
     box-shadow: 0 0 0 4px hsla(206, 100%, 40%, 0.15);
+  }
+  &:visited {
+    color: ${(props) => (props.skyblue ? 'hsl(205,47%,42%)' : 'white')};
+    background-color: ${(props) =>
+      props.skyblue ? 'hsl(205,46%,92%)' : 'hsl(206,100%,52%)'};
   }
 `;
