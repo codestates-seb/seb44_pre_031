@@ -1,5 +1,5 @@
 # seb44_pre_031
-# 🍾Team.코딩 방범대
+# 🥷🏻Team.코딩 방범대
 <br/>
 
 <div  align="center">
@@ -8,7 +8,7 @@
 
 </br>
 
-- **`팀 이름` :** 🍾 Team.Coding bangbumdae
+- **`팀 이름` :** 🥷🏻 Team.Coding bangbumdae
 - **`프로젝트 명` :** stackover flow clone coding
 - **`프로젝트 기간` :** 2023.06.13. - 2023.06.27.
 - **`팀원` :** 임정민(팀장), 조하얀, 김연우, 이영탁(부팀장), 박지훈, 전예훈
