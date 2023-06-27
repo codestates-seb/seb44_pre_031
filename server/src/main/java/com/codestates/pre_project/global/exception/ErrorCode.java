@@ -31,6 +31,7 @@ public enum ErrorCode {
     MEMBER_DISPLAY_NAME_ALREADY_EXISTS(HttpStatus.CONFLICT, "중복된 이름 입니다."),
     ALREADY_LIKE_ANSWER(HttpStatus.CONFLICT, "이미 좋아요를 누르셨습니다."),
     ALREADY_DISLIKE_ANSWER(HttpStatus.CONFLICT, "이미 싫어요를 누르셨습니다."),
+    EMAIL_CODE_NOT_VALUE(HttpStatus.CONFLICT, "이메일 인증코드가 유효하지 않습니다."),
 
     // 500
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다. 관리자에게 문의하세요.")
