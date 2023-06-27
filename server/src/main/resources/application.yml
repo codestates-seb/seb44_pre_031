@@ -29,9 +29,9 @@ spring:
 #    driver-class-name: org.h2.Driver
 
   datasource:
-    url: jdbc:mysql://database-1.cb1tmltkopsz.ap-northeast-2.rds.amazonaws.com/test?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
-    username: admin
-    password: zheldqkdqjaeo1!
+#    url: jdbc:mysql://database-1.cb1tmltkopsz.ap-northeast-2.rds.amazonaws.com/test?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+#    username: admin
+#    password: zheldqkdqjaeo1!
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
 #    database-platform: org.hibernate.dialect.H2Dialect
