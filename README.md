@@ -74,9 +74,9 @@
 ## :sloth: Git
 
 `main` : 배포 브랜치 <br/>
-`dev/FE` : 프론트엔드 개발 환경 브랜치 <br/>
-`dev/BE` : 백엔드 개발 환경 브랜치 <br/>
-`feat/역할군/개발명` : 기능 개발 브랜치 ex) feat/FE/Askquestion  // 개발후 삭제
+`FE` : 프론트엔드 개발 환경 브랜치 <br/>
+`BE` : 백엔드 개발 환경 브랜치 <br/>
+`feat/역할군/개발명` : 기능 개발 브랜치 ex) ✨feat/Askquestion  // 개발후 브랜치 삭제
 
 
 
