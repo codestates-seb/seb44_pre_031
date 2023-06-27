@@ -67,9 +67,12 @@
 
 <br/>
 
+
 ## :notebook: 사용자 요구사항 정의서
 [사용자 요구사항 정의서](https://www.notion.so/codestates/api-176893b49c674bc696ebd5efd0701abd)
-
+<br/>
+## :notebook: ERD
+[ERD](https://github.com/codestates-seb/seb44_pre_031/assets/91462693/c69f7151-b1b5-4aed-895b-6ee365987dd8)
 <br/>
 ## :sloth: Git
 
