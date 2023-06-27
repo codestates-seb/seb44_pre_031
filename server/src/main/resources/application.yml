@@ -3,7 +3,7 @@ spring:
     host: smtp.gmail.com # gmail SMTP 서버
     port: 587 # gmail SMTP 서버
     username: dlawjdals02182@gmail.com
-    password: inpvdunmyhdyzubr
+#    password: inpvdunmyhdyzubr
     properties: # 추가 속성
       mail:
         smtp:
@@ -58,7 +58,7 @@ logging.level:
   org.hibernate.SQL: debug
 # jwt 관련
 jwt:
-  key: kevin12312421512312431@!kfjiejwf
+#  key: kevin12312421512312431@!kfjiejwf
   access-token-expiration-minutes: 40
   refresh-token-expiration-minutes: 420
 # 관리자 이메일
