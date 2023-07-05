@@ -1,10 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
 import GlobalStyle from './styles/GlobalStyle';
 import Questions from './pages/Questions';
-import AskQuestion from './pages/AskQuestion';
-import QuestionDetail from './pages/QuestionDetail';
-import UpdateQuestion from './pages/UpdateQuestion';
-import UpdateAnswer from './pages/UpdateAnswer';
+// import AskQuestion from './pages/AskQuestion';
+// import QuestionDetail from './pages/QuestionDetail';
+// import UpdateQuestion from './pages/UpdateQuestion';
+// import UpdateAnswer from './pages/UpdateAnswer';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Users from './pages/Users';
@@ -33,12 +33,6 @@ function App() {
           <Route path="mypage" element={<Users />} />
           <Route path="mypage/patch" element={<UpdateUserInfo />} />
           <Route path="anotherUser" element={<SearchUsers />} />
-        </Route>
-        <Route path="questions">
-          <Route path="ask" element={<AskQuestion />} />
-          <Route path=":questionId" element={<QuestionDetail />} />
-          <Route path=":questionId/edit" element={<UpdateQuestion />} />
-          <Route path=":questionId/:answerId/edit" element={<UpdateAnswer />} />
         </Route>
       </Routes>
     </div>
